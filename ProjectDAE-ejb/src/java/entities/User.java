@@ -23,7 +23,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "USERS")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class User implements Serializable {
     @Id
     private String username;

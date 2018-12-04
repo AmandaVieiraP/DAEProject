@@ -6,22 +6,22 @@
 package entities;
 
 import java.io.Serializable;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 
 /**
  *
  * @author Amanda
  */
 @Entity
-@Table(name = "ADMINISTRATORS")
-@AttributeOverrides({
-    @AttributeOverride(name="username", column=@Column(name="username")),
-    @AttributeOverride(name="password", column=@Column(name="password"))
-})
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("Administrator")
 public class Administrator extends User implements Serializable {
     private String name;
     private String email;
