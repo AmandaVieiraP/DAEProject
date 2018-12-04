@@ -5,6 +5,7 @@
  */
 package entities;
 
+import entities.UserGroup.GROUP;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -30,8 +31,8 @@ public class Administrator extends User implements Serializable {
     public Administrator() {
     }
 
-    public Administrator(String name, String email, String jobRole, String username, String password) {
-        super(username, password);
+    public Administrator(String username, String password, String name, String email, String jobRole) {
+        super(username, password, GROUP.Administrator);
         this.name = name;
         this.email = email;
         this.jobRole = jobRole;

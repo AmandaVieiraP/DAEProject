@@ -5,10 +5,8 @@
  */
 package entities;
 
+import entities.UserGroup.GROUP;
 import java.io.Serializable;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -37,8 +35,8 @@ public class Client extends User implements Serializable {
     public Client() {
     }
 
-    public Client(String address, String companyName, String contactPerson, String username, String password) {
-        super(username, password);
+    public Client(String username, String password, String address, String companyName, String contactPerson) {
+        super(username, password, GROUP.Client);
         this.address = address;
         this.companyName = companyName;
         this.contactPerson = contactPerson;
