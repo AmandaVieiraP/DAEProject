@@ -28,7 +28,7 @@ public class UserGroup implements Serializable {
     
     @Id
     @Enumerated(EnumType.STRING)
-    private GROUP groupName;
+    private GROUP group_name;
     
     @Id
     @OneToOne
@@ -39,16 +39,16 @@ public class UserGroup implements Serializable {
     }
 
     public UserGroup(GROUP groupName, User user) {
-        this.groupName = groupName;
+        this.group_name = groupName;
         this.user = user;
     }
 
     public GROUP getGroupName() {
-        return groupName;
+        return group_name;
     }
 
     public void setGroupName(GROUP groupName) {
-        this.groupName = groupName;
+        this.group_name = groupName;
     }
 
     public User getUser() {

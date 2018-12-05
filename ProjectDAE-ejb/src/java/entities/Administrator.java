@@ -29,6 +29,7 @@ public class Administrator extends User implements Serializable {
     private String jobRole;
 
     public Administrator() {
+        super();
     }
 
     public Administrator(String username, String password, String name, String email, String jobRole) {
