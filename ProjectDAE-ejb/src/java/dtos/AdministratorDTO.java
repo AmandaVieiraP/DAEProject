@@ -26,7 +26,9 @@ public class AdministratorDTO extends UserDTO implements Serializable  {
         this.jobRole = jobRole;
     }
     
+    @Override
     public void reset() {
+        super.reset();
         setName(null);
         setEmail(null);
         setJobRole(null);

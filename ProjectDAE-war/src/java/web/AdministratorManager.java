@@ -6,13 +6,18 @@
 package web;
 
 
+import dtos.AdministratorDTO;
 import ejbs.AdministratorBean;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -32,17 +37,40 @@ public class AdministratorManager implements Serializable {
     @EJB 
     private AdministratorBean administratorBean;
     
+    private AdministratorDTO newAdministratorDTO;
+    private UIComponent component;
+    
     
     @ManagedProperty("#{userManager}")
     private UserManager userManager; 
 
     public AdministratorManager() {
         // acrescencar posteriormente
+        this.newAdministratorDTO = new AdministratorDTO();
         
     }
     
-    
-    
+    public void createNewAdministrator() {
+        
+    }
+
+  
+    public AdministratorDTO getNewAdministratorDTO() {
+        return newAdministratorDTO;
+    }
+
+    public void setNewAdministratorDTO(AdministratorDTO newAdministratorDTO) {
+        this.newAdministratorDTO = newAdministratorDTO;
+    }
+
+    public UIComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(UIComponent component) {
+        this.component = component;
+    }
+
     
     
     public UserManager getUserManager() {

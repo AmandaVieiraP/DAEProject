@@ -27,7 +27,9 @@ public class ClientDTO extends UserDTO implements Serializable {
         this.contactPerson = contactPerson;
     }
 
+    @Override
     public void reset () {
+        super.reset();
         setAddress(null);
         setCompanyName(null);
         setContactPerson(null);
