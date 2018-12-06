@@ -10,7 +10,80 @@
     <h:body>        
         <div>ADMIN PAGE</div>
         <br />
-              
+                 <h:dataTable
+            var="temp"
+            summary="List all of templates"
+            value="#{administratorManager.allTemplatesREST}"
+            rules="all"
+            cellpadding="5"
+            class="datatable">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Code"/>
+                </f:facet>
+                <h:outputText value="#{temp.code}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Description"/>
+                </f:facet>
+                <h:outputText value="#{temp.description}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="State"/>
+                </f:facet>
+                <h:outputText value="#{temp.state}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Version"/>
+                </f:facet>
+                <h:outputText value="#{temp.version}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Software"/>
+                </f:facet>
+                <h:outputText value="#{temp.software_code}"/>
+            </h:column>
+             <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Contract"/>
+                </f:facet>
+                 <h:outputText value="#{temp.contract_code}"/>
+            </h:column>
+             <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Modules"/>
+                </f:facet>
+                <h:outputText value="Modules List"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Services"/>
+                </f:facet>
+                <h:outputText value="Services List"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Licenses"/>
+                </f:facet>
+                <h:outputText value="Services List"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Parameters"/>
+                </f:facet>
+                <h:outputText value="Parameters List"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Repository List"/>
+                </f:facet>
+                <h:outputText value="#{temp.artefactsRepository}"/>
+            </h:column>
+        </h:dataTable>    
 
     </h:body>
 </html>

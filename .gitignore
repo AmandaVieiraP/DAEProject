@@ -4,3 +4,6 @@
 /ProjectDAE-war/dist/
 /dist/
 /build/
+/nbproject/private/
+/ProjectDAE-war/nbproject/private/
+/ProjectDAE-ejb/nbproject/private/

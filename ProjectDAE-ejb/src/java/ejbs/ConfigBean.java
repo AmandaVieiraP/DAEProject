@@ -5,6 +5,7 @@
  */
 package ejbs;
 
+import entities.Template;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -25,11 +26,27 @@ public class ConfigBean {
     @EJB
     private AdministratorBean administratorBean;
     
+    @EJB
+    private TemplateBean templateBean;
+    
+    @EJB
+    private SoftwareBean softwareBean;
+    
+    @EJB
+    private ContractBean contractBean;
+    
     @PostConstruct
     public void populateDB()  {
         try {
             administratorBean.create("JoaoP", "123", "João Pedro", "job@email.com", "Administrator Of Things");
             administratorBean.create("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things");
+            
+            //Criar o software 1000
+            softwareBean.create(1000, "Spots");
+            //Criar o contrat 10
+            contractBean.create(10, 12, 200.50, 2, "8:00 am - 1:00 pm", 20.50);
+            
+            templateBean.create(1, "Template 1", Template.STATE.Active, 1000, "Version 1", 10, "C:\\Template_1_Repo");
             
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
