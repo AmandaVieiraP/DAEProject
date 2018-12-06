@@ -5,12 +5,18 @@
  */
 package ejbs;
 
+import dtos.AdministratorDTO;
 import entities.Administrator;
+import exceptions.EntityDoesNotExistsException;
 import exceptions.EntityExistsException;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 
 /**
@@ -18,6 +24,7 @@ import javax.persistence.PersistenceContext;
  * @author Amanda
  */
 @Stateless
+@Path("/administrators")
 public class AdministratorBean {
 
     // Add business logic below. (Right-click in editor and choose
@@ -26,7 +33,7 @@ public class AdministratorBean {
     @PersistenceContext
     EntityManager em;
     
-    public void create (String username, String password, String name, String email, String jobRole) throws EntityExistsException {
+    public void createNormal (String username, String password, String name, String email, String jobRole) throws EntityExistsException {
         try {
             // verificar se existe e lançar exception
             Administrator a = em.find(Administrator.class, username);
@@ -43,7 +50,28 @@ public class AdministratorBean {
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
+    } 
+    
+    @POST
+    @Path("/create")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create (AdministratorDTO admin) throws EntityExistsException {
+        try {
+            Administrator a = em.find(Administrator.class, admin.getUsername());
+            if (a != null) {
+                throw new EntityExistsException("ERROR: Can't create new administrator because already exists a administrator with the username: " + admin.getUsername());
+            }
+            
+            Administrator administrator = new Administrator(admin.getUsername(), admin.getUsername(), admin.getName(), admin.getEmail(), admin.getJobRole());
+            em.persist(administrator);
+        } catch (EntityExistsException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }        
     }
+       
+
     
     
     

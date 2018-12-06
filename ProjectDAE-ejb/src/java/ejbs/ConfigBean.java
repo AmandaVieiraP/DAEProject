@@ -28,8 +28,9 @@ public class ConfigBean {
     @PostConstruct
     public void populateDB()  {
         try {
-            administratorBean.create("JoaoP", "123", "João Pedro", "job@email.com", "Administrator Of Things");
-            administratorBean.create("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things");
+          //  AdministratorDTO admin = new AdministratorDTO("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things")
+            //administratorBean.create("JoaoP", "123", "João Pedro", "job@email.com", "Administrator Of Things");
+            administratorBean.createNormal("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things");
             
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
