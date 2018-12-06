@@ -7,19 +7,16 @@ package web;
 
 
 import dtos.AdministratorDTO;
+import dtos.ClientDTO;
 import ejbs.AdministratorBean;
-import exceptions.EntityExistsException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -45,6 +42,7 @@ public class AdministratorManager implements Serializable {
     private AdministratorBean administratorBean;
     
     private AdministratorDTO newAdministratorDTO;
+    private ClientDTO newClientDTO;
     private UIComponent component;
     
     private Client client;
@@ -58,6 +56,7 @@ public class AdministratorManager implements Serializable {
     public AdministratorManager() {
         // acrescencar posteriormente
         this.newAdministratorDTO = new AdministratorDTO();
+        this.newClientDTO = new ClientDTO();
         client = ClientBuilder.newClient();
         
     }
@@ -70,18 +69,6 @@ public class AdministratorManager implements Serializable {
     
     public String createNewAdministrator() {
         
-        /* 
-         client.target(baseUri)
-                  .path("/students/update")
-                  .request(MediaType.APPLICATION_XML).put(Entity.xml(currentStudent));
-         // GenericEntity<List<SubjectDTO>> list = new GenericEntity<List<SubjectDTO>>(subjectsStudentIsEnrolled) {};
-          client.target(baseUri)
-                  .path("/students/updateSubjects")
-                  .path(currentStudent.getUsername())
-                  .request(MediaType.APPLICATION_XML).put(Entity.xml(new GenericEntity<List<SubjectDTO>>(subjectsStudentIsEnrolled) {})); 
-       
-        */
-             
          try {
            // administratorBean.create(newAdministratorDTO.getUsername(), newAdministratorDTO.getPassword(), newAdministratorDTO.getName(), newAdministratorDTO.getEmail(), newAdministratorDTO.getJobRole());
            client.target(baseUri)
@@ -103,14 +90,42 @@ public class AdministratorManager implements Serializable {
             //return "admin_students_create?faces-redirect=true";
             return null;
         }
-        return "admin_index?faces-redirect=true"; // é redirecionado para está página
+        return "admin_index?faces-redirect=true"; // é redirecionado para está página  
+    }
+    
+    
+    public String createNewClient() {
         
+         try {
+           client.target(baseUri)
+                   .path("/clients/create")
+                   .request(MediaType.APPLICATION_XML).post(Entity.xml(newClientDTO));
+           
+           
+           clearNewAdministrator(); 
+        } /*catch (EntityExistsException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+            System.err.println(e.getMessage());
+            return null;
+        } */  catch (Exception e) {
+            System.err.println(e.getMessage());
+            //logger.warning("Unexpected error. Try again latter!");
+            FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", logger);
+            FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
+            // logger.warning("Problem creating student in method creatStudent.");   
+            //return "admin_students_create?faces-redirect=true";
+            return null;
+        }
+        return "admin_index?faces-redirect=true"; // é redirecionado para está página  
     }
     
     public void clearNewAdministrator() {
         newAdministratorDTO = new AdministratorDTO();
     }
 
+    public void clearNewClient() {
+        newClientDTO = new ClientDTO();
+    }
   
     public AdministratorDTO getNewAdministratorDTO() {
         return newAdministratorDTO;
@@ -128,7 +143,23 @@ public class AdministratorManager implements Serializable {
         this.component = component;
     }
 
-    
+    public ClientDTO getNewClientDTO() {
+        return newClientDTO;
+    }
+
+    public void setNewClientDTO(ClientDTO newClientDTO) {
+        this.newClientDTO = newClientDTO;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+  
     
     public UserManager getUserManager() {
         return userManager;

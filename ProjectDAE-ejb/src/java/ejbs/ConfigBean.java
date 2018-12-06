@@ -24,13 +24,20 @@ public class ConfigBean {
     
     @EJB
     private AdministratorBean administratorBean;
+    @EJB 
+    private ClientBean clientBean;
     
     @PostConstruct
     public void populateDB()  {
         try {
           //  AdministratorDTO admin = new AdministratorDTO("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things")
             //administratorBean.create("JoaoP", "123", "João Pedro", "job@email.com", "Administrator Of Things");
-            administratorBean.createNormal("123", "123", "Thiago", "fsdfb@email.com", "Administrator Of Things");
+            administratorBean.create("admin", "123", "Thiago Santos", "oiji@email.com", "Administrator Of Things");
+            administratorBean.create("admin1", "123", "Pedro G.", "nhb@email.com", "Administrator Of Things");
+            administratorBean.create("admin2", "123", "João Pedro", "ryeb@email.com", "Administrator Of Things");
+            administratorBean.create("admin3", "123", "Arlindo", "fasb@email.com", "Administrator Of Things");
+            
+            clientBean.create("client1", "123", "Rua dash", "Company jjij", "John - 84562145");
             
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

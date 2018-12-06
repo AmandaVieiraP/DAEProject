@@ -21,9 +21,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
-                  
                     <li class="nav-item">
                         <h:link class="nav-link" value="Create New Admin" outcome="create_new_admin" /> 
+                    </li> 
+                  
+                    <li class="nav-item">
+                        <h:link class="nav-link" value="Create New Client" outcome="create_new_client" /> 
                     </li>    
                 </ul>
      <!--         <span class="navbar-text">
@@ -32,7 +35,10 @@
             </div>
         </nav>
         
-        <div id="main">
+        <div class="container" id="main">
+            <div class="jumpotron">
+                <h2> Admin </h2>
+            </div>
             <ui:insert name="main">
                 <!-- All the main application content goes here -->
             </ui:insert>

@@ -33,7 +33,7 @@ public class AdministratorBean {
     @PersistenceContext
     EntityManager em;
     
-    public void createNormal (String username, String password, String name, String email, String jobRole) throws EntityExistsException {
+    public void create (String username, String password, String name, String email, String jobRole) throws EntityExistsException {
         try {
             // verificar se existe e lançar exception
             Administrator a = em.find(Administrator.class, username);
