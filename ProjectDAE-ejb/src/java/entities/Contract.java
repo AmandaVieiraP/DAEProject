@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,41 +23,27 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "CONTRACTS")
 public class Contract implements Serializable {
-    
+
     @Id
     private int code;
-    
+
     @NotNull
-    private int totalMaintenanceHoursPerMonth;
-    
-    @NotNull
-    private double price;
-    
-    @NotNull
-    private int durationInYears;
-    
-    @NotNull
-    private String maintenanceSchedule;
-    
-    @NotNull
-    private double adicionalPricePerHour;
-    
+    @ManyToMany(mappedBy = "contracts")
+    private List<ContractParameter> contractParameters;
+
     @NotNull
     @OneToMany(mappedBy = "contract", cascade = CascadeType.REMOVE)
-    private List<Template>templates;
+    private List<ConfigurationSuper> templates;
 
     public Contract() {
-        this.templates=new LinkedList<>();
+        this.templates = new LinkedList<>();
+        this.contractParameters = new LinkedList<>();
     }
 
-    public Contract(int code, int totalMaintenanceHoursPerMonth, double price, int durationInYears, String maintenanceSchedule, double adicionalPricePerHour) {
+    public Contract(int code) {
         this.code = code;
-        this.totalMaintenanceHoursPerMonth = totalMaintenanceHoursPerMonth;
-        this.price = price;
-        this.durationInYears = durationInYears;
-        this.maintenanceSchedule = maintenanceSchedule;
-        this.adicionalPricePerHour = adicionalPricePerHour;
-        this.templates=new LinkedList<>();
+        this.contractParameters = new LinkedList<>();
+        this.templates = new LinkedList<>();
     }
 
     public int getCode() {
@@ -67,65 +54,43 @@ public class Contract implements Serializable {
         this.code = code;
     }
 
-    public int getTotalMaintenanceHoursPerMonth() {
-        return totalMaintenanceHoursPerMonth;
+    public List<ContractParameter> getContractParameters() {
+        return contractParameters;
     }
 
-    public void setTotalMaintenanceHoursPerMonth(int totalMaintenanceHoursPerMonth) {
-        this.totalMaintenanceHoursPerMonth = totalMaintenanceHoursPerMonth;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getDurationInYears() {
-        return durationInYears;
-    }
-
-    public void setDurationInYears(int durationInYears) {
-        this.durationInYears = durationInYears;
-    }
-
-    public String getMaintenanceSchedule() {
-        return maintenanceSchedule;
-    }
-
-    public void setMaintenanceSchedule(String maintenanceSchedule) {
-        this.maintenanceSchedule = maintenanceSchedule;
-    }
-
-    public double getAdicionalPricePerHour() {
-        return adicionalPricePerHour;
-    }
-
-    public void setAdicionalPricePerHour(double adicionalPricePerHour) {
-        this.adicionalPricePerHour = adicionalPricePerHour;
-    }
-
-    public List<Template> getTemplates() {
+    public List<ConfigurationSuper> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(List<Template> templates) {
+    public void setTemplates(List<ConfigurationSuper> templates) {
         this.templates = templates;
     }
-    
-    public void addTemplate(Template templateToAdd) {
+
+    public void addConfiguration(ConfigurationSuper templateToAdd) {
 
         if (templateToAdd != null && !templates.contains(templateToAdd)) {
             templates.add(templateToAdd);
         }
     }
 
-    public void removeTemplate(Template templateToRemove) {
+    public void removeConfiguration(ConfigurationSuper templateToRemove) {
 
         if (templateToRemove != null && templates.contains(templateToRemove)) {
             templates.remove(templateToRemove);
+        }
+    }
+
+    public void addParameter(ContractParameter contractParameter) {
+
+        if (contractParameter != null && !contractParameters.contains(contractParameter)) {
+            contractParameters.add(contractParameter);
+        }
+    }
+
+    public void removeParameter(ContractParameter contractParameter) {
+
+        if (contractParameter != null && contractParameters.contains(contractParameter)) {
+            contractParameters.remove(contractParameter);
         }
     }
 }

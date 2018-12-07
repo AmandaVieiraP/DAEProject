@@ -54,37 +54,14 @@ public class AdministratorManager implements Serializable {
         this.client = ClientBuilder.newClient();
     }
 
-    /*@PostConstruct
+    @PostConstruct
     public void init() {
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(userManager.getUsername(), userManager.getPassword());
         client.register(feature);
         logger.log(Level.WARNING, "init conc");
         logger.log(Level.WARNING, userManager.getUsername());
-    }*/
-
-    public List<TemplateDTO> getAllTemplates() {
-        /*logger.log(Level.WARNING, "init REST");
-        List<TemplateDTO> returnedTemplates=null;
-        
-        try{
-            returnedTemplates = client.target(baseUri).path("/templates/all")
-                                    .request(MediaType.APPLICATION_XML)
-                                    .get(new GenericType<List<TemplateDTO>>() {
-                                    });
-        } catch(Exception e){
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-        
-        return returnedTemplates;*/
-        
-        try {
-            return templateBean.getAll();
-        } catch (Exception e) {
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-            return null;
-        }
     }
+    
     
     public List<TemplateDTO> getAllTemplatesREST() {
         logger.log(Level.WARNING, "init REST");

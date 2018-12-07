@@ -6,13 +6,14 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -22,31 +23,28 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "MODULES")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "MODULE_TYPE", discriminatorType = DiscriminatorType.STRING)
 public class Module implements Serializable {
+
     @Id
     private int code;
-    
+
     @NotNull
     private String description;
     
     @NotNull
-    @ManyToMany
-    @JoinTable(name = "MODULES_TEMPLATES", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
-            inverseJoinColumns = @JoinColumn(name = "TEMPLATE_CODE", referencedColumnName = "CODE"))
-    private List<Template> templates;
+    @ManyToOne
+    @JoinColumn(name = "SOFTWARE_CODE")
+    private Software software;
 
     public Module() {
-        this.templates=new LinkedList<>();
-    }
-    
-    public Module(int code, String description) {
-        this.code = code;
-        this.description = description;
-        this.templates=new LinkedList<>();
     }
 
-    public Module(int code) {
+    public Module(int code, String description, Software software) {
         this.code = code;
+        this.description = description;
+        this.software=software;
     }
 
     public int getCode() {
@@ -56,18 +54,21 @@ public class Module implements Serializable {
     public void setCode(int code) {
         this.code = code;
     }
-    
-    public void addTemplate(Template templateToAdd) {
 
-        if (templateToAdd != null && !templates.contains(templateToAdd)) {
-            templates.add(templateToAdd);
-        }
+    public String getDescription() {
+        return description;
     }
 
-    public void removeTemplate(Template templateToRemove) {
-
-        if (templateToRemove != null && templates.contains(templateToRemove)) {
-            templates.remove(templateToRemove);
-        }
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    public Software getSoftware() {
+        return software;
+    }
+
+    public void setSoftware(Software software) {
+        this.software = software;
+    }
+
 }

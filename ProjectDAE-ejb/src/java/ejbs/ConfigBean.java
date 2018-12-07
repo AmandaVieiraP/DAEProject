@@ -5,11 +5,9 @@
  */
 package ejbs;
 
-import entities.Template;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 
 /**
@@ -46,7 +44,11 @@ public class ConfigBean {
             //Criar o contrat 10
             contractBean.create(10, 12, 200.50, 2, "8:00 am - 1:00 pm", 20.50);
             
-            templateBean.create(1, "Template 1", Template.STATE.Active, 1000, "Version 1", 10, "C:\\Template_1_Repo");
+            //templateBean.create(1, "Template 1", ContractParameters.STATE.Active, 1000, "Version 1", 10, "C:\\Template_1_Repo");
+            
+            //templateBean.addServiceToTemplate("Service 1", 1);
+            //templateBean.addServiceToTemplate("Service 2", 1);
+            //templateBean.addServiceToTemplate("Service 3", 1);
             
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

@@ -31,7 +31,7 @@ public class SoftwareBean {
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
-            software=new Software(code,name);
+            //software=new Software(code,name);
 
             em.persist(software);
             

@@ -7,16 +7,16 @@ package entities;
 
 import entities.UserGroup.GROUP;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,8 +31,13 @@ public class Client extends User implements Serializable {
     private String companyName;
       // perguntar o que quer aqqui exatamente, ter numero?? 
     private String contactPerson;
+    
+    @NotNull
+    @ManyToMany(mappedBy = "clients")
+    private List<Configuration> configurations;
 
     public Client() {
+        this.configurations=new LinkedList<>();
     }
 
     public Client(String username, String password, String address, String companyName, String contactPerson) {
@@ -40,6 +45,7 @@ public class Client extends User implements Serializable {
         this.address = address;
         this.companyName = companyName;
         this.contactPerson = contactPerson;
+        this.configurations=new LinkedList<>();
     }
 
     public String getAddress() {
@@ -65,6 +71,25 @@ public class Client extends User implements Serializable {
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
     }
-       
- 
+
+    public List<Configuration> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(List<Configuration> configurations) {
+        this.configurations = configurations;
+    }
+    
+    public void addConfiguration(Configuration configuration) {
+        if (configuration != null && !configurations.contains(configuration)) {
+            configurations.add(configuration);
+        }
+    }
+
+    public void removeConfiguration(Configuration configuration) {
+        if (configuration != null && configurations.contains(configuration)) {
+            configurations.remove(configuration);
+        }
+    }
+
 }

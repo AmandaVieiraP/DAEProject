@@ -9,21 +9,19 @@ import dtos.TemplateDTO;
 import entities.Software;
 import entities.Contract;
 import entities.Template;
-import entities.Template.STATE;
-import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.PermitAll;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -45,16 +43,36 @@ public class TemplateBean {
 
             List<Template> templates = query.getResultList();
 
-            return templateListToTemplatesDTOList(templates);
+           return templateListToTemplatesDTOList(templates);
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
-    public void create(int code, String description, STATE state, int software_code, String version, int contract_code, String repository) {
+    @GET
+    @Produces({/*MediaType.APPLICATION_XML,*/MediaType.APPLICATION_JSON})
+    @Path("services/{id}")
+    public /*List<String>*/ String getAllServicesFromTemplate(@PathParam("id") int code) {
         try {
-            Template template = em.find(Template.class, code);
+            //ContractParameters template = em.find(ContractParameters.class, code);
+
+            /*if (template == null) {
+                return null;
+            }
+            
+            return template.getServices().toString();*/
+            return null;
+            //return template.getServices();
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
+    /*public void create(int code, String description, STATE state, int software_code, String version, int contract_code, String repository) {
+        try {
+            ContractParameters template = em.find(ContractParameters.class, code);
             if (template != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
@@ -71,7 +89,7 @@ public class TemplateBean {
                 return;
             }
 
-            template = new Template(code, description, state, software, version, contract, repository);
+            template = new ContractParameters(code, description, state, software, version, contract, repository);
             //Adiciona estudante ao curso
             software.addTemplate(template);
 
@@ -82,14 +100,14 @@ public class TemplateBean {
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
-    }
+    }*/
 
     private List<TemplateDTO> templateListToTemplatesDTOList(List<Template> templates) {
         try {
             List<TemplateDTO> templatesDTO = new LinkedList<>();
 
             for (Template t : templates) {
-                templatesDTO.add(studentToStudentDTO(t));
+                templatesDTO.add(templateToTemplatetDTO(t));
             }
 
             return templatesDTO;
@@ -97,19 +115,36 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
-
-    private TemplateDTO studentToStudentDTO(Template t) {
+    
+    private TemplateDTO templateToTemplatetDTO(Template t) {
         try {
             return new TemplateDTO(t.getCode(),
                     t.getDescription(),
-                    t.getState().toString(),
                     t.getSoftware().getCode(),
+                    t.getSoftware().getName(),
                     t.getContract().getCode(),
-                    t.getVersion(),
-                    t.getArtefactsRepository());
+                    t.getVersion());
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
+/*
+    public void addServiceToTemplate(String serviceToAdd, int template_code) {
+        try {
+            ContractParameters template = em.find(ContractParameters.class, template_code);
+
+            if (template == null || template.getServices().contains(serviceToAdd)) {
+                return;
+            }
+
+            template.addService(serviceToAdd);
+
+            em.merge(template);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+
+    }*/
 
 }

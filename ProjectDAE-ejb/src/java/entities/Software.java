@@ -30,17 +30,62 @@ public class Software implements Serializable {
     private String name;
     
     @NotNull
+    private String description;
+    
+    @NotNull
+    private List<String> versions;
+    
+    @NotNull
     @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
-    private List<Template> templates;
+    private List<ConfigurationSuper> templates;
+    
+    @NotNull
+    @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
+    private List<Extension> extensions;
+    
+    @NotNull
+    @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
+    private List<Module> modules;
 
     public Software() {
         this.templates=new LinkedList<>();
+        this.versions=new LinkedList<>();
+        this.extensions=new LinkedList<>();
+        this.modules=new LinkedList<>();
     }
 
-    public Software(int code, String name) {
+    public Software(int code, String name, String description) {
         this.code = code;
         this.name = name;
+        this.description = description;
         this.templates=new LinkedList<>();
+        this.versions=new LinkedList<>();
+        this.extensions=new LinkedList<>();
+        this.modules=new LinkedList<>();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getVersions() {
+        return versions;
+    }
+
+    public void setVersions(List<String> versions) {
+        this.versions = versions;
+    }
+
+    public List<Extension> getExtensions() {
+        return extensions;
+    }
+
+    public void setExtensions(List<Extension> extensions) {
+        this.extensions = extensions;
     }
 
     public int getCode() {
@@ -59,25 +104,63 @@ public class Software implements Serializable {
         this.name = name;
     }
 
-    public List<Template> getTemplates() {
+    public List<ConfigurationSuper> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(List<Template> templates) {
+    public void setTemplates(List<ConfigurationSuper> templates) {
         this.templates = templates;
     }
+
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
+    }
     
-    public void addTemplate(Template templateToAdd) {
+    public void addTemplate(ConfigurationSuper templateToAdd) {
 
         if (templateToAdd != null && !templates.contains(templateToAdd)) {
             templates.add(templateToAdd);
         }
     }
 
-    public void removeTemplate(Template templateToRemove) {
+    public void removeTemplate(ConfigurationSuper templateToRemove) {
 
         if (templateToRemove != null && templates.contains(templateToRemove)) {
             templates.remove(templateToRemove);
+        }
+    }
+    
+     public void addExtension(Extension extension) {
+        if (extension != null && !extensions.contains(extension)) {
+            extensions.add(extension);
+        }
+    }
+
+    public void removeExtension(Extension extension) {
+        if (extension != null && extensions.contains(extension)) {
+            extensions.remove(extension);
+        }
+    }
+    
+    public void addVersion(String version) {
+        if (version != null && !versions.contains(version)) {
+            versions.add(version);
+        }
+    }
+    
+    public void removeModule(Module module) {
+        if (module != null && modules.contains(module)) {
+            modules.remove(module);
+        }
+    }
+    
+    public void addModule(Module module) {
+        if (module != null && !modules.contains(module)) {
+            modules.add(module);
         }
     }
     
