@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +25,9 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "EXTENSIONS")
+@NamedQueries({
+    @NamedQuery(name = "getAllExtensionsBySoftware", query = "SELECT e FROM Extension e WHERE e.software.code=?1"),
+})
 public class Extension implements Serializable {
 
     @Id

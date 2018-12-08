@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>#{anonymousManager.currentTemplate.softwareName} Details</title>
+    </h:head>
+    <h:body>
+        <h1>#{anonymousManager.currentTemplate.softwareName} Details</h1>
+        
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Software:"/>
+            <h:dataTable
+                var="software"
+                summary="Software Details"
+                value="#{anonymousManager.currentSoftware}"
+                rules="all"
+                cellpadding="5">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Code"/>
+                    </f:facet>
+                    <h:outputText value="#{software.code}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Name"/>
+                    </f:facet>
+                    <h:outputText value="#{software.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Description"/>
+                    </f:facet>
+                    <h:outputText value="#{software.description}"/>
+                </h:column>
+            </h:dataTable>
+            <h:outputLabel value="Versions:"/>
+            <h:dataTable
+                var="versions"
+                summary="Software Versions"
+                value="#{anonymousManager.currentSoftwareVersions}"
+                rules="all"
+                cellpadding="5">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Versions"/>
+                    </f:facet>
+                    <h:outputText value="#{versions}"/>
+                </h:column>
+            </h:dataTable>
+            <h:outputLabel value="Extensions:"/>
+            <h:dataTable
+                var="extension"
+                summary="Software Extensions"
+                value="#{anonymousManager.currentSoftwareExtensions}"
+                rules="all"
+                cellpadding="5">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Code"/>
+                    </f:facet>
+                    <h:outputText value="#{extension.code}"/>
+                </h:column>
+                 <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Name"/>
+                    </f:facet>
+                     <h:outputText value="#{extension.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Descrição"/>
+                    </f:facet>
+                    <h:outputText value="#{extension.description}"/>
+                </h:column>
+            </h:dataTable>
+            <h:outputLabel value="Software Modules:"/>
+            <h:dataTable
+                var="module"
+                summary="Software Modules"
+                value="#{anonymousManager.currentSoftwareModule}"
+                rules="all"
+                cellpadding="5">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Code"/>
+                    </f:facet>
+                    <h:outputText value="#{module.code}"/>
+                </h:column>
+                 <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Description"/>
+                    </f:facet>
+                     <h:outputText value="#{module.description}"/>
+                </h:column>
+            </h:dataTable>
+        </h:panelGrid>
+    </h:body>
+</html>
+

@@ -46,7 +46,7 @@ public class ContractBean {
         }
     }
 
-    public void create(int code, int totalMaintenanceHoursPerMonth, double price, int durationInYears, String maintenanceSchedule, double adicionalPricePerHour) {
+    public void create(int code) {
         try {
             Contract contract = em.find(Contract.class, code);
             if (contract != null) {
@@ -54,7 +54,7 @@ public class ContractBean {
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
-            //contract = new Contract(code, totalMaintenanceHoursPerMonth, price, durationInYears, maintenanceSchedule, adicionalPricePerHour);
+            contract = new Contract(code);
 
             em.persist(contract);
 

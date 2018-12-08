@@ -120,17 +120,17 @@ public class Software implements Serializable {
         this.modules = modules;
     }
     
-    public void addTemplate(ConfigurationSuper templateToAdd) {
+    public void addConfiguration(ConfigurationSuper configuration) {
 
-        if (templateToAdd != null && !templates.contains(templateToAdd)) {
-            templates.add(templateToAdd);
+        if (configuration != null && !templates.contains(configuration)) {
+            templates.add(configuration);
         }
     }
 
-    public void removeTemplate(ConfigurationSuper templateToRemove) {
+    public void removeConfiguration(ConfigurationSuper configuration) {
 
-        if (templateToRemove != null && templates.contains(templateToRemove)) {
-            templates.remove(templateToRemove);
+        if (configuration != null && templates.contains(configuration)) {
+            templates.remove(configuration);
         }
     }
     

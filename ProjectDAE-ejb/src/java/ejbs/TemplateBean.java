@@ -6,8 +6,8 @@
 package ejbs;
 
 import dtos.TemplateDTO;
-import entities.Software;
 import entities.Contract;
+import entities.Software;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +21,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  *
@@ -69,16 +68,17 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-
-    /*public void create(int code, String description, STATE state, int software_code, String version, int contract_code, String repository) {
+    
+    public void create(int code, String description, int software_code, int contract_code, String version) {
         try {
-            ContractParameters template = em.find(ContractParameters.class, code);
+            Template template = em.find(Template.class, code);
             if (template != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
+            
+            Software software=em.find(Software.class, software_code);
 
-            Software software = em.find(Software.class, software_code);
             if (software == null) {
                 return;
                 // throw new EntityDoesNotExistException("The course does not exists");
@@ -89,18 +89,18 @@ public class TemplateBean {
                 return;
             }
 
-            template = new ContractParameters(code, description, state, software, version, contract, repository);
-            //Adiciona estudante ao curso
-            software.addTemplate(template);
+            template = new Template(code, description, software, contract, version);
 
-            contract.addTemplate(template);
+            software.addConfiguration(template);
+
+            contract.addConfiguration(template);
 
             em.persist(template);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
-    }*/
+    }
 
     private List<TemplateDTO> templateListToTemplatesDTOList(List<Template> templates) {
         try {

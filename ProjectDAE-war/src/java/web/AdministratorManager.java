@@ -5,11 +5,9 @@
  */
 package web;
 
-import dtos.TemplateDTO;
 import ejbs.AdministratorBean;
 import ejbs.TemplateBean;
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -19,8 +17,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 /**
@@ -60,24 +56,6 @@ public class AdministratorManager implements Serializable {
         client.register(feature);
         logger.log(Level.WARNING, "init conc");
         logger.log(Level.WARNING, userManager.getUsername());
-    }
-    
-    
-    public List<TemplateDTO> getAllTemplatesREST() {
-        logger.log(Level.WARNING, "init REST");
-        List<TemplateDTO> returnedTemplates=null;
-        
-        try{
-            returnedTemplates = client.target(baseUri).path("/templates/all")
-                                    .request(MediaType.APPLICATION_XML)
-                                    .get(new GenericType<List<TemplateDTO>>() {
-                                    });
-        } catch(Exception e){
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-        
-        return returnedTemplates;
     }
 
     public UserManager getUserManager() {
