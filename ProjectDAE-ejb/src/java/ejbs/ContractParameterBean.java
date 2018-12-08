@@ -30,7 +30,7 @@ public class ContractParameterBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("contracts/{id}")
@@ -38,7 +38,7 @@ public class ContractParameterBean {
         try {
             Contract contract = em.find(Contract.class, contract_code);
 
-            if(contract==null){
+            if (contract == null) {
                 return null;
             }
 
@@ -65,13 +65,13 @@ public class ContractParameterBean {
 
     private ContractParameterDTO contractParameterTocontractParameterDTO(ContractParameter c) {
         try {
-            return new ContractParameterDTO(c.getName(),c.getDescription(),c.getParamValue());
-            
+            return new ContractParameterDTO(c.getName(), c.getDescription(), c.getParamValue());
+
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     //Change to REST if necessary
     public void create(String name, String description, String parameterValue) {
         try {
@@ -98,11 +98,11 @@ public class ContractParameterBean {
             if (contract == null || parameter == null) {
                 return;
             }
-            
-            if(contract.getContractParameters().contains(parameter)){
+
+            if (contract.getContractParameters().contains(parameter)) {
                 return;
             }
-            
+
             contract.addParameter(parameter);
             parameter.addContract(contract);
 

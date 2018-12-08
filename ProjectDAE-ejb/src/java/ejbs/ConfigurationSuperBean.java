@@ -6,7 +6,6 @@
 package ejbs;
 
 import entities.ConfigurationSuper;
-import entities.Software;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

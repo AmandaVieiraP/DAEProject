@@ -43,24 +43,23 @@ public class TemplateBean {
 
             List<Template> templates = query.getResultList();
 
-           return templateListToTemplatesDTOList(templates);
+            return templateListToTemplatesDTOList(templates);
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
-    
-    
+
     public void create(int code, String description, int software_code, int contract_code, String version) {
         try {
             Template template = em.find(Template.class, code);
-            
+
             if (template != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
-            
-            Software software=em.find(Software.class, software_code);
+
+            Software software = em.find(Software.class, software_code);
 
             if (software == null) {
                 return;
@@ -84,8 +83,8 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
-    public void associateExtensionToTemplate(int extensionCode, int templateCode){
+
+    public void associateExtensionToTemplate(int extensionCode, int templateCode) {
         try {
             Extension extension = em.find(Extension.class, extensionCode);
             Template template = em.find(Template.class, templateCode);
@@ -93,11 +92,11 @@ public class TemplateBean {
             if (extension == null || template == null) {
                 return;
             }
-            
-            if(template.getExtensions().contains(extension)){
+
+            if (template.getExtensions().contains(extension)) {
                 return;
             }
-            
+
             template.addExtension(extension);
             extension.addConfiguration(template);
 
@@ -107,8 +106,8 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
-    public void associateModuleToTemplate(int moduleCode, int templateCode){
+
+    public void associateModuleToTemplate(int moduleCode, int templateCode) {
         try {
             SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
             Template template = em.find(Template.class, templateCode);
@@ -116,11 +115,11 @@ public class TemplateBean {
             if (module == null || template == null) {
                 return;
             }
-            
-            if(template.getModules().contains(module)){
+
+            if (template.getModules().contains(module)) {
                 return;
             }
-            
+
             template.addModule(module);
             module.addTemplate(template);
 
@@ -144,7 +143,7 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     private TemplateDTO templateToTemplatetDTO(Template t) {
         try {
             return new TemplateDTO(t.getCode(),

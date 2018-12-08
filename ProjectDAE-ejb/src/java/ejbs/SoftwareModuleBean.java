@@ -32,7 +32,7 @@ public class SoftwareModuleBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("softwares/{id}")
@@ -50,7 +50,7 @@ public class SoftwareModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("templates/{id}")
@@ -58,7 +58,7 @@ public class SoftwareModuleBean {
         try {
             Template template = em.find(Template.class, template_code);
 
-            if(template==null){
+            if (template == null) {
                 return null;
             }
 
@@ -95,21 +95,21 @@ public class SoftwareModuleBean {
     }
 
     public void create(int code, String description, int softwareCode, String softwareName) {
-         try {
+        try {
             SoftwareModule softwareModule = em.find(SoftwareModule.class, code);
             if (softwareModule != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
-            
-            Software software=em.find(Software.class, softwareCode);
+
+            Software software = em.find(Software.class, softwareCode);
 
             if (software == null) {
                 return;
                 // throw new EntityDoesNotExistException("The course does not exists");
             }
 
-            softwareModule = new SoftwareModule(code,description,software);
+            softwareModule = new SoftwareModule(code, description, software);
 
             software.addModule(softwareModule);
 

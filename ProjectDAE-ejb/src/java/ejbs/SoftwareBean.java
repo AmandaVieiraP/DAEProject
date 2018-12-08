@@ -60,7 +60,7 @@ public class SoftwareBean {
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
-    }    
+    }
 
     public void create(int code, String name, String description) {
         try {
@@ -91,7 +91,6 @@ public class SoftwareBean {
             software.addVersion(version);
 
             em.merge(software);
-
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());

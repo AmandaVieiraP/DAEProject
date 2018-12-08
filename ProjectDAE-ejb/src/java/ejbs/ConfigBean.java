@@ -40,7 +40,7 @@ public class ConfigBean {
 
     @EJB
     private ContractParameterBean contractParameterBean;
-    
+
     @EJB
     private ConfigurationSuperBean configurationSuperBean;
 
@@ -84,26 +84,24 @@ public class ConfigBean {
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Contract Price");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Contract Duration");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Maintenance Schedule");
-            contractParameterBean.associateParameterToAContract(10,"Type 1 - Guarantee of Support");
-             /* Outros Parametro Exemplos:
+            contractParameterBean.associateParameterToAContract(10, "Type 1 - Guarantee of Support");
+            /* Outros Parametro Exemplos:
             custo adicional por hora de manutençao
             qualidade de serviço, 
             responsabilidades,
             disponibilidade...*/
-             
-            templateBean.associateExtensionToTemplate(12,1);
-            templateBean.associateExtensionToTemplate(13,2);
-            
+
+            templateBean.associateExtensionToTemplate(12, 1);
+            templateBean.associateExtensionToTemplate(13, 2);
+
             templateBean.associateModuleToTemplate(100, 1);
             templateBean.associateModuleToTemplate(101, 2);
-            
-            configurationSuperBean.addHelpMaterialToConfiguration(1,"First Steps in Spots Software");
-            configurationSuperBean.addHelpMaterialToConfiguration(1,"How to deal with firebase exceptions");
-            
-            configurationSuperBean.addArtefactsToConfiguration(1,"script.sql");
-            configurationSuperBean.addArtefactsToConfiguration(1,"spots.apk");
-            
 
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "First Steps in Spots Software");
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "How to deal with firebase exceptions");
+
+            configurationSuperBean.addArtefactsToConfiguration(1, "script.sql");
+            configurationSuperBean.addArtefactsToConfiguration(1, "spots.apk");
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
