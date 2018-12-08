@@ -3,9 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-
-
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
     <!-- <h:button value="Login" outcome="login" /> -->
 
@@ -14,15 +13,60 @@
 
         <ui:define name="main">
             <!-- Acrescentar coisas pra aprensentar aqui -->
-            
+            <div class="jumbotron">
+                <h1>All Software Templates</h1>
+            </div>
             <h:form rendered="#{userManager.loginFlag}">
-                
+
+                <p:dataTable
+                    var="temp"
+                    widgetVar="templatesTable"
+                    summary="List all of templates"
+                    emptyMessage="No templates found for the given criteria"
+                    value="#{anonymousManager.allTemplates}"
+                    class="datatable"
+                    filteredValue="#{anonymousManager.filteredTemplates}">
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <div align="right"><h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('templatesTable').filter()" placeholder="Enter keyword"/>
+                            </div>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Code" sortBy="#{temp.code}" filterBy="#{temp.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{temp.description}" filterBy="#{temp.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.description}"/></div>
+                    </p:column>
+                    <p:column headerText="Version" sortBy="#{temp.version}" filterBy="#{temp.version}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.version}"/></div>
+                    </p:column>
+
+                    <p:column headerText="Software" sortBy="#{temp.softwareName}" filterBy="#{temp.softwareName}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.softwareName}"/></div>
+                        <div align="center"><h:commandLink value=" View Software Details" action="anonymous_details_software?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                                <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                    <p:column headerText="Contract"  sortBy="#{temp.contractCode}" filterBy="#{temp.contractCode}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="Nr #{temp.contractCode} - "/></div>
+                        <div align="center"><h:commandLink value=" View Contract Details" action="anonymous_details_contract?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                                <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                    <p:column headerText="Other Template Details">
+                        <div align="center"><h:commandLink value="Extensions | Modules | Help Materials | Artefacts Repository" 
+                                                           action="anonymous_details_template?faces-redirect=true">
+                                <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                </p:dataTable>
             </h:form>
-            
+
         </ui:define>
     </ui:composition>   
-
-   
-
 
 </html>

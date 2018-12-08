@@ -35,6 +35,8 @@ public class AnonymousManager implements Serializable {
     private static final Logger logger = Logger.getLogger("web.AdministratorManager");
 
     private TemplateDTO currentTemplate;
+    
+    private List<TemplateDTO> filteredTemplates;
 
     private int contractCode;
     private int softwareCode;
@@ -264,6 +266,8 @@ public class AnonymousManager implements Serializable {
         }
     }
     
+    
+    
     /**
     * Getters & Setters
     **/
@@ -299,4 +303,14 @@ public class AnonymousManager implements Serializable {
     public void setSoftwareCode(int softwareCode) {
         this.softwareCode = softwareCode;
     }
+
+    public List<TemplateDTO> getFilteredTemplates() {
+        return filteredTemplates;
+    }
+
+    public void setFilteredTemplates(List<TemplateDTO> filteredTemplates) {
+        this.filteredTemplates = filteredTemplates;
+    }
+    
+    
 }
