@@ -94,7 +94,7 @@ public class SoftwareModuleBean {
         }
     }
 
-    public void create(int code, String description, int softwareCode, String softwareName) {
+    public void create(int code, String description, int softwareCode) {
         try {
             SoftwareModule softwareModule = em.find(SoftwareModule.class, code);
             if (softwareModule != null) {

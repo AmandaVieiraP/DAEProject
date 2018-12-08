@@ -54,9 +54,9 @@ public class ConfigBean {
             softwareBean.create(1000, "Spots", "A parking spot manager software");
 
             //Adicionar Versão ao software
-            softwareBean.addVersionToSoftware(1000, "version 1.0");
-            softwareBean.addVersionToSoftware(1000, "version 2.0");
-            softwareBean.addVersionToSoftware(1000, "version 3.0");
+            softwareBean.addVersionToSoftware(1000, "Version 1.0");
+            softwareBean.addVersionToSoftware(1000, "Version 2.0");
+            softwareBean.addVersionToSoftware(1000, "Version 2.1");
 
             //Adicionar Extensoes ao software
             extensionBean.create(12, "Clear Cache", "Clear Chrome Browser Cache", 1000);
@@ -64,21 +64,21 @@ public class ConfigBean {
             extensionBean.create(14, "Last Pass", "Password Manager", 1000);
 
             //Adicionar Modules de Software ao Software
-            softwareModuleBean.create(100, "Module for financial data", 1000, "Spots");
-            softwareModuleBean.create(101, "Module for human resources management", 1000, "Spots");
+            softwareModuleBean.create(100, "FD - Financial Data Managment", 1000);
+            softwareModuleBean.create(101, "HR - Human Resources Management", 1000);
 
             //Criar Parametros para o contrato
             contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 ours / month");
-            contractParameterBean.create("Type 1 - Contract Price", "The total price of the contract during the according time", "10000");
-            contractParameterBean.create("Type 1 - Contract Duration", "The ammount of time in years where the contract still valid", "3 years from the beggining date");
-            contractParameterBean.create("Type 1 - Maintenance Schedule", "Valid manteinace schedule when the clients can obtain support for eventual problems", "8am to 4pm");
-            contractParameterBean.create("Type 1 - Guarantee of Support", "Garanty of support response under the time period of manteinance schedule", "If we miss your call we will return a call during the next 10 min");
+            contractParameterBean.create("Type 1 - Contract Price", "Total price of the contract during the according time", "10000 €");
+            contractParameterBean.create("Type 1 - Contract Duration", "Amount of years where the contract is valid", "3 years");
+            contractParameterBean.create("Type 1 - Maintenance Schedule", "Maintenance horary for support of eventual problems", "From 8:00 am to 4:00 pm");
+            contractParameterBean.create("Type 1 - Guarantee of Support", "Guarantee of response hover the time period of maintenance schedule", "If we miss your call we will return it during the next 10 min");
 
             //Criar o contrat 10
             contractBean.create(10);
 
-            templateBean.create(1, "Template 1", 1000, 10, "version 1.0");
-            templateBean.create(2, "Template 2", 1000, 10, "version 1.0");
+            templateBean.create(1, "Template 1", 1000, 10, "Version 1.0");
+            templateBean.create(2, "Template 2", 1000, 10, "Version 1.0");
 
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Maintenance Hours");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Contract Price");

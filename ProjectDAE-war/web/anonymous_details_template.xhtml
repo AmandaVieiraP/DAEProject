@@ -2,85 +2,79 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>Template #{anonymousManager.currentTemplate.code} Details</title>
-    </h:head>
-    <h:body>
-        <h2>Extensions</h2>
-        <h:dataTable
-            var="extension"
-            summary="Software Extensions"
-            value="#{anonymousManager.currentTemplateExtensions}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Code"/>
-                </f:facet>
-                <h:outputText value="#{extension.code}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Name"/>
-                </f:facet>
-                <h:outputText value="#{extension.name}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Descrição"/>
-                </f:facet>
-                <h:outputText value="#{extension.description}"/>
-            </h:column>
-        </h:dataTable>
-        <h2>Template Modules</h2>
-        <h:dataTable
-            var="module"
-            summary="Template Modules"
-            value="#{anonymousManager.currentTemplateModule}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Code"/>
-                </f:facet>
-                <h:outputText value="#{module.code}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Description"/>
-                </f:facet>
-                <h:outputText value="#{module.description}"/>
-            </h:column>
-        </h:dataTable>
-        <h2>Artefacts Repository</h2>
-        <h:dataTable
-            var="repo"
-            summary="Template Artefacts"
-            value="#{anonymousManager.currentTemplateArtefacts}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="File Content"/>
-                </f:facet>
-                <h:outputText value="#{repo}"/>
-            </h:column>
-        </h:dataTable>
-        <h2>Artefacts Repository</h2>
-        <h:dataTable
-            var="help"
-            summary="Template Help Materials"
-            value="#{anonymousManager.currentTemplateHelpMaterials}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Help Materials List"/>
-                </f:facet>
-                <h:outputText value="#{help}"/>
-            </h:column>
-        </h:dataTable>
-    </h:body>
-</html>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
+    <ui:composition template="./templates/skeleton.xhtml">
+
+        <ui:define name="main">
+            <!-- Acrescentar coisas pra aprensentar aqui -->
+            <div class="jumbotron">
+                <h1>Details of Template Nro. #{anonymousManager.currentTemplate.code}</h1>
+            </div>
+            <h:form rendered="#{userManager.loginFlag}">
+                <div align="center"> <p class="h5"><strong>Template #{anonymousManager.currentTemplate.code} Extensions</strong></p></div>
+                <p:dataTable
+                    var="extension"
+                    summary="Template Extensions"
+                    value="#{anonymousManager.currentTemplateExtensions}"
+                    emptyMessage="No template extensions found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{extension.code}" filterBy="#{extension.code}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.code}"/> </div>
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{extension.name}" filterBy="#{extension.name}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.name}"/> </div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{extension.description}" filterBy="#{extension.description}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                <div align="center"> <p class="h5"><strong>Template #{anonymousManager.currentTemplate.code} Modules</strong></p></div>
+                <p:dataTable
+                    var="module"
+                    summary="Template Modules"
+                    value="#{anonymousManager.currentTemplateModule}"
+                    emptyMessage="No software modules found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{module.code}" filterBy="#{module.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                <div align="center"> <p class="h5"><strong>Template #{anonymousManager.currentTemplate.code} Artefatcs and Help Materials</strong></p></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <p:dataTable
+                                var="repo"
+                                summary="Template Artefacts Repository"
+                                value="#{anonymousManager.currentTemplateArtefacts}"
+                                emptyMessage="No template artefacts found for the given criteria">
+                                <p:column headerText="Files Content" sortBy="#{repo}" filterBy="#{repo}" filterMatchMode="contains">
+                                    <div align="center"><h:outputText value="#{repo}"/></div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        <div class="col">
+                            <p:dataTable
+                                var="help"
+                                summary="Help Materials Repository"
+                                value="#{anonymousManager.currentTemplateHelpMaterials}"
+                                emptyMessage="No template artefacts found for the given criteria">
+                                <p:column headerText="Help Materials" sortBy="#{help}" filterBy="#{help}" filterMatchMode="contains">
+                                    <div align="center"><h:outputText value="#{help}"/></div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+
+
+            </h:form> 
+
+        </ui:define>
+    </ui:composition>   
+
+</html>

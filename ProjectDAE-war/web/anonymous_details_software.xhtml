@@ -2,99 +2,75 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <h:head>
-        <title>#{anonymousManager.currentTemplate.softwareName} Details</title>
-    </h:head>
-    <h:body>
-        <h1>#{anonymousManager.currentTemplate.softwareName} Details</h1>
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
-        <h2> Software</h2>
-        <h:dataTable
-            var="software"
-            summary="Software Details"
-            value="#{anonymousManager.currentSoftware}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Code"/>
-                </f:facet>
-                <h:outputText value="#{software.code}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Name"/>
-                </f:facet>
-                <h:outputText value="#{software.name}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Description"/>
-                </f:facet>
-                <h:outputText value="#{software.description}"/>
-            </h:column>
-        </h:dataTable>
-        <h2> Versions</h2>
-        <h:dataTable
-            var="versions"
-            summary="Software Versions"
-            value="#{anonymousManager.currentSoftwareVersions}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Versions"/>
-                </f:facet>
-                <h:outputText value="#{versions}"/>
-            </h:column>
-        </h:dataTable>
-        <h2> Extensions</h2>
-        <h:dataTable
-            var="extension"
-            summary="Software Extensions"
-            value="#{anonymousManager.currentSoftwareExtensions}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Code"/>
-                </f:facet>
-                <h:outputText value="#{extension.code}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Name"/>
-                </f:facet>
-                <h:outputText value="#{extension.name}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Descrição"/>
-                </f:facet>
-                <h:outputText value="#{extension.description}"/>
-            </h:column>
-        </h:dataTable>
-        <h2> Modules</h2>
-        <h:dataTable
-            var="module"
-            summary="Software Modules"
-            value="#{anonymousManager.currentSoftwareModule}"
-            rules="all"
-            cellpadding="5">
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Code"/>
-                </f:facet>
-                <h:outputText value="#{module.code}"/>
-            </h:column>
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Description"/>
-                </f:facet>
-                <h:outputText value="#{module.description}"/>
-            </h:column>
-        </h:dataTable>
-    </h:body>
+    <ui:composition template="./templates/skeleton.xhtml">
+
+        <ui:define name="main">
+            <!-- Acrescentar coisas pra aprensentar aqui -->
+            <div class="jumbotron">
+                <h1>#{anonymousManager.currentTemplate.softwareName} Details</h1>
+            </div>
+            <h:form rendered="#{userManager.loginFlag}">
+
+                <p:dataTable
+                    var="software"
+                    summary="Software Details"
+                    value="#{anonymousManager.currentSoftware}">
+                    <p:column headerText="Code">
+                        <div align="center"><h:outputText value="#{software.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Name">
+                        <div align="center"><h:outputText value="#{software.name}"/></div>
+                    </p:column>
+                    <p:column headerText="Description">
+                        <div align="center"><h:outputText value="#{software.description}"/></div>
+                    </p:column>
+                    <p:column headerText="Versions">
+                        <ui:repeat value="#{anonymousManager.currentSoftwareVersions}" var="versions">
+                            <div align="center"> #{versions}<br/> </div>
+                        </ui:repeat>
+                    </p:column>
+                </p:dataTable>
+                <br/>
+                <div align="center"> <p class="h5"> <strong>#{anonymousManager.currentTemplate.softwareName} Extensions</strong></p></div>
+
+                <p:dataTable
+                    var="extension"
+                    summary="Software Extensions"
+                    value="#{anonymousManager.currentSoftwareExtensions}"
+                    emptyMessage="No software extensions found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{extension.code}" filterBy="#{extension.code}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.code}"/> </div>
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{extension.name}" filterBy="#{extension.name}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.name}"/> </div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{extension.description}" filterBy="#{extension.description}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                
+                <br/>
+                <div align="center"> <p class="h5"> <strong>#{anonymousManager.currentTemplate.softwareName} Modules</strong></p></div>
+                <p:dataTable
+                    var="module"
+                    summary="Software Modules"
+                    value="#{anonymousManager.currentSoftwareModule}"
+                    emptyMessage="No software modules found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{module.code}" filterBy="#{module.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form> 
+
+        </ui:define>
+    </ui:composition>   
+
 </html>
-
