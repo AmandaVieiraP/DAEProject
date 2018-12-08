@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
  * @author Iolanda
  */
 @Entity
-@Table(name = "PARAMETERS")
+@Table(name = "CONTRACTPARAMETERS")
 public class ContractParameter implements Serializable {
 
     @Id
@@ -33,12 +33,16 @@ public class ContractParameter implements Serializable {
     @NotNull
     private String paramValue;
     
-    @NotNull
+    /*@NotNull
     @ManyToMany
-    @JoinTable(name = "CONTRACTS_PARAMETERS", joinColumns = @JoinColumn(name = "PARAMETER_CODE", referencedColumnName = "CODE"),
+    @JoinTable(name = "CONTRACTPARAMETERS_CONTRACTS", joinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"),
             inverseJoinColumns = @JoinColumn(name = "CONTRACT_CODE", referencedColumnName = "CODE"))
+    private List<Contract> contracts;*/
+    
+    @NotNull
+    @ManyToMany(mappedBy = "contractParameters")
     private List<Contract> contracts;
-
+    
     public ContractParameter() {
         contracts=new LinkedList<>();
     }

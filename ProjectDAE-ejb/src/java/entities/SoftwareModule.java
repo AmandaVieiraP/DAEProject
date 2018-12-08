@@ -29,6 +29,9 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("SoftwareModule")
+@NamedQueries({
+    @NamedQuery(name = "getAllSoftwareModulesBySoftware", query = "SELECT m FROM SoftwareModule m WHERE m.software.code=?1"),
+})
 public class SoftwareModule extends Module implements Serializable {
     
     @NotNull

@@ -5,46 +5,21 @@
  */
 package ejbs;
 
-import dtos.ContractDTO;
 import entities.Contract;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author Iolanda
  */
 @Stateless
-@Path("/contracts")
 public class ContractBean {
 
     @PersistenceContext
     EntityManager em;
-    
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("/{id}")
-    public ContractDTO getContractByCode(@PathParam("id") int contract_code) {
-        try {
-            Contract contract = em.find(Contract.class, contract_code);
-            if (contract == null) {
-                return null;
-            }
-            return null;
-            
-            //return contractToContractDTO(contract);
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }
 
     public void create(int code) {
         try {
@@ -63,16 +38,30 @@ public class ContractBean {
         }
     }
 
-    /*private ContractDTO contractToContractDTO(Contract c) {
-        try {
-            return new ContractDTO(c.getCode(),
-                    c.getTotalMaintenanceHoursPerMonth(),
-                    c.getPrice(),
-                    c.getDurationInYears(),
-                    c.getMaintenanceSchedule(),
-                    c.getAdicionalPricePerHour());
-        } catch (Exception e) {
-            throw new EJBException(e.getMessage());
+    /*public void associateParameterToContract(int contractCode, String parameterName) {
+         try {
+            Contract contract = em.find(Contract.class, contractCode);
+            ContractParameter contractParameter = em.find(ContractParameter.class, parameterName);
+
+            if (contract == null || contractParameter == null) {
+                return;
+            }
+            
+            if (contractParameter.getContracts().contains(contract)) {
+                return;
+            }
+           
+
+            //Adiciona disciplina ao estudante
+            contractParameter.addContract(contract);
+
+            //Adiciona estudante à disciplina
+            contract.addParameter(contractParameter);
+
+            em.merge(contractParameter);
+            em.merge(contract);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
         }
     }*/
 }

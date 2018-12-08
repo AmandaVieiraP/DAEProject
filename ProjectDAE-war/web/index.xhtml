@@ -42,7 +42,7 @@
                     <f:facet name="header">
                         <h:outputText value="Software"/>
                     </f:facet>
-                    <h:outputText value="#{temp.softwareName}"/>
+                    <h:outputText value="#{temp.softwareName} - "/>
                     <h:commandLink value=" View Software Details" action="anonymous_details_software?faces-redirect=true">
                         <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
                     </h:commandLink>
@@ -52,9 +52,19 @@
                         <h:outputText value="Contract"/>
                     </f:facet>
                     <h:outputText value="Nr #{temp.contractCode} - "/>
-                    
+                    <h:commandLink value=" View Contract Details" action="anonymous_details_contract?faces-redirect=true">
+                        <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                    </h:commandLink>
                 </h:column>
-               
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Other Details"/>
+                    </f:facet>
+                    <h:commandLink value=" View Template Specific Extensions and Modules, Help Materials and Artefacts Repository" action="anonymous_details_template?faces-redirect=true">
+                        <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                    </h:commandLink>
+                </h:column>
+
             </h:dataTable>
         </h:form>
     </h:body>

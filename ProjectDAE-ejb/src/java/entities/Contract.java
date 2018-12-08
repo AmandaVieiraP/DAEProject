@@ -11,6 +11,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,8 +29,14 @@ public class Contract implements Serializable {
     @Id
     private int code;
 
-    @NotNull
+    /*@NotNull
     @ManyToMany(mappedBy = "contracts")
+    private List<ContractParameter> contractParameters;*/
+    
+    @NotNull
+    @ManyToMany
+    @JoinTable(name = "CONTRACTS_CONTRACTPARAMETERS", joinColumns = @JoinColumn(name = "CONTRACT_CODE", referencedColumnName = "CODE"),
+            inverseJoinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"))
     private List<ContractParameter> contractParameters;
 
     @NotNull
@@ -56,6 +64,10 @@ public class Contract implements Serializable {
 
     public List<ContractParameter> getContractParameters() {
         return contractParameters;
+    }
+
+    public void setContractParameters(List<ContractParameter> contractParameters) {
+        this.contractParameters = contractParameters;
     }
 
     public List<ConfigurationSuper> getTemplates() {
@@ -93,4 +105,6 @@ public class Contract implements Serializable {
             contractParameters.remove(contractParameter);
         }
     }
+    
+    
 }

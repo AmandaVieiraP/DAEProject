@@ -8,6 +8,7 @@ package ejbs;
 import dtos.ExtensionDTO;
 import entities.Extension;
 import entities.Software;
+import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -50,13 +51,31 @@ public class ExtensionBean {
         }
     }
 
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("templates/{id}")
+    public List<ExtensionDTO> getExtensionByTemplateCode(@PathParam("id") int template_code) {
+        try {
+            Template template = em.find(Template.class, template_code);
+
+            if (template == null) {
+                return null;
+            }
+
+            return extensionListToExtensionDTOList(template.getExtensions());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
     private List<ExtensionDTO> extensionListToExtensionDTOList(List<Extension> extensions) {
         try {
             List<ExtensionDTO> extensionsDTO = new LinkedList<>();
 
-            for (Extension e : extensions) {
+            extensions.forEach((e) -> {
                 extensionsDTO.add(extensionToExtensiontDTO(e));
-            }
+            });
 
             return extensionsDTO;
         } catch (Exception e) {
@@ -76,22 +95,23 @@ public class ExtensionBean {
         }
     }
 
+    //Change to REST if necessary
     public void create(int code, String name, String description, int softwareCode) {
-         try {
+        try {
             Extension extension = em.find(Extension.class, code);
             if (extension != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
-            
-            Software software=em.find(Software.class, softwareCode);
+
+            Software software = em.find(Software.class, softwareCode);
 
             if (software == null) {
                 return;
                 // throw new EntityDoesNotExistException("The course does not exists");
             }
 
-            extension = new Extension(code, name,description, software);
+            extension = new Extension(code, name, description, software);
 
             software.addExtension(extension);
 

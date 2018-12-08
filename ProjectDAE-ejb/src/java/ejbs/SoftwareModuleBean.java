@@ -8,6 +8,7 @@ package ejbs;
 import dtos.SoftwareModuleDTO;
 import entities.Software;
 import entities.SoftwareModule;
+import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -44,6 +45,24 @@ public class SoftwareModuleBean {
             List<SoftwareModule> softwareModules = query.getResultList();
 
             return softwareModuleListToSoftwareModuleDTOList(softwareModules);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("templates/{id}")
+    public List<SoftwareModuleDTO> getSoftwareModuleByTemplateCode(@PathParam("id") int template_code) {
+        try {
+            Template template = em.find(Template.class, template_code);
+
+            if(template==null){
+                return null;
+            }
+
+            return softwareModuleListToSoftwareModuleDTOList(template.getModules());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());

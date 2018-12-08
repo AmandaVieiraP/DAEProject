@@ -5,12 +5,13 @@
  */
 package web;
 
-import dtos.ContractDTO;
+import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.TemplateDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -101,6 +102,26 @@ public class AnonymousManager implements Serializable {
         return versions;
     }
     
+    public List<ExtensionDTO> getCurrentTemplateExtensions(){
+        List<ExtensionDTO> extensions=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            extensions = client.target(baseUri).path("/extensions/templates").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return extensions;
+    }
+    
     public List<ExtensionDTO> getCurrentSoftwareExtensions(){
         List<ExtensionDTO> extensions=new LinkedList<>();
         
@@ -128,15 +149,11 @@ public class AnonymousManager implements Serializable {
         try {
             String code = String.valueOf(currentTemplate.getSoftwareCode());
             
-            /*Response serviceResponse = client.target(baseUri).path("/softwareModules/softwares").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);*/
-            
             softwareModules = client.target(baseUri).path("/softwareModules/softwares").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<SoftwareModuleDTO>>() {
                     });
             
-            logger.log(Level.SEVERE, softwareModules.get(0).getDescription());
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
@@ -145,34 +162,54 @@ public class AnonymousManager implements Serializable {
         return softwareModules;
     }
     
-    
-    
-    //--------------------------------------
-
-    public ContractDTO getContractByCode() {
-        ContractDTO contract = null;
-
-        try {
-            String code = String.valueOf(contractCode);
-
-            contract = client.target(baseUri).path("/contracts").path(code)
-                    .request(MediaType.APPLICATION_XML).get(new GenericType<ContractDTO>() {
-            });
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-        return contract;
-    }
-    
-    public List<String> getAllCurrentTemplateServices(){
-        List<String> services=new LinkedList<>();
+    public List<SoftwareModuleDTO> getCurrentTemplateModule(){
+        List<SoftwareModuleDTO> softwareModules=new LinkedList<>();
         
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            Response serviceResponse = client.target(baseUri).path("/templates/services").path(code).
-                    request(MediaType.APPLICATION_JSON).get(Response.class);
+            softwareModules = client.target(baseUri).path("/softwareModules/templates").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareModuleDTO>>() {
+                    });
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return softwareModules;
+    }
+    
+    public List<ContractParameterDTO> getCurrentContractParameters(){
+        List<ContractParameterDTO> contractParameters=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getContractCode());
+            
+            contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    });
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return contractParameters;
+    }
+    
+    public List<String> getCurrentTemplateArtefacts(){
+        List<String> artefacts=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            Response serviceResponse = client.target(baseUri).path("/configurations/artefacts").path(code)
+                    .request(MediaType.APPLICATION_JSON).get(Response.class);
+            
+            artefacts=computeJsonResponseToStringList(serviceResponse);
             
             
         } catch (Exception e) {
@@ -180,9 +217,57 @@ public class AnonymousManager implements Serializable {
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
         
-        return services;
+        return artefacts;
     }
-
+    
+    public List<String> getCurrentTemplateHelpMaterials(){
+        List<String> helpMaterials=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            Response serviceResponse = client.target(baseUri).path("/configurations/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_JSON).get(Response.class);
+            
+            helpMaterials=computeJsonResponseToStringList(serviceResponse);
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return helpMaterials;
+    }
+    
+    /**
+    * Auxiliary Functions
+    **/
+    private List<String> computeJsonResponseToStringList(Response serviceResponse) {
+        List<String> response = new LinkedList();
+        try{
+            String list = serviceResponse.readEntity(String.class);
+            
+            list=list.replace("[", "");
+            
+            list=list.replace("]","");
+            
+            String[]servicesList=list.split(",");
+            
+            response.addAll(Arrays.asList(servicesList));
+            
+            return response;
+        }
+        catch(Exception e){
+            logger.log(Level.SEVERE, e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+    * Getters & Setters
+    **/
+    
     public Client getClient() {
         return client;
     }
@@ -213,28 +298,5 @@ public class AnonymousManager implements Serializable {
 
     public void setSoftwareCode(int softwareCode) {
         this.softwareCode = softwareCode;
-    }
-
-    private List<String> computeJsonResponseToStringList(Response serviceResponse) {
-        List<String> response = new LinkedList();
-        try{
-            String list = serviceResponse.readEntity(String.class);
-            
-            list=list.replace("[", "");
-            
-            list=list.replace("]","");
-            
-            String[]servicesList=list.split(",");
-            
-            for(String s:servicesList){
-                response.add(s);
-            }
-            
-            return response;
-        }
-        catch(Exception e){
-            logger.log(Level.SEVERE, e.getMessage());
-            return null;
-        }
     }
 }

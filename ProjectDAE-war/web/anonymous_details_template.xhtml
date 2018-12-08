@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Template #{anonymousManager.currentTemplate.code} Details</title>
+    </h:head>
+    <h:body>
+        <h2>Extensions</h2>
+        <h:dataTable
+            var="extension"
+            summary="Software Extensions"
+            value="#{anonymousManager.currentTemplateExtensions}"
+            rules="all"
+            cellpadding="5">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Code"/>
+                </f:facet>
+                <h:outputText value="#{extension.code}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Name"/>
+                </f:facet>
+                <h:outputText value="#{extension.name}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Descrição"/>
+                </f:facet>
+                <h:outputText value="#{extension.description}"/>
+            </h:column>
+        </h:dataTable>
+        <h2>Template Modules</h2>
+        <h:dataTable
+            var="module"
+            summary="Template Modules"
+            value="#{anonymousManager.currentTemplateModule}"
+            rules="all"
+            cellpadding="5">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Code"/>
+                </f:facet>
+                <h:outputText value="#{module.code}"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Description"/>
+                </f:facet>
+                <h:outputText value="#{module.description}"/>
+            </h:column>
+        </h:dataTable>
+        <h2>Artefacts Repository</h2>
+        <h:dataTable
+            var="repo"
+            summary="Template Artefacts"
+            value="#{anonymousManager.currentTemplateArtefacts}"
+            rules="all"
+            cellpadding="5">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="File Content"/>
+                </f:facet>
+                <h:outputText value="#{repo}"/>
+            </h:column>
+        </h:dataTable>
+        <h2>Artefacts Repository</h2>
+        <h:dataTable
+            var="help"
+            summary="Template Help Materials"
+            value="#{anonymousManager.currentTemplateHelpMaterials}"
+            rules="all"
+            cellpadding="5">
+            <h:column>
+                <f:facet name="header">
+                    <h:outputText value="Help Materials List"/>
+                </f:facet>
+                <h:outputText value="#{help}"/>
+            </h:column>
+        </h:dataTable>
+    </h:body>
+</html>
+

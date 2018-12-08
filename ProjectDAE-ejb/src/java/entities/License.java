@@ -22,10 +22,10 @@ import javax.validation.constraints.NotNull;
 public class License implements Serializable {
 
     @Id
-    private int key;
+    private int code;
 
     @NotNull
-    private String value;
+    private String licenceValue;
     
     @NotNull
     @ManyToOne
@@ -36,25 +36,32 @@ public class License implements Serializable {
     }
 
     public License(int key, String value, ConfigurationModule config) {
-        this.key = key;
-        this.value = value;
+        this.code = key;
+        this.licenceValue = value;
         this.configurationModule=config;
     }
 
-    public int getKey() {
-        return key;
+    public int getCode() {
+        return code;
     }
 
-    public void setKey(int key) {
-        this.key = key;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getValue() {
-        return value;
+    public String getLicenceValue() {
+        return licenceValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setLicenceValue(String licenceValue) {
+        this.licenceValue = licenceValue;
     }
 
+    public ConfigurationModule getConfigurationModule() {
+        return configurationModule;
+    }
+
+    public void setConfigurationModule(ConfigurationModule configurationModule) {
+        this.configurationModule = configurationModule;
+    }
 }

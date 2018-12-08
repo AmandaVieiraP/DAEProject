@@ -48,7 +48,7 @@ public class Extension implements Serializable {
     
     @NotNull
     @ManyToMany
-    @JoinTable(name = "CONFIGURATIONS_EXTENSIONS", joinColumns = @JoinColumn(name = "EXTENSION_CODE", referencedColumnName = "CODE"),
+    @JoinTable(name = "EXTENSIONS_CONFIGURATIONS", joinColumns = @JoinColumn(name = "EXTENSION_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "CONFIGURATION_CODE", referencedColumnName = "CODE"))
     private List<ConfigurationSuper> configurations;
 

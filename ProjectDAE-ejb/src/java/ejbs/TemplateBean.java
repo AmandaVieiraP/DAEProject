@@ -7,7 +7,9 @@ package ejbs;
 
 import dtos.TemplateDTO;
 import entities.Contract;
+import entities.Extension;
 import entities.Software;
+import entities.SoftwareModule;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -48,30 +49,12 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-
-    @GET
-    @Produces({/*MediaType.APPLICATION_XML,*/MediaType.APPLICATION_JSON})
-    @Path("services/{id}")
-    public /*List<String>*/ String getAllServicesFromTemplate(@PathParam("id") int code) {
-        try {
-            //ContractParameters template = em.find(ContractParameters.class, code);
-
-            /*if (template == null) {
-                return null;
-            }
-            
-            return template.getServices().toString();*/
-            return null;
-            //return template.getServices();
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }
+    
     
     public void create(int code, String description, int software_code, int contract_code, String version) {
         try {
             Template template = em.find(Template.class, code);
+            
             if (template != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
@@ -101,6 +84,52 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    public void associateExtensionToTemplate(int extensionCode, int templateCode){
+        try {
+            Extension extension = em.find(Extension.class, extensionCode);
+            Template template = em.find(Template.class, templateCode);
+
+            if (extension == null || template == null) {
+                return;
+            }
+            
+            if(template.getExtensions().contains(extension)){
+                return;
+            }
+            
+            template.addExtension(extension);
+            extension.addConfiguration(template);
+
+            em.merge(template);
+            em.merge(extension);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void associateModuleToTemplate(int moduleCode, int templateCode){
+        try {
+            SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
+            Template template = em.find(Template.class, templateCode);
+
+            if (module == null || template == null) {
+                return;
+            }
+            
+            if(template.getModules().contains(module)){
+                return;
+            }
+            
+            template.addModule(module);
+            module.addTemplate(template);
+
+            em.merge(template);
+            em.merge(module);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
 
     private List<TemplateDTO> templateListToTemplatesDTOList(List<Template> templates) {
         try {
@@ -128,23 +157,5 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
-/*
-    public void addServiceToTemplate(String serviceToAdd, int template_code) {
-        try {
-            ContractParameters template = em.find(ContractParameters.class, template_code);
-
-            if (template == null || template.getServices().contains(serviceToAdd)) {
-                return;
-            }
-
-            template.addService(serviceToAdd);
-
-            em.merge(template);
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-
-    }*/
 
 }

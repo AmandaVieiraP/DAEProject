@@ -8,7 +8,6 @@ package web;
 import ejbs.AdministratorBean;
 import ejbs.TemplateBean;
 import java.io.Serializable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -27,11 +26,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 @ManagedBean(name = "administratorManager")
 @SessionScoped
 public class AdministratorManager implements Serializable {
-    // também tem propriedades de controlador 
-
-    /**
-     * Creates a new instance of AdministratorManager
-     */
+    
     private static final Logger logger = Logger.getLogger("web.AdministratorManager");
 
     @EJB
@@ -54,8 +49,8 @@ public class AdministratorManager implements Serializable {
     public void init() {
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(userManager.getUsername(), userManager.getPassword());
         client.register(feature);
-        logger.log(Level.WARNING, "init conc");
-        logger.log(Level.WARNING, userManager.getUsername());
+        //logger.log(Level.WARNING, "init conc");
+        //logger.log(Level.WARNING, userManager.getUsername());
     }
 
     public UserManager getUserManager() {

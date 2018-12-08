@@ -87,6 +87,10 @@ public class ConfigurationModule extends Module implements Serializable {
     public List<Configuration> getConfigurations() {
         return configurations;
     }
+
+    public void setConfigurations(List<Configuration> configurations) {
+        this.configurations = configurations;
+    }
     
     public void addLicense(License license) {
         if (license != null && !licenses.contains(license)) {
