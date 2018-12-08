@@ -6,6 +6,7 @@
 package dtos;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +27,9 @@ public class ClientDTO extends UserDTO implements Serializable {
         this.contactPerson = contactPerson;
     }
 
+    @Override
     public void reset () {
+        super.reset();
         setAddress(null);
         setCompanyName(null);
         setContactPerson(null);

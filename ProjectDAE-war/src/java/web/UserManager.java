@@ -76,7 +76,7 @@ public class UserManager implements Serializable {
             request.login(this.username, this.password);
         } catch (ServletException e) {
             logger.log(Level.WARNING, e.getMessage());
-            return "error?faces-redirect=true";
+            return "login_error?faces-redirect=true";
         }
         if(isUserInRole("Administrator")){
             return "/faces/admin/admin_index?faces-redirect=true";
