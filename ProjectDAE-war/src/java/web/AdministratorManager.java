@@ -52,6 +52,8 @@ public class AdministratorManager implements Serializable {
     
     private AdministratorDTO currentAdminLogged; 
     
+    private List<AdministratorDTO> administratorsFiltered;
+    
     
     @ManagedProperty("#{userManager}")
     private UserManager userManager; 
@@ -107,7 +109,7 @@ public class AdministratorManager implements Serializable {
                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newClientDTO));
            
            
-           clearNewAdministrator(); 
+           clearNewClient(); 
         } /*catch (EntityExistsException e) {
             FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
             System.err.println(e.getMessage());
@@ -219,6 +221,16 @@ public class AdministratorManager implements Serializable {
     public void setCurrentAdminLogged(AdministratorDTO currentAdminLogged) {
         this.currentAdminLogged = currentAdminLogged;
     }
+
+    public List<AdministratorDTO> getAdministratorsFiltered() {
+        return administratorsFiltered;
+    }
+
+    public void setAdministratorsFiltered(List<AdministratorDTO> administratorsFiltered) {
+        this.administratorsFiltered = administratorsFiltered;
+    }
+    
+    
 
 
     

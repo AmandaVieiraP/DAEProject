@@ -12,22 +12,40 @@
         <composite:attribute name="headers" required="true"/>
         <composite:attribute name="list" required="true"/>
         <composite:attribute name="props" required="true"/>
+        <composite:attribute name="widgetVar" required="true"/>
     </composite:interface>
     
     <composite:implementation>
-        
-        <p:dataTable value="${cc.attrs.list}" var="object" summary="${cc.attrs.title}">
-            <f:facet name="header" rendered="#{not empty cc.attrs.title}">
-                <h:outputText value="${cc.attrs.title}" />
-            </f:facet>
-            <c:forEach items="#{cc.attrs.headers}" var="header" varStatus="loop">
-                <p:column headerText="${header}">
-                    <h:outputText value="${object[cc.attrs.props[loop.index]]}"></h:outputText>
-                </p:column>
-            </c:forEach>
-            <composite:insertChildren />
-        </p:dataTable>
-        
+        <h:form>
+            <p:dataTable 
+                value="${cc.attrs.list}" 
+                var="object" 
+                summary="${cc.attrs.title}" 
+                widgetVar="${cc.attrs.widgetVar}"
+                rows="10"
+                paginator="true"
+                paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,15">
+                
+                <f:facet name="header" rendered="#{not empty cc.attrs.title}">
+                    <h:outputText value="${cc.attrs.title}" />
+                </f:facet>
+                <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('${cc.attrs.widgetVar}').filter()" style="width:150px" placeholder="Enter keyword"/>
+                        </p:outputPanel>
+                </f:facet> 
+
+                <c:forEach items="#{cc.attrs.headers}" var="header" varStatus="loop">
+                    <p:column headerText="${header}" filterBy="#{object[cc.attrs.props[loop.index]]}"  filterMatchMode="contains" filterStyle="display:none;" sortBy="#{object[cc.attrs.props[loop.index]]}">
+                        <h:outputText value="${object[cc.attrs.props[loop.index]]}"></h:outputText>
+                    </p:column>
+                </c:forEach>
+                <composite:insertChildren />
+            </p:dataTable>
+        </h:form>
+            
     </composite:implementation>
     
 </html>
