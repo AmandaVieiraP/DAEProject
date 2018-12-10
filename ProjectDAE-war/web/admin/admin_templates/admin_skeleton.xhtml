@@ -9,6 +9,8 @@
         
         <title><ui:insert name="title">DAE Project</ui:insert></title>
         <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="app.css"/>
+        
         <ui:insert name="css">
             <!-- other style sheets you might want to include -->
         </ui:insert>
@@ -39,7 +41,8 @@
                             Clients
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <h:link class="dropdown-item" value="Create New Client" outcome="create_new_client" />                   
+                            <h:link class="dropdown-item" value="Create New Client" outcome="create_new_client" />    
+                            <h:link class="dropdown-item" value="List All Clients" outcome="clients_list" />
                         </div>
                     </li>
   

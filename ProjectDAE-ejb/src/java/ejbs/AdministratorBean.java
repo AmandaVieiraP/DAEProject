@@ -7,6 +7,7 @@ package ejbs;
 
 import dtos.AdministratorDTO;
 import entities.Administrator;
+import entities.Client;
 import exceptions.EntityDoesNotExistsException;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
@@ -17,8 +18,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -94,10 +97,7 @@ public class AdministratorBean {
             throw new EJBException(e.getMessage());
         }        
     }
-    
-    public AdministratorDTO administratorToDTO(Administrator admin) {
-        return new AdministratorDTO(admin.getName(), admin.getEmail(), admin.getJobRole(), admin.getUsername(), admin.getPassword());
-    }
+   
     
     @GET
     @RolesAllowed({"Administrator"})
@@ -116,6 +116,25 @@ public class AdministratorBean {
         }
     }
     
+    @DELETE 
+    @RolesAllowed({"Administrator"})
+    @Path("{username}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void remove(@PathParam("username") String username) {
+        try {
+            Administrator  admin = (Administrator) em.find(Administrator.class, username);
+                     
+            if (admin == null) {
+                throw new EntityDoesNotExistsException("ERROR: Can't delete that administrator because doesn't exists a administrator with the username: " + username);
+            }
+                   
+            em.remove(admin);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    
     public List<AdministratorDTO> administratorsToDTOs(List<Administrator> admins) {
         List<AdministratorDTO> administratorsDTO = new LinkedList<AdministratorDTO>(); 
         
@@ -125,6 +144,10 @@ public class AdministratorBean {
 
         return administratorsDTO;
     } 
+    
+    public AdministratorDTO administratorToDTO(Administrator admin) {
+        return new AdministratorDTO(admin.getName(), admin.getEmail(), admin.getJobRole(), admin.getUsername(), admin.getPassword());
+    }
     
     
     /*
@@ -138,5 +161,25 @@ public class AdministratorBean {
     }
     */
     
+    @PUT 
+    @Path("/update")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateRest(AdministratorDTO admin) throws EntityDoesNotExistsException {
+        try {
+            Administrator a = em.find(Administrator.class, admin.getUsername());
+            
+            if (a == null) {
+                throw new EntityDoesNotExistsException("ERROR: Can't update the administrator because doesn't exists any administrator with the username: " + admin.getUsername());
+            }
+            
+            a.setUsername(admin.getUsername());
+            a.setName(admin.getName());
+            a.setEmail(admin.getEmail());
+            a.setJobRole(admin.getJobRole());
+ 
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
     
 }

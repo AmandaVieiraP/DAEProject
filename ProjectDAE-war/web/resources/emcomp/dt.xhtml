@@ -29,13 +29,12 @@
                 
                 <f:facet name="header" rendered="#{not empty cc.attrs.title}">
                     <h:outputText value="${cc.attrs.title}" />
+                    <p:outputPanel class='tableFilter'>
+                        <h:outputText value="Search all fields: " />
+                        <p:inputText id="globalFilter" onkeyup="PF('${cc.attrs.widgetVar}').filter()" style="width:150px" placeholder="Enter keyword"/>
+                    </p:outputPanel>
                 </f:facet>
-                <f:facet name="header">
-                        <p:outputPanel>
-                            <h:outputText value="Search all fields: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('${cc.attrs.widgetVar}').filter()" style="width:150px" placeholder="Enter keyword"/>
-                        </p:outputPanel>
-                </f:facet> 
+
 
                 <c:forEach items="#{cc.attrs.headers}" var="header" varStatus="loop">
                     <p:column headerText="${header}" filterBy="#{object[cc.attrs.props[loop.index]]}"  filterMatchMode="contains" filterStyle="display:none;" sortBy="#{object[cc.attrs.props[loop.index]]}">

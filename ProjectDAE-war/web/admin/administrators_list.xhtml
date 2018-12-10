@@ -18,6 +18,18 @@
                    props="#{['username', 'name', 'email', 'jobRole']}" 
                    list="#{administratorManager.allAdministrators}" 
                    widgetVar="adminsTable">
+                
+                <p:column headerText="Actions"> 
+                <!--    <h:form> -->
+                        <h:commandLink value="Update" action="update_admin?faces-redirect=true">
+                            <f:setPropertyActionListener target="#{administratorManager.currentAdmin}" value="#{object}" />
+                        </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeAdministrator}">
+                            <f:param name="deleteAdminUsername" id="deleteAdminUsername" value="#{object.username}" />    
+                        </h:commandLink>
+                 <!--   </h:form> -->
+                </p:column>
             
             </em:dt> 
             

@@ -18,9 +18,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
+import javax.faces.event.ActionEvent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -51,9 +54,9 @@ public class AdministratorManager implements Serializable {
     private final String baseUri = "http://localhost:8080/ProjectDAE-war/webapi";
     
     private AdministratorDTO currentAdminLogged; 
+    private AdministratorDTO currentAdmin;
     
-    private List<AdministratorDTO> administratorsFiltered;
-    
+    private ClientDTO currentClient;    
     
     @ManagedProperty("#{userManager}")
     private UserManager userManager; 
@@ -77,7 +80,6 @@ public class AdministratorManager implements Serializable {
     public String createNewAdministrator() {
         
          try {
-           // administratorBean.create(newAdministratorDTO.getUsername(), newAdministratorDTO.getPassword(), newAdministratorDTO.getName(), newAdministratorDTO.getEmail(), newAdministratorDTO.getJobRole());
            client.target(baseUri)
                    .path("/administrators/create")
                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newAdministratorDTO));
@@ -99,7 +101,6 @@ public class AdministratorManager implements Serializable {
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para está página  
     }
-    
     
     public String createNewClient() {
         
@@ -164,6 +165,88 @@ public class AdministratorManager implements Serializable {
         return returnedAdministrators;
     }
     
+    public List<ClientDTO> getAllClients() {
+        List<ClientDTO> returnedClients = null;
+        
+        try {
+            returnedClients = client.target(baseUri)
+                    .path("/clients/all")
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ClientDTO>>() {
+                    });
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all administrators with REST");
+            return null;
+        }
+        return returnedClients;
+    }
+    
+    public String removeClient(ActionEvent event) {
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteClientUsername");
+            String username = param.getValue().toString();
+       
+            System.out.println("????????????? " + username);
+            
+            client.target(baseUri).path("/clients")
+                    .path(username)
+                    .request(MediaType.APPLICATION_XML)
+                    .delete();
+            
+        } catch (Exception e) {
+            logger.warning("Problem removing the client");  
+            return null;
+        }
+        return "admin_index?faces-redirect=true";
+    }
+    
+    public String removeAdministrator(ActionEvent event) {
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteAdminUsername");
+            String username = param.getValue().toString();
+                   
+            client.target(baseUri).path("/administrators")
+                    .path(username)
+                    .request(MediaType.APPLICATION_XML)
+                    .delete();
+            
+        } catch (Exception e) {
+            logger.warning("Problem removing the client");  
+            return null;
+        }
+        return "admin_index?faces-redirect=true";
+    }
+    
+    public String updateAdministrator () {
+        try {          
+          client.target(baseUri)
+                  .path("/administrators/update")
+                  .request(MediaType.APPLICATION_XML).put(Entity.xml(currentAdmin));
+              
+        } catch (Exception e) {
+            logger.warning("Problem updating the administrator");
+            return "update_admin";
+        }
+       // return "index?faces-redirect=true";
+       return "administrators_list?faces-redirect=true";
+    }
+   
+    public String updateClient () {
+        try {          
+          client.target(baseUri)
+                  .path("/clients/update")
+                  .request(MediaType.APPLICATION_XML).put(Entity.xml(currentClient));
+              
+        } catch (Exception e) {
+            logger.warning("Problem updating the client");
+            return "update_client";
+        }
+       // return "index?faces-redirect=true";
+       return "clients_list?faces-redirect=true";
+    }
+     
+    
     public void clearNewAdministrator() {
         newAdministratorDTO = new AdministratorDTO();
     }
@@ -222,13 +305,23 @@ public class AdministratorManager implements Serializable {
         this.currentAdminLogged = currentAdminLogged;
     }
 
-    public List<AdministratorDTO> getAdministratorsFiltered() {
-        return administratorsFiltered;
+    public AdministratorDTO getCurrentAdmin() {
+        return currentAdmin;
     }
 
-    public void setAdministratorsFiltered(List<AdministratorDTO> administratorsFiltered) {
-        this.administratorsFiltered = administratorsFiltered;
+    public void setCurrentAdmin(AdministratorDTO currentAdmin) {
+        this.currentAdmin = currentAdmin;
     }
+
+    public ClientDTO getCurrentClient() {
+        return currentClient;
+    }
+
+    public void setCurrentClient(ClientDTO currentClient) {
+        this.currentClient = currentClient;
+    }
+
+    
     
     
 
