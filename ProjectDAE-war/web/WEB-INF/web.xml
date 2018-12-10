@@ -28,6 +28,16 @@
             <description/>
             <url-pattern>/faces/admin/*</url-pattern>
         </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin webpage</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/administrators/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin clients webpage</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/clients/*</url-pattern>
+        </web-resource-collection>
         <auth-constraint>
             <description/>
             <role-name>Administrator</role-name>

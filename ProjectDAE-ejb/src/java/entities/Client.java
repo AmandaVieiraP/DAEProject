@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -26,18 +28,23 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Client")
+@NamedQueries({
+    @NamedQuery(name = "getAllClients",
+            query = "SELECT c from Client c ORDER BY c.companyName") // é uma query à entidade não à tabela
+})
 public class Client extends User implements Serializable {
+
     private String address;
     private String companyName;
-      // perguntar o que quer aqqui exatamente, ter numero?? 
+    // perguntar o que quer aqqui exatamente, ter numero?? 
     private String contactPerson;
-    
+
     @NotNull
     @ManyToMany(mappedBy = "clients")
     private List<Configuration> configurations;
 
     public Client() {
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public Client(String username, String password, String address, String companyName, String contactPerson) {
@@ -45,7 +52,7 @@ public class Client extends User implements Serializable {
         this.address = address;
         this.companyName = companyName;
         this.contactPerson = contactPerson;
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public String getAddress() {
@@ -79,7 +86,7 @@ public class Client extends User implements Serializable {
     public void setConfigurations(List<Configuration> configurations) {
         this.configurations = configurations;
     }
-    
+
     public void addConfiguration(Configuration configuration) {
         if (configuration != null && !configurations.contains(configuration)) {
             configurations.add(configuration);

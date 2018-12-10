@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
+   
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">Update admin</ui:define>
+        
+        <ui:define name="main">
+            <div class="container">
+                <h:form> 
+                    <div class="form-group">   
+                        <h:outputLabel for="username" value="Username: " />
+                        <h:outputText 
+                            class="form-control"
+                            id="username"
+                            value="#{administratorManager.currentClient.username}">
+                        </h:outputText>
+                        <h:message for="username" errorStyle="color:red" />
+                    </div>    
+                        
+                    <div class="form-group"> 
+                        <h:outputLabel for="companyName" value="Company name: " />
+                        <h:inputText
+                            id="companyName"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Company name cannot be empty"
+                            value="#{administratorManager.currentClient.companyName}" />
+                        <h:message for="companyName" errorStyle="color:red" />
+                    </div>      
+                        
+                    <div class="form-group"> 
+                        <h:outputLabel for="address" value="Address: " />
+                        <h:inputText
+                            id="address"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Address cannot be empty"
+                            value="#{administratorManager.currentClient.address}" />
+                        <h:message for="address" errorStyle="color:red" />
+                    </div>      
+                     
+                    <div class="form-group">     
+                        <h:outputLabel for="contactPerson" value="Contact person: " />
+                        <h:inputText
+                            id="contactPerson"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Contact person cannot be empty"
+                            value="#{administratorManager.currentClient.contactPerson}" />
+                        <h:message for="contactPerson" errorStyle="color:red" />         
+                    </div>                       
+                        
+
+                    <h:commandButton
+                        id="submit"
+                        value="Update"
+                        action="#{administratorManager.updateClient()}" />
+                    <h:message for="submit" errorStyle="color:red" />
+                    <h:button
+                        id="cancel"
+                        value="Cancel"   
+                        outcome="administrators_list"/>          
+                    <h:message for="cancel" errorStyle="color:red" />             
+                  
+                </h:form>  
+            </div>    
+                
+    
+        </ui:define>
+        
+        
+    </ui:composition>  
+    
+</html>
+
