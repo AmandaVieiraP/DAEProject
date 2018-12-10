@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -26,6 +28,10 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Client")
+@NamedQueries({
+    @NamedQuery(name = "getAllClients", 
+                query = "SELECT c from Client c ORDER BY c.companyName")  // é uma query à entidade não à tabela
+})
 public class Client extends User implements Serializable {
     private String address;
     private String companyName;

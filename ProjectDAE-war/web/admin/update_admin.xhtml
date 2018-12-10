@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
+   
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">Update admin</ui:define>
+        
+        <ui:define name="main">
+            <div class="container">
+                <h:form> 
+                    <div class="form-group">   
+                        <h:outputLabel for="username" value="Username: " />
+                        <h:outputText 
+                            class="form-control"
+                            id="username"
+                            value="#{administratorManager.currentAdmin.username}">
+                        </h:outputText>
+                        <h:message for="username" errorStyle="color:red" />
+                    </div>    
+                        
+                    <div class="form-group"> 
+                        <h:outputLabel for="name" value="Name: " />
+                        <h:inputText
+                            id="name"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Name cannot be empty"
+                            value="#{administratorManager.currentAdmin.name}" />
+                        <h:message for="name" errorStyle="color:red" />
+                    </div>      
+                        
+                    <div class="form-group"> 
+                        <h:outputLabel for="email" value="Email: " />
+                        <h:inputText
+                            id="email"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Email cannot be empty"
+                            value="#{administratorManager.currentAdmin.email}" />
+                        <h:message for="email" errorStyle="color:red" />
+                    </div>      
+                     
+                    <div class="form-group">     
+                        <h:outputLabel for="jobRole" value="Job Role: " />
+                        <h:inputText
+                            id="jobRole"
+                            class="form-control"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: Job role cannot be empty"
+                            value="#{administratorManager.currentAdmin.jobRole}" />
+                        <h:message for="jobRole" errorStyle="color:red" />         
+                    </div>                       
+                        
+                    <h:commandButton
+                        id="submit"
+                        value="Update"
+                        action="#{administratorManager.updateAdministrator()}" />
+                    <h:message for="submit" errorStyle="color:red" />
+                    <h:button
+                        id="cancel"
+                        value="Cancel"   
+                        outcome="administrators_list"/>          
+                    <h:message for="cancel" errorStyle="color:red" />             
+                  
+                </h:form>  
+            </div>    
+                
+    
+        </ui:define>
+        
+        
+    </ui:composition>  
+    
+</html>
+

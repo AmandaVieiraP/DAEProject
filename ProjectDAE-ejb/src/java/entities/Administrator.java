@@ -13,6 +13,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -23,6 +25,10 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Administrator")
+@NamedQueries({
+    @NamedQuery(name = "getAllAdministrators", 
+                query = "SELECT a from Administrator a ORDER BY a.name")  // é uma query à entidade não à tabela
+})
 public class Administrator extends User implements Serializable {
     private String name;
     private String email;

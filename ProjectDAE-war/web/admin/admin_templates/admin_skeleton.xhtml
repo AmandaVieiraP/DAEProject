@@ -9,6 +9,8 @@
         
         <title><ui:insert name="title">DAE Project</ui:insert></title>
         <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="app.css"/>
+        
         <ui:insert name="css">
             <!-- other style sheets you might want to include -->
         </ui:insert>
@@ -21,23 +23,49 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
-                  
                     <li class="nav-item">
-                        <h:link class="nav-link" value="Create New Admin" outcome="create_new_admin" /> 
-                    </li>    
+                        <h:link class="nav-link" value="Initial Page" outcome="admin_index" /> 
+                    </li> 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Administrators
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <h:link class="dropdown-item" value="Create New Admin" outcome="create_new_admin" />  
+                            <h:link class="dropdown-item" value="List All Admins" outcome="administrators_list" />  
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Clients
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <h:link class="dropdown-item" value="Create New Client" outcome="create_new_client" />    
+                            <h:link class="dropdown-item" value="List All Clients" outcome="clients_list" />
+                        </div>
+                    </li>
+  
                 </ul>
-     <!--         <span class="navbar-text">
-                Navbar text with an inline element
-              </span> -->
+            <span class="navbar-text">
+                ${administratorManager.currentAdminLogged.name}
+              </span> 
+               
             </div>
         </nav>
         
-        <div id="main">
+        
+        
+        <div class="container" id="main">
+            <div class="jumpotron">
+                <h2> Admin </h2>
+            </div>
             <ui:insert name="main">
                 <!-- All the main application content goes here -->
             </ui:insert>
         </div>
         
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <h:outputScript library="js" name="bootstrap.js"></h:outputScript>
         
         <ui:insert name="scripts">
