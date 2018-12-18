@@ -8,17 +8,17 @@
     <ui:composition template="./templates/skeleton.xhtml">
         
         <ui:define name="main">
-            
-            <h:form rendered="#{userManager.loginFlag}">
-                <h:panelGrid columns="2">
-                    <h:outputLabel for="usernameInput">Username: </h:outputLabel>
-                        <h:inputText id="usernameInput" value="#{userManager.username}" required="true" />
-                    <h:outputLabel for="passwordInput">Password: </h:outputLabel>
-                         <h:inputSecret id="passwordInput" value="#{userManager.password}" required="true" />
-                    <h:commandButton class="btn btn-secondary" value="Login" action="#{userManager.login}" />
-                </h:panelGrid>
-            </h:form>  
- 
+            <div id="login">
+                <h:form rendered="#{userManager.loginFlag}">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="usernameInput">Username: </h:outputLabel>
+                            <h:inputText id="usernameInput" value="#{userManager.username}" required="true" />
+                        <h:outputLabel for="passwordInput">Password: </h:outputLabel>
+                             <h:inputSecret id="passwordInput" value="#{userManager.password}" required="true" />
+                        <h:commandButton class="btn btn-secondary" value="Login" action="#{userManager.login}" />
+                    </h:panelGrid>
+                </h:form>  
+            </div>    
              
         </ui:define>
     </ui:composition>   

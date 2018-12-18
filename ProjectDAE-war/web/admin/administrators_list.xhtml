@@ -12,8 +12,11 @@
         <ui:define name="title">List of Administrators</ui:define>
         
         <ui:define name="main">
+            <div class="jumbotron">
+                <h1>List of Administrators</h1>
+            </div>
             
-            <em:dt title="List of Administrators" 
+            <em:dt
                    headers="#{['Username', 'Name', 'Email', 'Job Role']}" 
                    props="#{['username', 'name', 'email', 'jobRole']}" 
                    list="#{administratorManager.allAdministrators}" 
