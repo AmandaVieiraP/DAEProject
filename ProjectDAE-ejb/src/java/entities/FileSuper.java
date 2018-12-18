@@ -35,20 +35,14 @@ public class FileSuper implements Serializable {
 
     @NotNull
     private String mimetype;
-    
-    @NotNull
-     @JoinTable(name = "FILES_CONFIGURATIONS", joinColumns = @JoinColumn(name = "FILENAME", referencedColumnName = "FILENAME"),
-            inverseJoinColumns = @JoinColumn(name = "CONFIGURATION_CODE", referencedColumnName = "CODE"))
-    private List<ConfigurationSuper> configurations;
 
     public FileSuper() {
-        this.configurations=new LinkedList<>();
+        
     }
 
     public FileSuper(String filename, String mimetype) {
         this.filename = filename;
         this.mimetype = mimetype;
-        this.configurations=new LinkedList<>();
     }
 
     public String getFilename() {
@@ -65,27 +59,5 @@ public class FileSuper implements Serializable {
 
     public void setMimetype(String mimetype) {
         this.mimetype = mimetype;
-    }
-
-    public List<ConfigurationSuper> getConfigurations() {
-        return configurations;
-    }
-
-    public void setConfigurations(List<ConfigurationSuper> configurations) {
-        this.configurations = configurations;
-    }
-    
-    public void addConfigurations(ConfigurationSuper conf) {
-
-        if (conf != null && !configurations.contains(conf)) {
-            configurations.add(conf);
-        }
-    }
-
-    public void removeConfigurations(ConfigurationSuper config) {
-
-        if (config != null && configurations.contains(config)) {
-            configurations.remove(config);
-        }
     }
 }

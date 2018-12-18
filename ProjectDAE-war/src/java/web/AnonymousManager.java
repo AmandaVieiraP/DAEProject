@@ -5,6 +5,7 @@
  */
 package web;
 
+import dtos.ArtefactDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.TemplateDTO;
@@ -202,17 +203,16 @@ public class AnonymousManager implements Serializable {
         return contractParameters;
     }
     
-    public List<String> getCurrentTemplateArtefacts(){
-        List<String> artefacts=new LinkedList<>();
+    public List<ArtefactDTO> getCurrentTemplateArtefacts(){
+        List<ArtefactDTO> artefacts=new LinkedList<>();
         
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            Response serviceResponse = client.target(baseUri).path("/configurations/artefacts").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-            
-            artefacts=computeJsonResponseToStringList(serviceResponse);
-            
+            artefacts = client.target(baseUri).path("/artefacts").path(code)
+                    .request(MediaType.APPLICATION_JSON)
+                    .get(new GenericType<List<ArtefactDTO>>() {
+                    });     
             
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());

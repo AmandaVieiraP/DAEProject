@@ -53,7 +53,9 @@
                                 value="#{anonymousManager.currentTemplateArtefacts}"
                                 emptyMessage="No template artefacts found for the given criteria">
                                 <p:column headerText="Files Content" sortBy="#{repo}" filterBy="#{repo}" filterMatchMode="contains">
-                                    <div align="center"><h:outputText value="#{repo}"/></div>
+                                    <p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(repo.filename, repo.mimetype)}" />
+                                    </p:commandButton>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -64,19 +66,12 @@
                                 value="#{anonymousManager.currentTemplateHelpMaterials}"
                                 emptyMessage="No template artefacts found for the given criteria">
                                 <p:column headerText="Help Materials" sortBy="#{help}" filterBy="#{help}" filterMatchMode="contains">
-                                    <h:form>
-                                        <p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
-                                            <p:fileDownload value="#{downloadManager.downloadFile(help.mimetype, help.filename)}" />
-                                        </p:commandButton>
-                                    </h:form>
-                                    <!--<div align="center"><h:outputText value="#{help}"/></div>-->
+                                    <div align="center"><h:outputText value="#{help}"/></div>
                                 </p:column>
                             </p:dataTable>
                         </div>
                     </div>
                 </div>
-
-
             </h:form> 
 
         </ui:define>

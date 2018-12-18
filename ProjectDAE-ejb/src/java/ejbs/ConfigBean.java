@@ -49,6 +49,9 @@ public class ConfigBean {
     
     @EJB
     private ConfigurationBean configurationBean;
+    
+    @EJB
+    private ArtefactBean artefactBean;
 
     @PostConstruct
     public void populateDB() {
@@ -134,9 +137,11 @@ public class ConfigBean {
             configurationSuperBean.addHelpMaterialToConfiguration(1, "How to deal with firebase exceptions");
             
             //Criar os artefactos
+            artefactBean.create("database.sql", "application/sql");
+            artefactBean.create("dae_esquema.png", "image/png");
 
-            configurationSuperBean.addArtefactsToConfiguration(1, "script.sql");
-            configurationSuperBean.addArtefactsToConfiguration(1, "spots.apk");
+            configurationSuperBean.addArtefactsToConfiguration(1, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(1, "dae_esquema.png");
             
             //Criar configuração para associar a um cliente
             configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1");

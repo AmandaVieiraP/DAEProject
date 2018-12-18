@@ -5,8 +5,10 @@
  */
 package ejbs;
 
+import dtos.ArtefactDTO;
 import entities.Artefact;
 import entities.ConfigurationSuper;
+import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,10 +30,10 @@ public class ConfigurationSuperBean {
     @PersistenceContext
     EntityManager em;
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    /*@GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("artefacts/{id}")
-    public String getConfigurationArtefactsRepository(@PathParam("id") int configCode) {
+    public List<ArtefactDTO> getConfigurationArtefactsRepository(@PathParam("id") int configCode) {
         try {
             ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configCode);
             if (configurationSuper == null) {
@@ -43,8 +45,25 @@ public class ConfigurationSuperBean {
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
-    }
+    }*/
+ /*
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("softwares/{id}")
+    public List<ExtensionDTO> getExtensionBySoftwareCode(@PathParam("id") int software_code) {
+        try {
+            Query query = em.createNamedQuery("getAllExtensionsBySoftware");
 
+            query.setParameter(1, software_code);
+
+            List<Extension> extensions = query.getResultList();
+
+            return extensionListToExtensionDTOList(extensions);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }*/
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("helpMaterials/{id}")
@@ -81,25 +100,30 @@ public class ConfigurationSuperBean {
     }
 
     public void addArtefactsToConfiguration(int configCode, String filename) {
-        ConfigurationSuper conf = em.find(ConfigurationSuper.class, configCode);
+        try {
+            ConfigurationSuper conf = em.find(ConfigurationSuper.class, configCode);
+            Artefact artefact = em.find(Artefact.class, filename);
 
-        if (conf == null){
-            return;
-        }
-        
-        Artefact artefact=em.find(Artefact.class, filename);
-        
-        if (artefact == null){
-            return;
-        }
-        
-        if(conf.getArtefactsRepository().contains(artefact)){
-            return;
-        }
+            if (conf == null) {
+                return;
+            }
 
-        conf.addArtefact(artefact);
+            if (artefact == null) {
+                return;
+            }
 
-        em.merge(conf);
-        em.merge(artefact);
+            if (conf.getArtefactsRepository().contains(artefact)) {
+                return;
+            }
+
+            conf.addArtefact(artefact);
+            artefact.addConfigurations(conf);
+
+            em.merge(conf);
+            em.merge(artefact);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
     }
 }
