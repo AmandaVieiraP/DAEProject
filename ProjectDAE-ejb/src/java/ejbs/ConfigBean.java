@@ -132,6 +132,8 @@ public class ConfigBean {
 
             configurationSuperBean.addHelpMaterialToConfiguration(1, "First Steps in Spots Software");
             configurationSuperBean.addHelpMaterialToConfiguration(1, "How to deal with firebase exceptions");
+            
+            //Criar os artefactos
 
             configurationSuperBean.addArtefactsToConfiguration(1, "script.sql");
             configurationSuperBean.addArtefactsToConfiguration(1, "spots.apk");

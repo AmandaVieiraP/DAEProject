@@ -5,6 +5,7 @@
  */
 package ejbs;
 
+import entities.Artefact;
 import entities.ConfigurationSuper;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -79,15 +80,26 @@ public class ConfigurationSuperBean {
         }
     }
 
-    public void addArtefactsToConfiguration(int configCode, String artefact) {
+    public void addArtefactsToConfiguration(int configCode, String filename) {
         ConfigurationSuper conf = em.find(ConfigurationSuper.class, configCode);
 
-        if (conf == null || conf.getArtefactsRepository().contains(artefact)) {
+        if (conf == null){
+            return;
+        }
+        
+        Artefact artefact=em.find(Artefact.class, filename);
+        
+        if (artefact == null){
+            return;
+        }
+        
+        if(conf.getArtefactsRepository().contains(artefact)){
             return;
         }
 
         conf.addArtefact(artefact);
 
         em.merge(conf);
+        em.merge(artefact);
     }
 }
