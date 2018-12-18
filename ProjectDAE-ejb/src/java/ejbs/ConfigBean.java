@@ -46,6 +46,9 @@ public class ConfigBean {
 
     @EJB
     private ConfigurationSuperBean configurationSuperBean;
+    
+    @EJB
+    private ConfigurationBean configurationBean;
 
     @PostConstruct
     public void populateDB() {
@@ -132,6 +135,11 @@ public class ConfigBean {
 
             configurationSuperBean.addArtefactsToConfiguration(1, "script.sql");
             configurationSuperBean.addArtefactsToConfiguration(1, "spots.apk");
+            
+            //Criar configuração para associar a um cliente
+            configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1");
+            configurationBean.create(31, "Configuration 2", 1000, 10, "Version 1.0", "client1");
+            configurationBean.create(32, "Configuration 2", 1000, 10, "Version 1.0", "client1");
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

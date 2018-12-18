@@ -37,7 +37,7 @@ public class Contract implements Serializable {
     @ManyToMany
     @JoinTable(name = "CONTRACTS_CONTRACTPARAMETERS", joinColumns = @JoinColumn(name = "CONTRACT_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"))
-    private List<ContractParameter> contractParameters;
+    private List<Parameter> contractParameters;
 
     @NotNull
     @OneToMany(mappedBy = "contract", cascade = CascadeType.REMOVE)
@@ -62,11 +62,11 @@ public class Contract implements Serializable {
         this.code = code;
     }
 
-    public List<ContractParameter> getContractParameters() {
+    public List<Parameter> getContractParameters() {
         return contractParameters;
     }
 
-    public void setContractParameters(List<ContractParameter> contractParameters) {
+    public void setContractParameters(List<Parameter> contractParameters) {
         this.contractParameters = contractParameters;
     }
 
@@ -92,14 +92,14 @@ public class Contract implements Serializable {
         }
     }
 
-    public void addParameter(ContractParameter contractParameter) {
+    public void addParameter(Parameter contractParameter) {
 
         if (contractParameter != null && !contractParameters.contains(contractParameter)) {
             contractParameters.add(contractParameter);
         }
     }
 
-    public void removeParameter(ContractParameter contractParameter) {
+    public void removeParameter(Parameter contractParameter) {
 
         if (contractParameter != null && contractParameters.contains(contractParameter)) {
             contractParameters.remove(contractParameter);

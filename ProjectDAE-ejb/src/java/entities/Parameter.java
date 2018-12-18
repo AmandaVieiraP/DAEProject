@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,8 +19,8 @@ import javax.validation.constraints.NotNull;
  * @author Iolanda
  */
 @Entity
-@Table(name = "CONTRACTPARAMETERS")
-public class ContractParameter implements Serializable {
+@Table(name = "PARAMETERS")
+public class Parameter implements Serializable {
 
     @Id
     private String name;
@@ -33,25 +31,31 @@ public class ContractParameter implements Serializable {
     @NotNull
     private String paramValue;
     
-    /*@NotNull
-    @ManyToMany
-    @JoinTable(name = "CONTRACTPARAMETERS_CONTRACTS", joinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"),
-            inverseJoinColumns = @JoinColumn(name = "CONTRACT_CODE", referencedColumnName = "CODE"))
-    private List<Contract> contracts;*/
-    
     @NotNull
     @ManyToMany(mappedBy = "contractParameters")
     private List<Contract> contracts;
     
-    public ContractParameter() {
-        contracts=new LinkedList<>();
+    @NotNull
+    @ManyToMany(mappedBy = "moduleParameters")
+    private List<ConfigurationModule> modules;
+    
+    @NotNull
+    @ManyToMany(mappedBy = "configurationParameters")
+    private List<Configuration> configurations;
+    
+    public Parameter() {
+        this.contracts=new LinkedList<>();
+        this.modules=new LinkedList<>();
+        this.configurations=new LinkedList<>();
     }
 
-    public ContractParameter(String name, String description, String value) {
+    public Parameter(String name, String description, String value) {
         this.name = name;
         this.description = description;
         this.paramValue = value;
-        contracts=new LinkedList<>();
+        this.contracts=new LinkedList<>();
+        this.modules=new LinkedList<>();
+        this.configurations=new LinkedList<>();
     }
 
     public String getName() {
@@ -85,6 +89,22 @@ public class ContractParameter implements Serializable {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
+
+    public List<ConfigurationModule> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<ConfigurationModule> modules) {
+        this.modules = modules;
+    }
+
+    public List<Configuration> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(List<Configuration> configurations) {
+        this.configurations = configurations;
+    }
     
     public void addContract(Contract contract) {
 
@@ -97,6 +117,34 @@ public class ContractParameter implements Serializable {
 
         if (contract != null && contracts.contains(contract)) {
             contracts.remove(contract);
+        }
+    }
+    
+    public void addModule(ConfigurationModule module) {
+
+        if (module != null && !modules.contains(module)) {
+            modules.add(module);
+        }
+    }
+
+    public void removeModule(ConfigurationModule module) {
+
+        if (module != null && modules.contains(module)) {
+            modules.remove(module);
+        }
+    }
+    
+    public void addConfigurations(Configuration conf) {
+
+        if (conf != null && !configurations.contains(conf)) {
+            configurations.add(conf);
+        }
+    }
+
+    public void removeConfigurations(Configuration config) {
+
+        if (config != null && configurations.contains(config)) {
+            configurations.remove(config);
         }
     }
     

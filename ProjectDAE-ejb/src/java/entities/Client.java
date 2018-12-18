@@ -9,15 +9,16 @@ import entities.UserGroup.GROUP;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -40,7 +41,7 @@ public class Client extends User implements Serializable {
     private String contactPerson;
 
     @NotNull
-    @ManyToMany(mappedBy = "clients")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
     private List<Configuration> configurations;
 
     public Client() {

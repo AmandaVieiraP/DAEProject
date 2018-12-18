@@ -7,7 +7,7 @@ package ejbs;
 
 import dtos.ContractParameterDTO;
 import entities.Contract;
-import entities.ContractParameter;
+import entities.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -49,7 +49,7 @@ public class ContractParameterBean {
         }
     }
 
-    private List<ContractParameterDTO> contractParameterListToContractParameterDTOList(List<ContractParameter> contractParameters) {
+    private List<ContractParameterDTO> contractParameterListToContractParameterDTOList(List<Parameter> contractParameters) {
         try {
             List<ContractParameterDTO> contractParametersDTO = new LinkedList<>();
 
@@ -63,7 +63,7 @@ public class ContractParameterBean {
         }
     }
 
-    private ContractParameterDTO contractParameterTocontractParameterDTO(ContractParameter c) {
+    private ContractParameterDTO contractParameterTocontractParameterDTO(Parameter c) {
         try {
             return new ContractParameterDTO(c.getName(), c.getDescription(), c.getParamValue());
 
@@ -75,13 +75,13 @@ public class ContractParameterBean {
     //Change to REST if necessary
     public void create(String name, String description, String parameterValue) {
         try {
-            ContractParameter contractParameter = em.find(ContractParameter.class, name);
+            Parameter contractParameter = em.find(Parameter.class, name);
             if (contractParameter != null) {
                 return;
                 //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
-            contractParameter = new ContractParameter(name, description, parameterValue);
+            contractParameter = new Parameter(name, description, parameterValue);
 
             em.persist(contractParameter);
 
@@ -93,7 +93,7 @@ public class ContractParameterBean {
     public void associateParameterToAContract(int contractCode, String parameterName) {
         try {
             Contract contract = em.find(Contract.class, contractCode);
-            ContractParameter parameter = em.find(ContractParameter.class, parameterName);
+            Parameter parameter = em.find(Parameter.class, parameterName);
 
             if (contract == null || parameter == null) {
                 return;
