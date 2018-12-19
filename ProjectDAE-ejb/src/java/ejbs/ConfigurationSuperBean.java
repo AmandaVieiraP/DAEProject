@@ -67,22 +67,6 @@ public class ConfigurationSuperBean {
             throw new EJBException(ex.getMessage());
         }
     }*/
-    @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("helpMaterials/{id}")
-    public List<HelpMaterialDTO> getConfigurationHelpMaterials(@PathParam("id") int configCode) {
-        try {
-            ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configCode);
-            if (configurationSuper == null) {
-                return null;
-            }
-
-            return helpMaterialListToHelpMaterialDTOList(configurationSuper.getHelpMaterials());
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }
 
     public void addHelpMaterialToConfiguration(int configCode, String filename) {
         try {
@@ -138,28 +122,6 @@ public class ConfigurationSuperBean {
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
-        }
-    }
-
-    private List<HelpMaterialDTO> helpMaterialListToHelpMaterialDTOList(List<HelpMaterial> helpMaterials) {
-        try {
-            List<HelpMaterialDTO> helpMaterialsDTO = new LinkedList<>();
-
-            for (HelpMaterial h : helpMaterials) {
-                helpMaterialsDTO.add(helpMaterialToHelpMaterialDTO(h));
-            }
-
-            return helpMaterialsDTO;
-        } catch (Exception e) {
-            throw new EJBException(e.getMessage());
-        }
-    }
-
-    private HelpMaterialDTO helpMaterialToHelpMaterialDTO(HelpMaterial h) {
-        try {
-            return new HelpMaterialDTO(h.getFilename(),h.getMimetype());
-        } catch (Exception e) {
-            throw new EJBException(e.getMessage());
         }
     }
 }

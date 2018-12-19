@@ -23,14 +23,7 @@ public class DownloadManager {
     private StreamedContent file;
 
     public DownloadManager() {
-        /*try {
-            InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/files/dae_esquema.png");
-            
-            file = new DefaultStreamedContent(stream, "image/jpeg", "dae_esquema.png");
-        } catch (Exception e) {
-            FacesExceptionHandler.handleException(e, "Can't download the file!",
-                    logger);
-        }*/
+        
     }
     
     public StreamedContent downloadFile(String mimetype, String filename){

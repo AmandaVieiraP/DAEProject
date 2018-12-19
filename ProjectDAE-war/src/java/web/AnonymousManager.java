@@ -231,7 +231,7 @@ public class AnonymousManager implements Serializable {
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            helpMaterials = client.target(baseUri).path("/configurations/helpMaterials").path(code)
+            helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<HelpMaterialDTO>>() {
                     });
