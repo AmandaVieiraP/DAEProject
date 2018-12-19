@@ -6,14 +6,17 @@
 package ejbs;
 
 import dtos.ArtefactDTO;
+import dtos.ExtensionDTO;
 import entities.Artefact;
 import entities.ConfigurationSuper;
+import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -46,7 +49,8 @@ public class ArtefactBean {
             throw new EJBException(e.getMessage());
         }
     }
-
+    
+    
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")
     public List<ArtefactDTO> getConfigurationArtefactsRepository(@PathParam("id") int configCode) {

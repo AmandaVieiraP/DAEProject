@@ -33,14 +33,17 @@ public class DownloadManager {
         }*/
     }
     
-    public void downloadFile(String mimetype, String filename){
+    public StreamedContent downloadFile(String mimetype, String filename){
         try {
             InputStream stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/files/"+filename);
             
             file = new DefaultStreamedContent(stream, mimetype, filename);
+            
+            return file;
         } catch (Exception e) {
             FacesExceptionHandler.handleException(e, "Can't download the file!",
                     logger);
+            return null;
         }
     }
 

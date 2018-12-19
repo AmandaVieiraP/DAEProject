@@ -9,20 +9,20 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author Iolanda
  */
-@XmlRootElement(name = "Artefact")
+@XmlRootElement(name = "HelpMaterial")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ArtefactDTO extends FileSuperDTO implements Serializable{
+public class HelpMaterialDTO extends FileSuperDTO implements Serializable{
 
-    public ArtefactDTO() {
+    public HelpMaterialDTO() {
     }
 
-    public ArtefactDTO(String filename, String mimetype) {
+    public HelpMaterialDTO(String filename, String mimetype) {
         super(filename, mimetype);
     }
+    
 }

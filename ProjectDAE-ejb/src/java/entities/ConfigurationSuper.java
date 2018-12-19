@@ -59,7 +59,8 @@ public class ConfigurationSuper implements Serializable {
     private List<Artefact> artefactsRepository;
 
     @NotNull
-    private List<String> helpMaterials;
+    @ManyToMany(mappedBy = "configurations")
+    private List<HelpMaterial> helpMaterials;
 
     public ConfigurationSuper() {
         this.extensions = new LinkedList<>();
@@ -126,11 +127,11 @@ public class ConfigurationSuper implements Serializable {
         this.artefactsRepository = artefactsRepository;
     }
 
-    public List<String> getHelpMaterials() {
+    public List<HelpMaterial> getHelpMaterials() {
         return helpMaterials;
     }
 
-    public void setHelpMaterials(List<String> helpMaterials) {
+    public void setHelpMaterials(List<HelpMaterial> helpMaterials) {
         this.helpMaterials = helpMaterials;
     }
 
@@ -154,13 +155,13 @@ public class ConfigurationSuper implements Serializable {
         }
     }
 
-    public void addHelpMaterial(String material) {
+    public void addHelpMaterial(HelpMaterial material) {
         if (material != null && !helpMaterials.contains(material)) {
             helpMaterials.add(material);
         }
     }
 
-    public void removeHelpMaterial(String material) {
+    public void removeHelpMaterial(HelpMaterial material) {
         if (material != null && helpMaterials.contains(material)) {
             helpMaterials.remove(material);
         }

@@ -6,11 +6,18 @@
 package dtos;
 
 import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author Iolanda
  */
+@XmlRootElement(name = "FileSuper")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso(ArtefactDTO.class)
 public class FileSuperDTO implements Serializable{
     private String filename;
     private String mimetype;

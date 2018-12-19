@@ -6,8 +6,11 @@
 package ejbs;
 
 import dtos.ArtefactDTO;
+import dtos.HelpMaterialDTO;
 import entities.Artefact;
 import entities.ConfigurationSuper;
+import entities.HelpMaterial;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -65,34 +68,45 @@ public class ConfigurationSuperBean {
         }
     }*/
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("helpMaterials/{id}")
-    public String getConfigurationHelpMaterials(@PathParam("id") int configCode) {
+    public List<HelpMaterialDTO> getConfigurationHelpMaterials(@PathParam("id") int configCode) {
         try {
             ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configCode);
             if (configurationSuper == null) {
                 return null;
             }
 
-            return configurationSuper.getHelpMaterials().toString();
+            return helpMaterialListToHelpMaterialDTOList(configurationSuper.getHelpMaterials());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
-    public void addHelpMaterialToConfiguration(int configCode, String helpMaterial) {
+    public void addHelpMaterialToConfiguration(int configCode, String filename) {
         try {
 
             ConfigurationSuper conf = em.find(ConfigurationSuper.class, configCode);
+            HelpMaterial helpMaterial = em.find(HelpMaterial.class, filename);
 
-            if (conf == null || conf.getHelpMaterials().contains(helpMaterial)) {
+            if (conf == null) {
+                return;
+            }
+
+            if (helpMaterial == null) {
+                return;
+            }
+
+            if (conf.getHelpMaterials().contains(helpMaterial)) {
                 return;
             }
 
             conf.addHelpMaterial(helpMaterial);
+            helpMaterial.addConfigurations(conf);
 
             em.merge(conf);
+            em.merge(helpMaterial);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -124,6 +138,28 @@ public class ConfigurationSuperBean {
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+
+    private List<HelpMaterialDTO> helpMaterialListToHelpMaterialDTOList(List<HelpMaterial> helpMaterials) {
+        try {
+            List<HelpMaterialDTO> helpMaterialsDTO = new LinkedList<>();
+
+            for (HelpMaterial h : helpMaterials) {
+                helpMaterialsDTO.add(helpMaterialToHelpMaterialDTO(h));
+            }
+
+            return helpMaterialsDTO;
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+
+    private HelpMaterialDTO helpMaterialToHelpMaterialDTO(HelpMaterial h) {
+        try {
+            return new HelpMaterialDTO(h.getFilename(),h.getMimetype());
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 }

@@ -52,10 +52,11 @@
                                 summary="Template Artefacts Repository"
                                 value="#{anonymousManager.currentTemplateArtefacts}"
                                 emptyMessage="No template artefacts found for the given criteria">
-                                <p:column headerText="Files Content" sortBy="#{repo}" filterBy="#{repo}" filterMatchMode="contains">
-                                    <p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                <p:column headerText="Files Content" sortBy="#{repo.filename}" filterBy="#{repo.filename}" filterMatchMode="contains">
+                                    <!--<p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
                                         <p:fileDownload value="#{downloadManager.downloadFile(repo.filename, repo.mimetype)}" />
-                                    </p:commandButton>
+                                    </p:commandButton>-->
+                                    <div align="center"><h:outputText value="#{repo.filename}"/></div>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -64,9 +65,12 @@
                                 var="help"
                                 summary="Help Materials Repository"
                                 value="#{anonymousManager.currentTemplateHelpMaterials}"
-                                emptyMessage="No template artefacts found for the given criteria">
-                                <p:column headerText="Help Materials" sortBy="#{help}" filterBy="#{help}" filterMatchMode="contains">
-                                    <div align="center"><h:outputText value="#{help}"/></div>
+                                emptyMessage="No help material found for the given criteria">
+                                <p:column headerText="Help Materials" sortBy="#{help.filename}" filterBy="#{help.filename}" filterMatchMode="contains">
+                                    <p:commandButton value="Download #{help.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(help.mimetype,help.filename)}" />
+                                    </p:commandButton>
+                                    
                                 </p:column>
                             </p:dataTable>
                         </div>

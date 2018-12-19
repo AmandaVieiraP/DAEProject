@@ -52,6 +52,9 @@ public class ConfigBean {
     
     @EJB
     private ArtefactBean artefactBean;
+    
+    @EJB
+    private HelpMaterialBean helpMaterialBean;
 
     @PostConstruct
     public void populateDB() {
@@ -132,11 +135,14 @@ public class ConfigBean {
 
             templateBean.associateModuleToTemplate(100, 1);
             templateBean.associateModuleToTemplate(101, 2);
-
-            configurationSuperBean.addHelpMaterialToConfiguration(1, "First Steps in Spots Software");
-            configurationSuperBean.addHelpMaterialToConfiguration(1, "How to deal with firebase exceptions");
             
-            //Criar os artefactos
+            helpMaterialBean.create("Procedimento_para_Erro_Invalid_Resource_academic_management__pm.txt", "text/plain");
+            helpMaterialBean.create("User_Manual.pdf", "application/pdf");
+
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "Procedimento_para_Erro_Invalid_Resource_academic_management__pm.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "User_Manual.pdf");
+            
+            //Criar os artefactos//String filename, String mimetype
             artefactBean.create("database.sql", "application/sql");
             artefactBean.create("dae_esquema.png", "image/png");
 

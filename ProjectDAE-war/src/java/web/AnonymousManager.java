@@ -8,6 +8,7 @@ package web;
 import dtos.ArtefactDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
+import dtos.HelpMaterialDTO;
 import dtos.TemplateDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
@@ -207,10 +208,11 @@ public class AnonymousManager implements Serializable {
         List<ArtefactDTO> artefacts=new LinkedList<>();
         
         try {
+            
             String code = String.valueOf(currentTemplate.getCode());
             
             artefacts = client.target(baseUri).path("/artefacts").path(code)
-                    .request(MediaType.APPLICATION_JSON)
+                    .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ArtefactDTO>>() {
                     });     
             
@@ -222,16 +224,17 @@ public class AnonymousManager implements Serializable {
         return artefacts;
     }
     
-    public List<String> getCurrentTemplateHelpMaterials(){
-        List<String> helpMaterials=new LinkedList<>();
+    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials(){
+
+        List<HelpMaterialDTO> helpMaterials=new LinkedList<>();
         
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            Response serviceResponse = client.target(baseUri).path("/configurations/helpMaterials").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-            
-            helpMaterials=computeJsonResponseToStringList(serviceResponse);
+            helpMaterials = client.target(baseUri).path("/configurations/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<HelpMaterialDTO>>() {
+                    });
             
             
         } catch (Exception e) {
@@ -311,6 +314,7 @@ public class AnonymousManager implements Serializable {
     public void setFilteredTemplates(List<TemplateDTO> filteredTemplates) {
         this.filteredTemplates = filteredTemplates;
     }
+    
     
     
 }
