@@ -42,10 +42,9 @@
                     <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
                         <div align="center"><h:outputText value="#{module.description}"/></div>
                     </p:column>
-                    <p:column headerText="Software" sortBy="#{temp.softwareName}" filterBy="#{temp.softwareName}" filterMatchMode="contains">
-                        <div align="center"><h:outputText value="#{temp.softwareName}"/></div>
-                        <div align="center"><h:commandLink value=" View Service Modules Details" action="anonymous_details_service_module?faces-redirect=true" class="btn btn-outline-info btn-sm">
-                                <f:setPropertyActionListener target="#{anonymousManager.currentTemplate}" value="#{temp}" />
+                    <p:column headerText="Services">
+                        <div align="center"><h:commandLink value=" View Details" action="anonymous_details_service_module?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                                <f:setPropertyActionListener target="#{anonymousManager.moduleCode}" value="#{module.code}" />
                             </h:commandLink></div>
                     </p:column>
                 </p:dataTable>

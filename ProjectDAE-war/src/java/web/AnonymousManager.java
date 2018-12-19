@@ -9,6 +9,8 @@ import dtos.ArtefactDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
+import dtos.ModuleDTO;
+import dtos.ServiceDTO;
 import dtos.TemplateDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
@@ -42,6 +44,7 @@ public class AnonymousManager implements Serializable {
 
     private int contractCode;
     private int softwareCode;
+    private int moduleCode;
 
     private Client client;
     private final String baseUri = "http://localhost:8080/ProjectDAE-war/webapi";
@@ -84,6 +87,26 @@ public class AnonymousManager implements Serializable {
 
         return softwareDTO;
         
+    }
+    
+    public List<ServiceDTO> getModuleServicesDetails(){
+        List<ServiceDTO> servicesDTO = new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(moduleCode);
+            
+            servicesDTO = client.target(baseUri).path("/services").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ServiceDTO>>(){
+             });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return servicesDTO;
     }
     
     public List<String> getCurrentSoftwareVersions(){
@@ -313,6 +336,14 @@ public class AnonymousManager implements Serializable {
 
     public void setFilteredTemplates(List<TemplateDTO> filteredTemplates) {
         this.filteredTemplates = filteredTemplates;
+    }
+
+    public int getModuleCode() {
+        return moduleCode;
+    }
+
+    public void setModuleCode(int moduleCode) {
+        this.moduleCode = moduleCode;
     }
     
     

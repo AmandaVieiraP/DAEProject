@@ -5,16 +5,22 @@
  */
 package ejbs;
 
+import dtos.ExtensionDTO;
 import dtos.ServiceDTO;
 import entities.Module;
 import entities.Service;
+import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -26,6 +32,24 @@ public class ServiceBean {
 
     @PersistenceContext
     EntityManager em;
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("{id}")
+    public List<ServiceDTO> getServicesByModuleCode(@PathParam("id") int moduleCode) {
+        try {
+            Module module = em.find(Module.class, moduleCode);
+
+            if (module == null) {
+                return null;
+            }
+
+            return servicesListToServicesDTOList(module.getServices());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
     
     private List<ServiceDTO> servicesListToServicesDTOList(List<Service> services) {
         try {
