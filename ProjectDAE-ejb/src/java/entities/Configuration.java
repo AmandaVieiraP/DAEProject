@@ -17,6 +17,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -28,9 +29,6 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Configuration")
 public class Configuration extends ConfigurationSuper implements Serializable {
-
-    @NotNull
-    private List<String> services;
     
     @NotNull
     @ManyToMany(mappedBy = "configurations")
@@ -41,31 +39,28 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     
     @NotNull
     @ManyToMany
-    @JoinTable(name = "CONFIGURATIONS_CLIENTS", joinColumns = @JoinColumn(name = "CONFIG_CODE", referencedColumnName = "CODE"),
-            inverseJoinColumns = @JoinColumn(name = "CLIENT_USERNAME", referencedColumnName = "USERNAME"))
-    private List<Client> clients;
+    @JoinTable(name = "CONFIGURATIONS_PARAMETERS", joinColumns = @JoinColumn(name = "CONFIGURATION_CODE", referencedColumnName = "CODE"),
+            inverseJoinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"))
+    private List<Parameter> configurationParameters;
+    
+    @NotNull    
+    @ManyToOne
+    @JoinColumn(name = "CLIENT_USERNAME")
+    private Client client;
 
     public Configuration() {
-        this.services=new LinkedList<>();
         this.modules=new LinkedList<>();
         this.licenses=new LinkedList<>();
-        this.clients=new LinkedList<>();
+        this.configurationParameters=new LinkedList<>();
     }
 
-    public Configuration(int code, String description, Software software, Contract contract, String version) {
+    public Configuration(int code, String description, Software software, Contract contract, String version, Client client) {
         super(code, description, software, contract, version);
-        this.services=new LinkedList<>();
+        
         this.modules=new LinkedList<>();
         this.licenses=new LinkedList<>();
-        this.clients=new LinkedList<>();
-    }
-
-    public List<String> getServices() {
-        return services;
-    }
-
-    public void setServices(List<String> services) {
-        this.services = services;
+        this.configurationParameters=new LinkedList<>();
+        this.client=client;
     }
 
     public List<ConfigurationModule> getModules() {
@@ -84,14 +79,34 @@ public class Configuration extends ConfigurationSuper implements Serializable {
         this.licenses = licenses;
     }
 
-    public List<Client> getClients() {
-        return clients;
+    public Client getClient() {
+        return client;
     }
 
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
+    public void setClient(Client client) {
+        this.client = client;
+    }  
+
+    public List<Parameter> getConfigurationParameters() {
+        return configurationParameters;
+    }
+
+    public void setConfigurationParameters(List<Parameter> configurationParameters) {
+        this.configurationParameters = configurationParameters;
     }
     
+    public void addParameters(Parameter parameter) {
+        if (parameter != null && !configurationParameters.contains(parameter)) {
+            configurationParameters.add(parameter);
+        }
+    }
+
+    public void removeParameter(Parameter parameters) {
+        if (parameters != null && configurationParameters.contains(parameters)) {
+            configurationParameters.remove(parameters);
+        }
+    }
+
     public void addLicense(License license) {
         if (license != null && !licenses.contains(license)) {
             licenses.add(license);
@@ -101,30 +116,6 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     public void removeLicense(License license) {
         if (license != null && licenses.contains(license)) {
             licenses.remove(license);
-        }
-    }
-    
-    public void addService(String service) {
-        if (service != null && !services.contains(service)) {
-            services.add(service);
-        }
-    }
-
-    public void removeService(String service) {
-        if (service != null && services.contains(service)) {
-            services.remove(service);
-        }
-    }
-    
-    public void addClient(Client client) {
-        if (client != null && !clients.contains(client)) {
-            clients.add(client);
-        }
-    }
-
-    public void removeClient(Client client) {
-        if (client != null && clients.contains(client)) {
-            clients.remove(client);
         }
     }
     

@@ -55,11 +55,16 @@
                             <h:link class="dropdown-item" value="List All Configurations Templates" outcome="templates_list" />
                         </div>
                     </li>
-  
+                    <li class="nav-item">
+                        <h:form>
+                            <h:commandLink class="nav-link" value="Logout" action="#{userManager.logout}" /> 
+                        </h:form>
+                    </li> 
+                    
                 </ul>
-            <span class="navbar-text">
-                ${administratorManager.currentAdminLogged.name}
-              </span> 
+                <span class="navbar-text">
+                    ${administratorManager.currentAdminLogged.name}
+                </span> 
                
             </div>
         </nav>

@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -54,10 +55,12 @@ public class ConfigurationSuper implements Serializable {
     private List<Extension> extensions;
 
     @NotNull
-    private List<String> artefactsRepository;
+    @ManyToMany(mappedBy = "configurations")
+    private List<Artefact> artefactsRepository;
 
     @NotNull
-    private List<String> helpMaterials;
+    @ManyToMany(mappedBy = "configurations")
+    private List<HelpMaterial> helpMaterials;
 
     public ConfigurationSuper() {
         this.extensions = new LinkedList<>();
@@ -116,19 +119,19 @@ public class ConfigurationSuper implements Serializable {
         this.version = version;
     }
 
-    public List<String> getArtefactsRepository() {
+    public List<Artefact> getArtefactsRepository() {
         return artefactsRepository;
     }
 
-    public void setArtefactsRepository(List<String> artefactsRepository) {
+    public void setArtefactsRepository(List<Artefact> artefactsRepository) {
         this.artefactsRepository = artefactsRepository;
     }
 
-    public List<String> getHelpMaterials() {
+    public List<HelpMaterial> getHelpMaterials() {
         return helpMaterials;
     }
 
-    public void setHelpMaterials(List<String> helpMaterials) {
+    public void setHelpMaterials(List<HelpMaterial> helpMaterials) {
         this.helpMaterials = helpMaterials;
     }
 
@@ -140,25 +143,25 @@ public class ConfigurationSuper implements Serializable {
         this.extensions = extensions;
     }
 
-    public void addArtefact(String artefact) {
+    public void addArtefact(Artefact artefact) {
         if (artefact != null && !artefactsRepository.contains(artefact)) {
             artefactsRepository.add(artefact);
         }
     }
 
-    public void removeArtefact(String artefact) {
+    public void removeArtefact(Artefact artefact) {
         if (artefact != null && artefactsRepository.contains(artefact)) {
             artefactsRepository.remove(artefact);
         }
     }
 
-    public void addHelpMaterial(String material) {
+    public void addHelpMaterial(HelpMaterial material) {
         if (material != null && !helpMaterials.contains(material)) {
             helpMaterials.add(material);
         }
     }
 
-    public void removeHelpMaterial(String material) {
+    public void removeHelpMaterial(HelpMaterial material) {
         if (material != null && helpMaterials.contains(material)) {
             helpMaterials.remove(material);
         }

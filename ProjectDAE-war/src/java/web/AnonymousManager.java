@@ -5,8 +5,12 @@
  */
 package web;
 
+import dtos.ArtefactDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
+import dtos.HelpMaterialDTO;
+import dtos.ModuleDTO;
+import dtos.ServiceDTO;
 import dtos.TemplateDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
@@ -40,6 +44,7 @@ public class AnonymousManager implements Serializable {
 
     private int contractCode;
     private int softwareCode;
+    private int moduleCode;
 
     private Client client;
     private final String baseUri = "http://localhost:8080/ProjectDAE-war/webapi";
@@ -82,6 +87,26 @@ public class AnonymousManager implements Serializable {
 
         return softwareDTO;
         
+    }
+    
+    public List<ServiceDTO> getModuleServicesDetails(){
+        List<ServiceDTO> servicesDTO = new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(moduleCode);
+            
+            servicesDTO = client.target(baseUri).path("/services").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ServiceDTO>>(){
+             });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return servicesDTO;
     }
     
     public List<String> getCurrentSoftwareVersions(){
@@ -202,17 +227,17 @@ public class AnonymousManager implements Serializable {
         return contractParameters;
     }
     
-    public List<String> getCurrentTemplateArtefacts(){
-        List<String> artefacts=new LinkedList<>();
+    public List<ArtefactDTO> getCurrentTemplateArtefacts(){
+        List<ArtefactDTO> artefacts=new LinkedList<>();
         
         try {
+            
             String code = String.valueOf(currentTemplate.getCode());
             
-            Response serviceResponse = client.target(baseUri).path("/configurations/artefacts").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-            
-            artefacts=computeJsonResponseToStringList(serviceResponse);
-            
+            artefacts = client.target(baseUri).path("/artefacts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ArtefactDTO>>() {
+                    });     
             
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -222,16 +247,17 @@ public class AnonymousManager implements Serializable {
         return artefacts;
     }
     
-    public List<String> getCurrentTemplateHelpMaterials(){
-        List<String> helpMaterials=new LinkedList<>();
+    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials(){
+
+        List<HelpMaterialDTO> helpMaterials=new LinkedList<>();
         
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            Response serviceResponse = client.target(baseUri).path("/configurations/helpMaterials").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-            
-            helpMaterials=computeJsonResponseToStringList(serviceResponse);
+            helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<HelpMaterialDTO>>() {
+                    });
             
             
         } catch (Exception e) {
@@ -311,6 +337,15 @@ public class AnonymousManager implements Serializable {
     public void setFilteredTemplates(List<TemplateDTO> filteredTemplates) {
         this.filteredTemplates = filteredTemplates;
     }
+
+    public int getModuleCode() {
+        return moduleCode;
+    }
+
+    public void setModuleCode(int moduleCode) {
+        this.moduleCode = moduleCode;
+    }
+    
     
     
 }

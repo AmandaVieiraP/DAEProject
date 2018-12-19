@@ -24,9 +24,13 @@
                         <h:commandLink value="Update" action="update_client?faces-redirect=true">
                             <f:setPropertyActionListener target="#{administratorManager.currentClient}" value="#{object}" />
                         </h:commandLink>
-                        &nbsp;
+                        <br/>
                         <h:commandLink value="Remove" actionListener="#{administratorManager.removeClient}">
                             <f:param name="deleteClientUsername" id="deleteClientUsername" value="#{object.username}" />    
+                        </h:commandLink>
+                        <br/>
+                        <h:commandLink value="View Configurations" action="configurations_client?faces-redirect=true">
+                            <f:setPropertyActionListener target="#{administratorManager.currentClient}" value="#{object}" />
                         </h:commandLink>
                  <!--   </h:form> -->
                 </p:column>
