@@ -55,6 +55,9 @@ public class ConfigBean {
     
     @EJB
     private HelpMaterialBean helpMaterialBean;
+    
+    @EJB
+    private ServiceBean serviceBean;
 
     @PostConstruct
     public void populateDB() {
@@ -105,7 +108,13 @@ public class ConfigBean {
             //Adicionar Modules de Software ao Software
             softwareModuleBean.create(100, "FD - Financial Data Managment", 1000);
             softwareModuleBean.create(101, "HR - Human Resources Management", 1000);
-
+            
+            serviceBean.create(1,"Service 1","Description of service 1","Version 1.0");
+            serviceBean.create(2,"Service 2","Description of service 2","Version 1.2");
+            
+            serviceBean.associateServiceToModule(1, 100);
+            serviceBean.associateServiceToModule(2, 101);
+            
             //Criar Parametros para o contrato
             contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 ours / month");
             contractParameterBean.create("Type 1 - Contract Price", "Total price of the contract during the according time", "10000 €");

@@ -5,14 +5,9 @@
  */
 package ejbs;
 
-import dtos.ExtensionDTO;
 import dtos.ServiceDTO;
-import entities.Contract;
-import entities.Extension;
 import entities.Module;
-import entities.Parameter;
 import entities.Service;
-import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
