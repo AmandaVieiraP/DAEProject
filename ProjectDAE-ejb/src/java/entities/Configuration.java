@@ -29,9 +29,6 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Configuration")
 public class Configuration extends ConfigurationSuper implements Serializable {
-
-    @NotNull
-    private List<String> services;
     
     @NotNull
     @ManyToMany(mappedBy = "configurations")
@@ -52,7 +49,6 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     private Client client;
 
     public Configuration() {
-        this.services=new LinkedList<>();
         this.modules=new LinkedList<>();
         this.licenses=new LinkedList<>();
         this.configurationParameters=new LinkedList<>();
@@ -60,19 +56,11 @@ public class Configuration extends ConfigurationSuper implements Serializable {
 
     public Configuration(int code, String description, Software software, Contract contract, String version, Client client) {
         super(code, description, software, contract, version);
-        this.services=new LinkedList<>();
+        
         this.modules=new LinkedList<>();
         this.licenses=new LinkedList<>();
         this.configurationParameters=new LinkedList<>();
         this.client=client;
-    }
-
-    public List<String> getServices() {
-        return services;
-    }
-
-    public void setServices(List<String> services) {
-        this.services = services;
     }
 
     public List<ConfigurationModule> getModules() {
@@ -128,18 +116,6 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     public void removeLicense(License license) {
         if (license != null && licenses.contains(license)) {
             licenses.remove(license);
-        }
-    }
-    
-    public void addService(String service) {
-        if (service != null && !services.contains(service)) {
-            services.add(service);
-        }
-    }
-
-    public void removeService(String service) {
-        if (service != null && services.contains(service)) {
-            services.remove(service);
         }
     }
     
