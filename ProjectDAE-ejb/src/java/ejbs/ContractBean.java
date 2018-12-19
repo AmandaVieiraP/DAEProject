@@ -5,17 +5,27 @@
  */
 package ejbs;
 
+import dtos.ContractDTO;
+import dtos.SoftwareDTO;
 import entities.Contract;
+import entities.Software;
+import java.util.LinkedList;
+import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author Iolanda
  */
 @Stateless
+@Path("/contracts")
 public class ContractBean {
 
     @PersistenceContext
@@ -37,7 +47,37 @@ public class ContractBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    @GET
+    //@RolesAllowed({"Administrator"})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all")
+    public List<ContractDTO> getAll() {
+        try {
+              // o EntityManager é que sabe como pegar todos os students 
+              // este bean vai ao entitymanager que depois vai à BD buscar os dados 
+              // o entitymanager sabe que tem que ir à entity Student pois é essa a entidade que tem a NamedQuery getAllStudents 
+              // não pode haver duas entidades com NamedQuery iguais 
+            List<Contract> contracts = em.createNamedQuery("getAllContracts").getResultList();
+            return contractsToDTOs(contracts);
+        } catch(Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    private List<ContractDTO> contractsToDTOs(List<Contract> contracts) {
+       List<ContractDTO> contractsDTO = new LinkedList<ContractDTO>(); 
+        
+        for(Contract c : contracts) {
+            contractsDTO.add(contractToDTO(c));
+        }
 
+        return contractsDTO;
+    }
+    
+    public ContractDTO contractToDTO(Contract contract) {
+        return new ContractDTO(contract.getCode());
+    }
     /*public void associateParameterToContract(int contractCode, String parameterName) {
          try {
             Contract contract = em.find(Contract.class, contractCode);
@@ -64,4 +104,6 @@ public class ContractBean {
             throw new EJBException(ex.getMessage());
         }
     }*/
+
+    
 }

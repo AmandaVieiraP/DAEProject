@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+
+        <ui:define name="main">
+            <!-- Acrescentar coisas pra aprensentar aqui -->
+            <div class="jumbotron">
+                <h1>Details of Template Nro. #{administratorManager.currentTemplate.code}</h1>
+            </div>
+            <h:form rendered="#{userManager.loginFlag}">
+                <div align="center"> <p class="h5"><strong>Template #{administratorManager.currentTemplate.code} Extensions</strong></p></div>
+                <p:dataTable
+                    var="extension"
+                    summary="Template Extensions"
+                    value="#{administratorManager.currentTemplateExtensions}"
+                    emptyMessage="No template extensions found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{extension.code}" filterBy="#{extension.code}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.code}"/> </div>
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{extension.name}" filterBy="#{extension.name}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.name}"/> </div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{extension.description}" filterBy="#{extension.description}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                <div align="center"> <p class="h5"><strong>Template #{administratorManager.currentTemplate.code} Modules</strong></p></div>
+                <p:dataTable
+                    var="module"
+                    summary="Template Modules"
+                    value="#{administratorManager.currentTemplateModule}"
+                    emptyMessage="No software modules found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{module.code}" filterBy="#{module.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                <div align="center"> <p class="h5"><strong>Template #{administratorManager.currentTemplate.code} Artefatcs and Help Materials</strong></p></div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <p:dataTable
+                                var="repo"
+                                summary="Template Artefacts Repository"
+                                value="#{administratorManager.currentTemplateArtefacts}"
+                                emptyMessage="No template artefacts found for the given criteria">
+                                <p:column headerText="Files Content" sortBy="#{repo}" filterBy="#{repo}" filterMatchMode="contains">
+                                    <div align="center"><h:outputText value="#{repo}"/></div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        <div class="col">
+                            <p:dataTable
+                                var="help"
+                                summary="Help Materials Repository"
+                                value="#{administratorManager.currentTemplateHelpMaterials}"
+                                emptyMessage="No template artefacts found for the given criteria">
+                                <p:column headerText="Help Materials" sortBy="#{help}" filterBy="#{help}" filterMatchMode="contains">
+                                    <div align="center"><h:outputText value="#{help}"/></div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </div>
+
+            </h:form> 
+
+        </ui:define>
+    </ui:composition>   
+
+</html>

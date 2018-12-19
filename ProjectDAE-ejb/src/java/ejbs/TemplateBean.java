@@ -5,12 +5,15 @@
  */
 package ejbs;
 
+import dtos.AdministratorDTO;
 import dtos.TemplateDTO;
+import entities.Administrator;
 import entities.Contract;
 import entities.Extension;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
+import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -18,8 +21,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -45,6 +51,72 @@ public class TemplateBean {
 
             return templateListToTemplatesDTOList(templates);
 
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @POST
+    @Path("/create")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void create (TemplateDTO temp) throws EntityExistsException {
+        try {
+            Template template = em.find(Template.class, temp.getCode());
+            if (template != null) {
+                throw new EntityExistsException("ERROR: Can't create new template because already exists a template with the code: " + temp.getCode());
+            }
+            
+            Software software = em.find(Software.class, temp.getSoftwareCode());
+
+            if (software == null) {
+                return;
+                // throw new EntityDoesNotExistException("The course does not exists");
+            }
+
+            Contract contract = em.find(Contract.class, temp.getContractCode());
+            if (contract == null) {
+                return;
+            }
+
+            template = new Template(temp.getCode(), temp.getDescription(), software, contract, temp.getVersion());
+
+            software.addConfiguration(template);
+
+            contract.addConfiguration(template);
+
+            em.persist(template);
+        } catch (EntityExistsException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }        
+    }
+    
+    @POST
+    @Path("/{templateId}/extension/{extensionId}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void associateExtensionToTemplateRest(@PathParam("extensionId") int extensionCode, @PathParam("templateId") int templateCode) {
+        try {
+            
+            System.out.println("recebido extensionId: "+extensionCode + " templateId: " + templateCode);
+
+            Extension extension = em.find(Extension.class, extensionCode);
+            Template template = em.find(Template.class, templateCode);
+
+            if (extension == null || template == null) {
+                return;
+            }
+
+            if (template.getExtensions().contains(extension)) {
+                return;
+            }
+
+            template.addExtension(extension);
+            extension.addConfiguration(template);
+
+            em.merge(template);
+            em.merge(extension);
+            
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+
+        <ui:define name="main">
+            <!-- Acrescentar coisas pra aprensentar aqui -->
+            <div class="jumbotron">
+                <h1>#{administratorManager.currentTemplate.softwareName} Details</h1>
+            </div>
+            <h:form rendered="#{userManager.loginFlag}">
+
+                <p:dataTable
+                    var="software"
+                    summary="Software Details"
+                    value="#{administratorManager.currentSoftware}">
+                    <p:column headerText="Code">
+                        <div align="center"><h:outputText value="#{software.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Name">
+                        <div align="center"><h:outputText value="#{software.name}"/></div>
+                    </p:column>
+                    <p:column headerText="Description">
+                        <div align="center"><h:outputText value="#{software.description}"/></div>
+                    </p:column>
+                    <p:column headerText="Versions">
+                        <ui:repeat value="#{administratorManager.currentSoftwareVersions}" var="versions">
+                            <div align="center"> #{versions}<br/> </div>
+                        </ui:repeat>
+                    </p:column>
+                </p:dataTable>
+                <br/>
+                <div align="center"> <p class="h5"> <strong>#{administratorManager.currentTemplate.softwareName} Extensions</strong></p></div>
+
+                <p:dataTable
+                    var="extension"
+                    summary="Software Extensions"
+                    value="#{administratorManager.currentSoftwareExtensions}"
+                    emptyMessage="No software extensions found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{extension.code}" filterBy="#{extension.code}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.code}"/> </div>
+                    </p:column>
+                    <p:column headerText="Name" sortBy="#{extension.name}" filterBy="#{extension.name}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.name}"/> </div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{extension.description}" filterBy="#{extension.description}" filterMatchMode="contains">
+                        <div align="center"> <h:outputText value="#{extension.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+                
+                <br/>
+                <div align="center"> <p class="h5"> <strong>#{administratorManager.currentTemplate.softwareName} Modules</strong></p></div>
+                <p:dataTable
+                    var="module"
+                    summary="Software Modules"
+                    value="#{administratorManager.currentSoftwareModule}"
+                    emptyMessage="No software modules found for the given criteria">
+                    <p:column headerText="Code" sortBy="#{module.code}" filterBy="#{module.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.description}"/></div>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form> 
+
+        </ui:define>
+    </ui:composition>   
+
+</html>

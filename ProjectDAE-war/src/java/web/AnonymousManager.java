@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response;
 @SessionScoped
 public class AnonymousManager implements Serializable {
 
-    private static final Logger logger = Logger.getLogger("web.AdministratorManager");
+    private static final Logger logger = Logger.getLogger("web.AnonymousManager");
 
     private TemplateDTO currentTemplate;
     

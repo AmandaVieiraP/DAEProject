@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
+    
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">List of Templates</ui:define>
+        
+        <ui:define name="main">
+            <h:form rendered="#{userManager.loginFlag}">
+               
+            <p:dataTable
+                    var="temp"
+                    widgetVar="templatesTable"
+                    summary="List all of templates"
+                    emptyMessage="No templates found for the given criteria"
+                    value="#{administratorManager.allTemplates}"
+                    class="datatable"
+                    filteredValue="#{administratorManager.filteredTemplates}">
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <div align="right"><h:outputText value="Search all fields:" />
+                                <p:inputText id="globalFilter" onkeyup="PF('templatesTable').filter()" placeholder="Enter keyword"/>
+                            </div>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Code" sortBy="#{temp.code}" filterBy="#{temp.code}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.code}"/></div>
+                    </p:column>
+                    <p:column headerText="Description" sortBy="#{temp.description}" filterBy="#{temp.description}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.description}"/></div>
+                    </p:column>
+                    <p:column headerText="Version" sortBy="#{temp.version}" filterBy="#{temp.version}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.version}"/></div>
+                    </p:column>
+
+                    <p:column headerText="Software" sortBy="#{temp.softwareName}" filterBy="#{temp.softwareName}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{temp.softwareName}"/></div>
+                        <div align="center"><h:commandLink value=" View Software Details" action="admin_details_software?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                                <f:setPropertyActionListener target="#{administratorManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                    <p:column headerText="Contract"  sortBy="#{temp.contractCode}" filterBy="#{temp.contractCode}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="Nr #{temp.contractCode} - "/></div>
+                        <div align="center"><h:commandLink value=" View Contract Details" action="admin_details_contract?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                                <f:setPropertyActionListener target="#{administratorManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                    <p:column headerText="Other Template Details">
+                        <div align="center"><h:commandLink value="Extensions | Modules | Help Materials | Artefacts Repository" 
+                                                           action="admin_details_template?faces-redirect=true">
+                                <f:setPropertyActionListener target="#{administratorManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink></div>
+                    </p:column>
+                </p:dataTable>
+            
+            </h:form>
+        </ui:define>
+        
+        
+    </ui:composition>  
+    
+</html>
+

@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">Create new configuration template</ui:define>
+        
+        <ui:define name="main">
+            <div class="container">
+                    
+                  <h:form>
+                   <div class="form-group">     
+                        <h:outputLabel for="software" value="Software: " />
+                        <br></br>
+                        <h:selectOneMenu id="software" value="#{administratorManager.newTemplateDTO.softwareCode}" >
+                        <f:selectItems value="#{administratorManager.allSoftwares}" var="software" itemValue="#{software.code}" itemLabel="Name: #{software.name} code: #{software.code} " />
+                        </h:selectOneMenu>
+                    </div> 
+                
+                    <div class="form-group">
+                        <h:commandLink
+                        class="btn btn-secondary"
+                        value="Show software modules"
+                        id="softwareModules"
+                        action="#{administratorManager.allModulesFromASoftware()}" />
+                    </div>
+                      
+                      
+                    <div class="form-group">
+                        <h:commandLink
+                        class="btn btn-secondary"
+                        value="Show software extensions"
+                        id="softwareExtensions"
+                        action="#{administratorManager.allExtentionsFromASoftware()}" />
+                    </div>
+
+                 </h:form>
+
+                <h:form>
+                    <div class="form-group">     
+                        <h:outputLabel for="module" value="Software modules: " />
+                        <br></br>     
+                        <h:selectManyListbox  id="module" value="#{administratorManager.selectedSoftwareModules}">
+                        <f:selectItems value="#{administratorManager.softwareModules}" var="module" itemValue="#{module.code}" itemLabel="Name: #{module.softwareName} Code: #{module.code}  Description: #{module.description}" />
+                        </h:selectManyListbox>
+                  </div> 
+                    
+                    <div class="form-group">     
+                        <h:outputLabel for="module" value="Software extensions " />
+                        <br></br>     
+                        <h:selectManyListbox  id="extension" value="#{administratorManager.selectedSoftwareExtensions}">
+                        <f:selectItems value="#{administratorManager.softwareExtensions}" var="extension" itemValue="#{extension.code}" itemLabel="Name: #{extension.softwareName} Code: #{extension.code}  Description: #{extension.description}" />
+                        </h:selectManyListbox>
+                  </div> 
+                    
+                    <div class="form-group">   
+                        <h:outputLabel for="code" value="Code: " />
+                        <h:inputText
+                            size="20"
+                            class="form-control"
+                            id="code"
+                            required="true"
+                            requiredMessage="Error: Code cannot be empty"
+                            value="#{administratorManager.newTemplateDTO.code}" >
+                        </h:inputText>    
+                        <h:message for="description" errorStyle="color:red" />
+                    </div>  
+                    
+                    <div class="form-group">   
+                        <h:outputLabel for="description" value="Description: " />
+                        <h:inputText
+                            size="20"
+                            class="form-control"
+                            id="description"
+                            required="true"
+                            requiredMessage="Error: Description cannot be empty"
+                            value="#{administratorManager.newTemplateDTO.description}" >
+                        </h:inputText>    
+                        <h:message for="description" errorStyle="color:red" />
+                    </div>  
+                        
+                    <div class="form-group">       
+                        <h:outputLabel for="version" value="Version: " />    
+                        <h:inputText
+                            class="form-control"
+                            id="version"
+                            size="20"
+                            required="true"
+                            requiredMessage="Error: version cannot be empty"
+                            value="#{administratorManager.newTemplateDTO.version}" >
+                        </h:inputText>
+                        <h:message for="version"  errorStyle="color:red" />     
+                    </div> 
+                  
+                   
+                    <div class="form-group">     
+                        <h:outputLabel for="contract" value="Contract: " />
+                        <br></br>
+                        <h:selectOneMenu id="contract" value="#{administratorManager.newTemplateDTO.contractCode}" >
+                        <f:selectItems value="#{administratorManager.allContracts}" var="contract" itemValue="#{contract.code}" itemLabel="Contract code: #{contract.code}" />
+                        </h:selectOneMenu>
+                    </div> 
+  
+                    <br></br>
+              
+                    <div class="form-group">
+                    <h:commandButton
+                        class="btn btn-secondary"
+                        id="submit"
+                        value="Create"
+                        binding="#{administratorManager.component}"
+                        action="#{administratorManager.createNewTemplateSoftware()}" />
+                    <h:message for="submit" />    
+                    </div>
+                    
+                    
+                   
+                </h:form> 
+                 <br></br>
+ 
+            </div>    
+                
+        </ui:define>
+        
+       
+    </ui:composition>   
+              
+</html>

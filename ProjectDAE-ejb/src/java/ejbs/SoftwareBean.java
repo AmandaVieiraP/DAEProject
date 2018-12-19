@@ -5,13 +5,21 @@
  */
 package ejbs;
 
+import dtos.AdministratorDTO;
 import dtos.SoftwareDTO;
+import entities.Administrator;
 import entities.Software;
+import exceptions.EntityExistsException;
+import java.util.LinkedList;
+import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -44,6 +52,23 @@ public class SoftwareBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @GET
+    //@RolesAllowed({"Administrator"})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all")
+    public List<SoftwareDTO> getAll() {
+        try {
+              // o EntityManager é que sabe como pegar todos os students 
+              // este bean vai ao entitymanager que depois vai à BD buscar os dados 
+              // o entitymanager sabe que tem que ir à entity Student pois é essa a entidade que tem a NamedQuery getAllStudents 
+              // não pode haver duas entidades com NamedQuery iguais 
+            List<Software> softwares = em.createNamedQuery("getAllSoftwares").getResultList();
+            return softwaresToDTOs(softwares);
+        } catch(Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -61,6 +86,8 @@ public class SoftwareBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    
 
     public void create(int code, String name, String description) {
         try {
@@ -106,4 +133,20 @@ public class SoftwareBean {
             throw new EJBException(e.getMessage());
         }
     }
+
+    private List<SoftwareDTO> softwaresToDTOs(List<Software> softwares) {
+        List<SoftwareDTO> softwresDTO = new LinkedList<SoftwareDTO>(); 
+        
+        for(Software s : softwares) {
+            softwresDTO.add(softwareToDTO(s));
+        }
+
+        return softwresDTO;
+    }
+    
+    public SoftwareDTO softwareToDTO(Software software) {
+        return new SoftwareDTO(software.getCode(), software.getName(), software.getDescription());
+    }
+    
+ 
 }

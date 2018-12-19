@@ -9,8 +9,15 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,6 +28,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "SOFTWARES")
+@NamedQueries({
+    @NamedQuery(name = "getAllSoftwares", 
+                query = "SELECT s from Software s ORDER BY s.code")  // é uma query à entidade não à tabela
+})
 public class Software implements Serializable {
     
     @Id

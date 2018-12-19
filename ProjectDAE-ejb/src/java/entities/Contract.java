@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "CONTRACTS")
+@NamedQueries({
+    @NamedQuery(name = "getAllContracts", 
+                query = "SELECT c from Contract c ORDER BY c.code")  // é uma query à entidade não à tabela
+})
 public class Contract implements Serializable {
 
     @Id

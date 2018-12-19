@@ -7,9 +7,18 @@ package web;
 
 import dtos.AdministratorDTO;
 import dtos.ClientDTO;
+import dtos.ContractDTO;
+import dtos.ContractParameterDTO;
+import dtos.ExtensionDTO;
+import dtos.SoftwareDTO;
+import dtos.SoftwareModuleDTO;
+import dtos.TemplateDTO;
 import ejbs.AdministratorBean;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,12 +28,15 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.apache.jasper.tagplugins.jstl.ForEach;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 /**
@@ -40,7 +52,16 @@ public class AdministratorManager implements Serializable {
 
     private AdministratorDTO newAdministratorDTO;
     private ClientDTO newClientDTO;
+    
+    private TemplateDTO newTemplateDTO;
+    private List<SoftwareModuleDTO> softwareModules;
+    private List<String> selectedSoftwareModules;
+    private List<ExtensionDTO> softwareExtensions;
+    private List<String> selectedSoftwareExtensions;
+    
     private UIComponent component;
+    
+    private List<TemplateDTO> filteredTemplates;
 
     private Client client;
 
@@ -48,6 +69,7 @@ public class AdministratorManager implements Serializable {
 
     private AdministratorDTO currentAdminLogged;
     private AdministratorDTO currentAdmin;
+    private TemplateDTO currentTemplate;
 
     private ClientDTO currentClient;
 
@@ -58,6 +80,7 @@ public class AdministratorManager implements Serializable {
         // acrescencar posteriormente
         this.newAdministratorDTO = new AdministratorDTO();
         this.newClientDTO = new ClientDTO();
+        this.newTemplateDTO = new TemplateDTO();
         this.currentAdminLogged = new AdministratorDTO();
         client = ClientBuilder.newClient();
 
@@ -92,6 +115,74 @@ public class AdministratorManager implements Serializable {
             return null;
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para está página  
+    }
+    
+    public String createNewTemplateSoftware() {
+
+        try {
+            
+            System.out.println("selected extensions: " + this.selectedSoftwareExtensions.toString());
+            
+
+            SoftwareDTO soft = new SoftwareDTO();
+            String code = String.valueOf(newTemplateDTO.getSoftwareCode());
+            
+            soft = client.target(baseUri).path("/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<SoftwareDTO>() {
+                    });
+
+           newTemplateDTO.setSoftwareName(soft.getName());
+            
+           client.target(baseUri)
+                    .path("/templates/create")
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newTemplateDTO));
+           
+           
+           
+           if(!selectedSoftwareExtensions.isEmpty())
+            {
+                for (String extension: selectedSoftwareExtensions) {
+                    
+                    System.out.println("enviado extensionId: "+extension + " templateId: " + newTemplateDTO.getCode());
+
+                    client.target(baseUri)
+                    .path("/templates").path(String.valueOf(newTemplateDTO.getCode())).path("/extension").path(extension)
+                    .request(MediaType.APPLICATION_XML);
+                    
+                }
+
+                
+            }
+            if(!selectedSoftwareModules.isEmpty())
+            {
+                for (String module: selectedSoftwareModules) {
+                    
+                    System.out.println("enviado moduleId: "+module + " templateId: " + newTemplateDTO.getCode());
+
+                    client.target(baseUri)
+                    .path("/templates/").path(String.valueOf(newTemplateDTO.getCode())).path("/module/").path(module)
+                    .request(MediaType.APPLICATION_XML);
+                    
+                }
+                
+            }
+           
+           
+            
+            clearNewTemplate();
+        } /*catch (EntityExistsException e) {
+            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+            System.err.println(e.getMessage());
+            return null;
+        } */ catch (Exception e) {
+            System.err.println(e.getMessage());
+            //logger.warning("Unexpected error. Try again latter!");
+            // logger.warning("Problem creating student in method creatStudent.");   
+            //return "admin_students_create?faces-redirect=true";
+            return null;
+        }
+        return "admin_index?faces-redirect=true"; // é redirecionado para esta página  
     }
 
     public String createNewClient() {
@@ -155,6 +246,23 @@ public class AdministratorManager implements Serializable {
         }
         return returnedAdministrators;
     }
+    
+    public List<TemplateDTO> getAllTemplates() {
+        List<TemplateDTO> returnedTemplates = null;
+
+        try {
+            returnedTemplates = client.target(baseUri)
+                    .path("/templates/all")
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<TemplateDTO>>() {
+                    });
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all templates with REST");
+            return null;
+        }
+        return returnedTemplates;
+    }
 
     public List<ClientDTO> getAllClients() {
         List<ClientDTO> returnedClients = null;
@@ -172,7 +280,298 @@ public class AdministratorManager implements Serializable {
         }
         return returnedClients;
     }
+    
+    
+    public List<SoftwareDTO> getAllSoftwares() {
+        List<SoftwareDTO> returnedSoftwares = null;
 
+        try {
+            returnedSoftwares = client.target(baseUri)
+                    .path("/softwares/all")
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareDTO>>() {
+                    });
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all softwares with REST");
+            return null;
+        }
+        return returnedSoftwares;
+    }
+    
+    public List<ContractDTO> getAllContracts() {
+        List<ContractDTO> returnedContracts = null;
+
+        try {
+            returnedContracts = client.target(baseUri)
+                    .path("/contracts/all")
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ContractDTO>>() {
+                    });
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all contracts with REST");
+            return null;
+        }
+        return returnedContracts;
+    }
+    //allSoftwaresModulesFromASoftware
+    public void allModulesFromASoftware() {
+        List<SoftwareModuleDTO> returnedSoftwareModules= null;
+
+        try {
+            String code = String.valueOf(newTemplateDTO.getSoftwareCode());
+            if(!code.isEmpty())
+            {
+               returnedSoftwareModules = client.target(baseUri)
+                    .path("/softwareModules/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareModuleDTO>>() {
+                    }); 
+            }
+            
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all software modules with REST");
+            //return null;
+        }
+        
+        this.softwareModules = returnedSoftwareModules;
+       // return returnedSoftwareModules;
+       
+    }
+    
+    public void allExtentionsFromASoftware() {
+        List<ExtensionDTO> returnedSoftwareExtensions= null;
+
+        try {
+            System.out.println("software code: " + newTemplateDTO.getSoftwareCode());
+            String code = String.valueOf(newTemplateDTO.getSoftwareCode());
+            if(!code.isEmpty())
+            {
+               returnedSoftwareExtensions = client.target(baseUri)
+                    .path("/extensions/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    }); 
+            }
+            
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            logger.warning("Problem getting all software extensions with REST");
+            //return null;
+        }
+        
+        this.softwareExtensions = returnedSoftwareExtensions;
+       // return returnedSoftwareModules;
+       
+    }
+    
+    
+    //todo ADICIONARRRRR metod é exatamente igualk ao do anonymousamanger
+    public List<ContractParameterDTO> getCurrentContractParameters(){
+        List<ContractParameterDTO> contractParameters=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getContractCode());
+            
+            contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    });
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return contractParameters;
+    }
+    //todo ADICIONARRRRRR
+    public SoftwareDTO getCurrentSoftware(){
+        SoftwareDTO softwareDTO = null;
+
+        try {
+            String code = String.valueOf(currentTemplate.getSoftwareCode());
+            
+            softwareDTO = client.target(baseUri).path("/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<SoftwareDTO>() {
+                    });
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return softwareDTO;
+        
+    }
+    //ADICIONARRRRRR
+    public List<String> getCurrentSoftwareVersions(){
+        List<String> versions=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getSoftwareCode());
+            
+            Response serviceResponse = client.target(baseUri).path("/softwares/versions").path(code)
+                    .request(MediaType.APPLICATION_JSON).get(Response.class);
+            
+            versions=computeJsonResponseToStringList(serviceResponse);
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return versions;
+    }
+    
+    //adicionarrrrrrr
+    public List<ExtensionDTO> getCurrentSoftwareExtensions(){
+        List<ExtensionDTO> extensions=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getSoftwareCode());
+            
+            extensions = client.target(baseUri).path("/extensions/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return extensions;
+    }
+    
+    public List<SoftwareModuleDTO> getCurrentSoftwareModule(){
+        List<SoftwareModuleDTO> softwareModules=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getSoftwareCode());
+            
+            softwareModules = client.target(baseUri).path("/softwareModules/softwares").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareModuleDTO>>() {
+                    });
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return softwareModules;
+    }
+    
+    
+    public List<ExtensionDTO> getCurrentTemplateExtensions(){
+        List<ExtensionDTO> extensions=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            extensions = client.target(baseUri).path("/extensions/templates").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return extensions;
+    }
+    
+    public List<SoftwareModuleDTO> getCurrentTemplateModule(){
+        List<SoftwareModuleDTO> softwareModules=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            softwareModules = client.target(baseUri).path("/softwareModules/templates").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareModuleDTO>>() {
+                    });
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return softwareModules;
+    }
+    
+    public List<String> getCurrentTemplateArtefacts(){
+        List<String> artefacts=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            Response serviceResponse = client.target(baseUri).path("/configurations/artefacts").path(code)
+                    .request(MediaType.APPLICATION_JSON).get(Response.class);
+            
+            artefacts=computeJsonResponseToStringList(serviceResponse);
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return artefacts;
+    }
+    
+    public List<String> getCurrentTemplateHelpMaterials(){
+        List<String> helpMaterials=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+            
+            Response serviceResponse = client.target(baseUri).path("/configurations/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_JSON).get(Response.class);
+            
+            helpMaterials=computeJsonResponseToStringList(serviceResponse);
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return helpMaterials;
+    }
+    
+    
+    
+    //adicionar
+    private List<String> computeJsonResponseToStringList(Response serviceResponse) {
+        List<String> response = new LinkedList();
+        try{
+            String list = serviceResponse.readEntity(String.class);
+            
+            list=list.replace("[", "");
+            
+            list=list.replace("]","");
+            
+            String[]servicesList=list.split(",");
+            
+            response.addAll(Arrays.asList(servicesList));
+            
+            return response;
+        }
+        catch(Exception e){
+            logger.log(Level.SEVERE, e.getMessage());
+            return null;
+        }
+    }
+    
+    
     public String removeClient(ActionEvent event) {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteClientUsername");
@@ -237,6 +636,15 @@ public class AdministratorManager implements Serializable {
         return "clients_list?faces-redirect=true";
     }
 
+    public void clearNewTemplate() {
+        //todo limnpar melhor
+        this.selectedSoftwareExtensions = null;
+        this.selectedSoftwareModules = null;
+        this.softwareExtensions = null;
+        this.softwareModules = null;
+        newTemplateDTO = new TemplateDTO();
+    }
+    
     public void clearNewAdministrator() {
         newAdministratorDTO = new AdministratorDTO();
     }
@@ -261,9 +669,18 @@ public class AdministratorManager implements Serializable {
         this.component = component;
     }
 
+    public TemplateDTO getNewTemplateDTO() {
+        return newTemplateDTO;
+    }
+    
     public ClientDTO getNewClientDTO() {
         return newClientDTO;
     }
+
+    public void setNewTemplateDTO(TemplateDTO newTemplateDTO) {
+        this.newTemplateDTO = newTemplateDTO;
+    }
+    
 
     public void setNewClientDTO(ClientDTO newClientDTO) {
         this.newClientDTO = newClientDTO;
@@ -308,5 +725,55 @@ public class AdministratorManager implements Serializable {
     public void setCurrentClient(ClientDTO currentClient) {
         this.currentClient = currentClient;
     }
+    public List<TemplateDTO> getFilteredTemplates() {
+        return filteredTemplates;
+    }
 
+    public void setFilteredTemplates(List<TemplateDTO> filteredTemplates) {
+        this.filteredTemplates = filteredTemplates;
+    }
+    
+    public TemplateDTO getCurrentTemplate() {
+        return currentTemplate;
+    }
+
+    public void setCurrentTemplate(TemplateDTO currentTemplate) {
+        this.currentTemplate = currentTemplate;
+    }
+
+    public List<SoftwareModuleDTO> getSoftwareModules() {
+        return softwareModules;
+    }
+
+    public void setSoftwareModules(List<SoftwareModuleDTO> softwareModules) {
+        this.softwareModules = softwareModules;
+    }
+
+    public List<String> getSelectedSoftwareModules() {
+        return selectedSoftwareModules;
+    }
+
+    public void setSelectedSoftwareModules(List<String> selectedSoftwareModules) {
+        this.selectedSoftwareModules = selectedSoftwareModules;
+    }
+
+    public List<String> getSelectedSoftwareExtensions() {
+        return selectedSoftwareExtensions;
+    }
+
+    public List<ExtensionDTO> getSoftwareExtensions() {
+        return softwareExtensions;
+    }
+
+    public void setSelectedSoftwareExtensions(List<String> selectedSoftwareExtensions) {
+        this.selectedSoftwareExtensions = selectedSoftwareExtensions;
+    }
+
+    public void setSoftwareExtensions(List<ExtensionDTO> softwareExtensions) {
+        this.softwareExtensions = softwareExtensions;
+    }
+    
+    
+    
+    
 }
