@@ -139,7 +139,7 @@ public class ConfigBean {
             helpMaterialBean.create("Procedimento_para_Erro_Invalid_Resource_academic_management__pm.txt", "text/plain");
             helpMaterialBean.create("User_Manual.pdf", "application/pdf");
 
-            configurationSuperBean.addHelpMaterialToConfiguration(1, "Procedimento_para_Erro_Invalid_Resource_academic_management__pm.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "Error_procedure.txt");
             configurationSuperBean.addHelpMaterialToConfiguration(1, "User_Manual.pdf");
             
             //Criar os artefactos//String filename, String mimetype

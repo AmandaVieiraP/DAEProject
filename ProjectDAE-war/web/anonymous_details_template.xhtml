@@ -53,10 +53,9 @@
                                 value="#{anonymousManager.currentTemplateArtefacts}"
                                 emptyMessage="No template artefacts found for the given criteria">
                                 <p:column headerText="Files Content" sortBy="#{repo.filename}" filterBy="#{repo.filename}" filterMatchMode="contains">
-                                    <!--<p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
-                                        <p:fileDownload value="#{downloadManager.downloadFile(repo.filename, repo.mimetype)}" />
-                                    </p:commandButton>-->
-                                    <div align="center"><h:outputText value="#{repo.filename}"/></div>
+                                    <p:commandButton value="Download #{repo.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(repo.mimetype, repo.filename)}" />
+                                    </p:commandButton>
                                 </p:column>
                             </p:dataTable>
                         </div>

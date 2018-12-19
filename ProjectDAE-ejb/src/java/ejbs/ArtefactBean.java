@@ -6,10 +6,9 @@
 package ejbs;
 
 import dtos.ArtefactDTO;
-import dtos.ExtensionDTO;
+import dtos.HelpMaterialDTO;
 import entities.Artefact;
 import entities.ConfigurationSuper;
-import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -32,6 +31,23 @@ public class ArtefactBean {
 
     @PersistenceContext
     EntityManager em;
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("{id}")
+    public List<ArtefactDTO> getConfigurationArtefactsRepository(@PathParam("id") int configCode) {
+        try {
+            ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configCode);
+            if (configurationSuper == null) {
+                return null;
+            }
+
+            return artefactListToArtefactsDTOList(configurationSuper.getArtefactsRepository());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
 
     public void create(String filename, String mimetype) {
         try {
@@ -47,23 +63,6 @@ public class ArtefactBean {
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
-        }
-    }
-    
-    
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("{id}")
-    public List<ArtefactDTO> getConfigurationArtefactsRepository(@PathParam("id") int configCode) {
-        try {
-            ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configCode);
-            if (configurationSuper == null) {
-                return null;
-            }
-
-            return artefactListToArtefactsDTOList(configurationSuper.getArtefactsRepository());
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
         }
     }
 
