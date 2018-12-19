@@ -18,7 +18,7 @@ import org.primefaces.model.StreamedContent;
  */
 @ManagedBean(name = "downloadManager")
 public class DownloadManager {
-
+ 
     private static final Logger logger = Logger.getLogger("web.downloadManager");
     private StreamedContent file;
 
