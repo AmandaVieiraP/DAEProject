@@ -17,10 +17,10 @@
                    headers="#{['Username', 'Company Name', 'Address', 'Contact Person']}" 
                    props="#{['username', 'companyName', 'address', 'contactPerson']}" 
                    list="#{administratorManager.allClients}" 
-                   widgetVar="clientsTable">
+                   widgetVar="clientsTable"
+                   class="datatable">
                 
                 <p:column headerText="Actions"> 
-                <!--    <h:form> -->
                         <h:commandLink value="Update" action="update_client?faces-redirect=true">
                             <f:setPropertyActionListener target="#{administratorManager.currentClient}" value="#{object}" />
                         </h:commandLink>
@@ -29,10 +29,10 @@
                             <f:param name="deleteClientUsername" id="deleteClientUsername" value="#{object.username}" />    
                         </h:commandLink>
                         <br/>
-                        <h:commandLink value="View Configurations" action="configurations_client?faces-redirect=true">
+                        <h:commandLink value="View Configurations" action="configurations_list?faces-redirect=true">
                             <f:setPropertyActionListener target="#{administratorManager.currentClient}" value="#{object}" />
                         </h:commandLink>
-                 <!--   </h:form> -->
+
                 </p:column>
             
             </em:dt> 

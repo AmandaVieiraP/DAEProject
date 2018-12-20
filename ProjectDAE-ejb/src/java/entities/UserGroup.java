@@ -25,11 +25,11 @@ public class UserGroup implements Serializable {
     public static enum GROUP {
         Administrator, Client
     }
-    
+
     @Id
     @Enumerated(EnumType.STRING)
     private GROUP group_name;
-    
+
     @Id
     @OneToOne
     @JoinColumn(name = "USERNAME")
@@ -58,7 +58,5 @@ public class UserGroup implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    
-    
-    
+
 }

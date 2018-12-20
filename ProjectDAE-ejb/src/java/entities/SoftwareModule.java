@@ -44,8 +44,8 @@ public class SoftwareModule extends Module implements Serializable {
         this.templates=new LinkedList<>();
     }
 
-    public SoftwareModule(int code, String description, Software software) {
-        super(code, description, software);
+    public SoftwareModule(int code, String description, Software software, String version) {
+        super(code, description, software,version);
         this.templates=new LinkedList<>();
     }
 

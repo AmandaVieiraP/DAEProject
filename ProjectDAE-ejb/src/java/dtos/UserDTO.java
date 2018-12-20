@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author Amanda
  */
 public class UserDTO implements Serializable {
+
     private String username;
     private String password;
 
@@ -22,7 +23,7 @@ public class UserDTO implements Serializable {
         this.username = username;
         this.password = password;
     }
-    
+
     public void reset() {
         setUsername(null);
         setPassword(null);
@@ -43,7 +44,5 @@ public class UserDTO implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
-    
+
 }

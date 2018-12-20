@@ -5,11 +5,9 @@
  */
 package ejbs;
 
-import dtos.ExtensionDTO;
 import dtos.ServiceDTO;
 import entities.Module;
 import entities.Service;
-import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -32,7 +30,7 @@ public class ServiceBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")
@@ -50,7 +48,7 @@ public class ServiceBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     private List<ServiceDTO> servicesListToServicesDTOList(List<Service> services) {
         try {
             List<ServiceDTO> servicesDTO = new LinkedList<>();
@@ -77,13 +75,11 @@ public class ServiceBean {
         }
     }
 
-    //Change to REST if necessary
     public void create(int code, String name, String description, String version) {
         try {
             Service service = em.find(Service.class, code);
             if (service != null) {
                 return;
-                //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
             service = new Service(code, name, description, version);
@@ -94,11 +90,10 @@ public class ServiceBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
-    
-    public void associateServiceToModule(int serviceCode,int moduleCode) {
+
+    public void associateServiceToModule(int serviceCode, int moduleCode) {
         try {
-            Service service = em.find(Service.class,serviceCode);
+            Service service = em.find(Service.class, serviceCode);
             Module module = em.find(Module.class, moduleCode);
 
             if (service == null || module == null) {

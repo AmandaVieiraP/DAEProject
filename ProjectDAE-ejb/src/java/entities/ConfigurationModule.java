@@ -40,13 +40,13 @@ public class ConfigurationModule extends Module implements Serializable {
     @NotNull
     @OneToMany(mappedBy = "configurationModule", cascade = CascadeType.REMOVE)
     private List<License> licenses;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "CONFIGURATIONS_MODULES", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "CONFIG_CODE", referencedColumnName = "CODE"))
     private List<Configuration> configurations;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "MODULES_PARAMETERS", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
@@ -55,15 +55,15 @@ public class ConfigurationModule extends Module implements Serializable {
 
     public ConfigurationModule() {
         this.licenses = new LinkedList<>();
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
         this.moduleParameters = new LinkedList<>();
     }
 
-    public ConfigurationModule(int code, String description, Software software, String dbServerIp, String applicationServerIp) {
-        super(code, description, software);
+    public ConfigurationModule(int code, String description, Software software, String dbServerIp, String applicationServerIp, String version) {
+        super(code, description, software, version);
         this.applicationServerIp = applicationServerIp;
         this.dbServerIp = dbServerIp;
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
         this.licenses = new LinkedList<>();
         this.moduleParameters = new LinkedList<>();
     }
@@ -107,7 +107,7 @@ public class ConfigurationModule extends Module implements Serializable {
     public void setModuleParameters(List<Parameter> moduleParameters) {
         this.moduleParameters = moduleParameters;
     }
-    
+
     public void addLicense(License license) {
         if (license != null && !licenses.contains(license)) {
             licenses.add(license);
@@ -119,7 +119,7 @@ public class ConfigurationModule extends Module implements Serializable {
             licenses.remove(license);
         }
     }
-    
+
     public void addParameter(Parameter param) {
         if (param != null && !moduleParameters.contains(param)) {
             moduleParameters.add(param);
@@ -131,7 +131,7 @@ public class ConfigurationModule extends Module implements Serializable {
             moduleParameters.remove(param);
         }
     }
-    
+
     public void addConfiguration(Configuration configuration) {
         if (configuration != null && !configurations.contains(configuration)) {
             configurations.add(configuration);

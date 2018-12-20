@@ -26,8 +26,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "EXTENSIONS")
 @NamedQueries({
-    @NamedQuery(name = "getAllExtensionsBySoftware", query = "SELECT e FROM Extension e WHERE e.software.code=?1"),
-})
+    @NamedQuery(name = "getAllExtensionsBySoftware", query = "SELECT e FROM Extension e WHERE e.software.code=?1"),})
 public class Extension implements Serializable {
 
     @Id
@@ -39,13 +38,13 @@ public class Extension implements Serializable {
     private String description;
 
     @NotNull
-    private List<String> versions;
+    private String version;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "SOFTWARE_CODE")
     private Software software;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "EXTENSIONS_CONFIGURATIONS", joinColumns = @JoinColumn(name = "EXTENSION_CODE", referencedColumnName = "CODE"),
@@ -53,17 +52,16 @@ public class Extension implements Serializable {
     private List<ConfigurationSuper> configurations;
 
     public Extension() {
-        this.versions = new LinkedList<>();
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
-    public Extension(int code, String name, String description, Software software) {
+    public Extension(int code, String name, String description, Software software, String version) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.software = software;
-        this.versions = new LinkedList<>();
-        this.configurations=new LinkedList<>();
+        this.version = version;
+        this.configurations = new LinkedList<>();
     }
 
     public int getCode() {
@@ -90,12 +88,12 @@ public class Extension implements Serializable {
         this.description = description;
     }
 
-    public List<String> getVersions() {
-        return versions;
+    public String getVersion() {
+        return version;
     }
 
-    public void setVersions(List<String> versions) {
-        this.versions = versions;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public Software getSoftware() {
@@ -110,22 +108,12 @@ public class Extension implements Serializable {
         this.configurations = configurations;
     }
 
-    public void setSoftware(Software software) {
-        this.software = software;
-    }
-
-    public void addVersion(String version) {
-        if (version != null && !versions.contains(version)) {
-            versions.add(version);
-        }
-    }
-
     public void addConfiguration(ConfigurationSuper config) {
         if (config != null && !configurations.contains(config)) {
             configurations.add(config);
         }
     }
-    
+
     public void removeConfiguration(ConfigurationSuper config) {
         if (config != null && configurations.contains(config)) {
             configurations.remove(config);

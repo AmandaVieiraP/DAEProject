@@ -89,29 +89,28 @@ public class ExtensionBean {
                     e.getName(),
                     e.getDescription(),
                     e.getSoftware().getCode(),
-                    e.getSoftware().getName());
+                    e.getSoftware().getName(),
+                    e.getVersion());
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
     //Change to REST if necessary
-    public void create(int code, String name, String description, int softwareCode) {
+    public void create(int code, String name, String description, int softwareCode, String version) {
         try {
             Extension extension = em.find(Extension.class, code);
             if (extension != null) {
                 return;
-                //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
             Software software = em.find(Software.class, softwareCode);
 
             if (software == null) {
                 return;
-                // throw new EntityDoesNotExistException("The course does not exists");
             }
 
-            extension = new Extension(code, name, description, software);
+            extension = new Extension(code, name, description, software, version);
 
             software.addExtension(extension);
 

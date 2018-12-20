@@ -6,7 +6,6 @@
 package ejbs;
 
 import dtos.ArtefactDTO;
-import dtos.HelpMaterialDTO;
 import entities.Artefact;
 import entities.ConfigurationSuper;
 import java.util.LinkedList;
@@ -31,7 +30,7 @@ public class ArtefactBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")

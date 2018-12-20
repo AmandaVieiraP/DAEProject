@@ -92,28 +92,54 @@ public class ConfigBean {
             clientBean.create("client11", "123", "Rua mmaso9a0jd", "Guardian", "Raven - 84562145");
             clientBean.create("client12", "123", "Rua mdaosodp90q", "Manchester City", "Emily - 84562145");
 
-            //Criar o software 1000
+            //Criar o softwares
             softwareBean.create(1000, "Spots", "A parking spot manager software");
+            softwareBean.create(1001, "Reteck", "A retail manager software");
+            softwareBean.create(1002, "GitNet", "A daily planning software");
 
             //Adicionar Versão ao software
             softwareBean.addVersionToSoftware(1000, "Version 1.0");
             softwareBean.addVersionToSoftware(1000, "Version 2.0");
             softwareBean.addVersionToSoftware(1000, "Version 2.1");
+            softwareBean.addVersionToSoftware(1001, "Version 1.0");
+            softwareBean.addVersionToSoftware(1001, "Version 1.1");
+            softwareBean.addVersionToSoftware(1001, "Version 1.5");
+            softwareBean.addVersionToSoftware(1002, "Version 1.1");
+            softwareBean.addVersionToSoftware(1002, "Version 1.7");
+            softwareBean.addVersionToSoftware(1002, "Version 2.3");
 
-            //Adicionar Extensoes ao software
-            extensionBean.create(12, "Clear Cache", "Clear Chrome Browser Cache", 1000);
-            extensionBean.create(13, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1000);
-            extensionBean.create(14, "Last Pass", "Password Manager", 1000);
+            //Criar Extensoes
+            extensionBean.create(12, "Clear Cache", "Clear Chrome Browser Cache", 1000,"Version 1.0");
+            extensionBean.create(13, "Clear Cache", "Clear Chrome Browser Cache", 1001,"Version 3.0");
+            extensionBean.create(14, "Clear Cache", "Clear Chrome Browser Cache", 1002,"Version 2.0");
+            extensionBean.create(15, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1000,"Version 1.0");
+            extensionBean.create(16, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1001,"Version 2.0");
+            extensionBean.create(17, "Last Pass", "Password Manager", 1000,"Version 1.0");
+            extensionBean.create(18, "Last Pass", "Password Manager", 1000,"Version 2.0");
+            extensionBean.create(19, "Last Pass", "Password Manager", 1001,"Version 3.0");
+            extensionBean.create(20, "Last Pass", "Password Manager", 1002,"Version 4.0");
 
-            //Adicionar Modules de Software ao Software
-            softwareModuleBean.create(100, "FD - Financial Data Managment", 1000);
-            softwareModuleBean.create(101, "HR - Human Resources Management", 1000);
+            //Criar Software Modules
+            softwareModuleBean.create(100, "FD - Financial Data Managment", 1000,"Version 1.1");
+            softwareModuleBean.create(101, "HR - Human Resources Management", 1000,"Version 1.2");
+            softwareModuleBean.create(102, "FD - Financial Data Managment", 1001,"Version 1.2");
+            softwareModuleBean.create(103, "HR - Human Resources Management", 1002,"Version 1.3");
             
+            //Criar Serviços
             serviceBean.create(1,"Service 1","Description of service 1","Version 1.0");
             serviceBean.create(2,"Service 2","Description of service 2","Version 1.2");
+            serviceBean.create(3,"Service 3","Description of service 3","Version 1.0");
+            serviceBean.create(4,"Service 4","Description of service 4","Version 1.2");
             
+            //Associar serviços a modulos
             serviceBean.associateServiceToModule(1, 100);
+            serviceBean.associateServiceToModule(2, 100);
+            serviceBean.associateServiceToModule(3, 100);
+            serviceBean.associateServiceToModule(1, 101);
             serviceBean.associateServiceToModule(2, 101);
+            serviceBean.associateServiceToModule(1, 102);
+            serviceBean.associateServiceToModule(3, 102);
+            serviceBean.associateServiceToModule(4, 104);
             
             //Criar Parametros para o contrato
             contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 ours / month");
@@ -127,6 +153,10 @@ public class ConfigBean {
 
             templateBean.create(1, "Template 1", 1000, 10, "Version 1.0");
             templateBean.create(2, "Template 2", 1000, 10, "Version 1.0");
+            templateBean.create(3, "Template 1", 1001, 10, "Version 1.0");
+            templateBean.create(4, "Template 2", 1001, 10, "Version 1.0");
+            templateBean.create(5, "Template 1", 1002, 10, "Version 1.0");
+            templateBean.create(6, "Template 2", 1002, 10, "Version 1.0");
 
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Maintenance Hours");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Contract Price");
@@ -138,30 +168,68 @@ public class ConfigBean {
             qualidade de serviço, 
             responsabilidades,
             disponibilidade...*/
+            
 
             templateBean.associateExtensionToTemplate(12, 1);
             templateBean.associateExtensionToTemplate(13, 2);
+            templateBean.associateExtensionToTemplate(14, 3);
+            templateBean.associateExtensionToTemplate(15, 4);
+            templateBean.associateExtensionToTemplate(16, 5);
+            templateBean.associateExtensionToTemplate(17, 6);
+            templateBean.associateExtensionToTemplate(18, 1);
+            templateBean.associateExtensionToTemplate(19, 2);
+            templateBean.associateExtensionToTemplate(20, 3);
 
             templateBean.associateModuleToTemplate(100, 1);
             templateBean.associateModuleToTemplate(101, 2);
+            templateBean.associateModuleToTemplate(102, 1);
+            templateBean.associateModuleToTemplate(103, 2);
+            templateBean.associateModuleToTemplate(100, 3);
+            templateBean.associateModuleToTemplate(101, 4);
+            templateBean.associateModuleToTemplate(102, 5);
+            templateBean.associateModuleToTemplate(103, 6);
             
             helpMaterialBean.create("Error_procedure.txt", "text/plain");
             helpMaterialBean.create("User_Manual.pdf", "application/pdf");
 
             configurationSuperBean.addHelpMaterialToConfiguration(1, "Error_procedure.txt");
             configurationSuperBean.addHelpMaterialToConfiguration(1, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(2, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(2, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(3, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(4, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(4, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(5, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(6, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(6, "User_Manual.pdf");
             
             //Criar os artefactos//String filename, String mimetype
             artefactBean.create("database.sql", "application/sql");
             artefactBean.create("dae_esquema.png", "image/png");
 
-            configurationSuperBean.addArtefactsToConfiguration(1, "database.sql");
-            configurationSuperBean.addArtefactsToConfiguration(1, "dae_esquema.png");
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(1, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(2, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(2, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(3, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(3, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(4, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(4, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(5, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(5, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(6, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(6, "User_Manual.pdf");
             
             //Criar configuração para associar a um cliente
             configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1");
-            configurationBean.create(31, "Configuration 2", 1000, 10, "Version 1.0", "client1");
-            configurationBean.create(32, "Configuration 2", 1000, 10, "Version 1.0", "client1");
+            configurationBean.create(31, "Configuration 2", 1001, 10, "Version 1.0", "client1");
+            configurationBean.create(32, "Configuration 3", 1002, 10, "Version 1.0", "client1");
+            configurationBean.create(33, "Configuration 1", 1001, 10, "Version 1.0", "client4");
+            configurationBean.create(34, "Configuration 2", 1001, 10, "Version 1.0", "client4");
+            configurationBean.create(35, "Configuration 3", 1001, 10, "Version 1.0", "client4");
+            configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6");
+            configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6");
+            configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6");
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

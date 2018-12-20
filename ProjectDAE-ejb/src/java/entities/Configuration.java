@@ -29,38 +29,33 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Configuration")
 public class Configuration extends ConfigurationSuper implements Serializable {
-    
+
     @NotNull
     @ManyToMany(mappedBy = "configurations")
     private List<ConfigurationModule> modules;
-    
-    @NotNull
-    private List<License> licenses;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "CONFIGURATIONS_PARAMETERS", joinColumns = @JoinColumn(name = "CONFIGURATION_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "PARAMETER_NAME", referencedColumnName = "NAME"))
     private List<Parameter> configurationParameters;
-    
-    @NotNull    
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "CLIENT_USERNAME")
     private Client client;
 
     public Configuration() {
-        this.modules=new LinkedList<>();
-        this.licenses=new LinkedList<>();
-        this.configurationParameters=new LinkedList<>();
+        this.modules = new LinkedList<>();
+        this.configurationParameters = new LinkedList<>();
     }
 
     public Configuration(int code, String description, Software software, Contract contract, String version, Client client) {
         super(code, description, software, contract, version);
-        
-        this.modules=new LinkedList<>();
-        this.licenses=new LinkedList<>();
-        this.configurationParameters=new LinkedList<>();
-        this.client=client;
+
+        this.modules = new LinkedList<>();
+        this.configurationParameters = new LinkedList<>();
+        this.client = client;
     }
 
     public List<ConfigurationModule> getModules() {
@@ -71,21 +66,13 @@ public class Configuration extends ConfigurationSuper implements Serializable {
         this.modules = modules;
     }
 
-    public List<License> getLicenses() {
-        return licenses;
-    }
-
-    public void setLicenses(List<License> licenses) {
-        this.licenses = licenses;
-    }
-
     public Client getClient() {
         return client;
     }
 
     public void setClient(Client client) {
         this.client = client;
-    }  
+    }
 
     public List<Parameter> getConfigurationParameters() {
         return configurationParameters;
@@ -94,7 +81,7 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     public void setConfigurationParameters(List<Parameter> configurationParameters) {
         this.configurationParameters = configurationParameters;
     }
-    
+
     public void addParameters(Parameter parameter) {
         if (parameter != null && !configurationParameters.contains(parameter)) {
             configurationParameters.add(parameter);
@@ -107,18 +94,6 @@ public class Configuration extends ConfigurationSuper implements Serializable {
         }
     }
 
-    public void addLicense(License license) {
-        if (license != null && !licenses.contains(license)) {
-            licenses.add(license);
-        }
-    }
-
-    public void removeLicense(License license) {
-        if (license != null && licenses.contains(license)) {
-            licenses.remove(license);
-        }
-    }
-    
     public void addModule(ConfigurationModule module) {
         if (module != null && !modules.contains(module)) {
             modules.add(module);
@@ -130,5 +105,5 @@ public class Configuration extends ConfigurationSuper implements Serializable {
             modules.remove(module);
         }
     }
-    
+
 }

@@ -16,8 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Service")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServiceDTO implements Serializable{
-    
+public class ServiceDTO implements Serializable {
+
     private int code;
     private String name;
     private String description;
@@ -32,8 +32,8 @@ public class ServiceDTO implements Serializable{
         this.description = description;
         this.version = version;
     }
-    
-    public void reset(){
+
+    public void reset() {
         setCode(0);
         setName(null);
         setDescription(null);
@@ -71,7 +71,5 @@ public class ServiceDTO implements Serializable{
     public void setVersion(String version) {
         this.version = version;
     }
-    
-    
-    
+
 }

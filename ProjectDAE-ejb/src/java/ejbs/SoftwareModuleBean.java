@@ -88,13 +88,15 @@ public class SoftwareModuleBean {
             return new SoftwareModuleDTO(m.getCode(),
                     m.getDescription(),
                     m.getSoftware().getCode(),
-                    m.getSoftware().getName());
+                    m.getSoftware().getName(),
+                    m.getVersion());
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
-    public void create(int code, String description, int softwareCode) {
+    //Para usar no EJB para popular a BD
+    public void create(int code, String description, int softwareCode, String version) {
         try {
             SoftwareModule softwareModule = em.find(SoftwareModule.class, code);
             if (softwareModule != null) {
@@ -109,7 +111,7 @@ public class SoftwareModuleBean {
                 // throw new EntityDoesNotExistException("The course does not exists");
             }
 
-            softwareModule = new SoftwareModule(code, description, software);
+            softwareModule = new SoftwareModule(code, description, software, version);
 
             software.addModule(softwareModule);
 

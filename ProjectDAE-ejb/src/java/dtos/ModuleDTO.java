@@ -18,28 +18,31 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement(name = "Module")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(SoftwareModuleDTO.class)
-public class ModuleDTO implements Serializable{
-    
+public class ModuleDTO implements Serializable {
+
     private int code;
     private String description;
     private int softwareCode;
     private String softwareName;
+    private String version;
 
     public ModuleDTO() {
     }
 
-    public ModuleDTO(int code, String description, int softwareCode, String softwareName) {
+    public ModuleDTO(int code, String description, int softwareCode, String softwareName, String version) {
         this.code = code;
         this.description = description;
         this.softwareCode = softwareCode;
         this.softwareName = softwareName;
+        this.version = version;
     }
-    
-    public void reset(){
+
+    public void reset() {
         setCode(0);
         setDescription(null);
         setSoftwareCode(0);
         setSoftwareName(null);
+        setVersion(null);
     }
 
     public int getCode() {
@@ -73,6 +76,13 @@ public class ModuleDTO implements Serializable{
     public void setSoftwareName(String softwareName) {
         this.softwareName = softwareName;
     }
-    
-    
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
 }

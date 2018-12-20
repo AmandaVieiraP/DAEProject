@@ -35,25 +35,29 @@ public class Module implements Serializable {
 
     @NotNull
     private String description;
-    
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "SOFTWARE_CODE")
     private Software software;
-    
+
     @NotNull
     @ManyToMany(mappedBy = "modules")
     private List<Service> services;
 
+    @NotNull
+    private String version;
+
     public Module() {
-        this.services=new LinkedList<>();
+        this.services = new LinkedList<>();
     }
 
-    public Module(int code, String description, Software software) {
+    public Module(int code, String description, Software software, String version) {
         this.code = code;
         this.description = description;
-        this.software=software;
-        this.services=new LinkedList<>();
+        this.software = software;
+        this.version = version;
+        this.services = new LinkedList<>();
     }
 
     public int getCode() {
@@ -87,8 +91,16 @@ public class Module implements Serializable {
     public void setServices(List<Service> services) {
         this.services = services;
     }
-    
-        public void addService(Service service) {
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void addService(Service service) {
         if (service != null && !services.contains(service)) {
             services.add(service);
         }

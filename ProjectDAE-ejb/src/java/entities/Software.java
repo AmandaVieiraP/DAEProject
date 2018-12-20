@@ -9,13 +9,8 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,50 +24,50 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "SOFTWARES")
 @NamedQueries({
-    @NamedQuery(name = "getAllSoftwares", 
-                query = "SELECT s from Software s ORDER BY s.code")  // é uma query à entidade não à tabela
+    @NamedQuery(name = "getAllSoftwares",
+            query = "SELECT s from Software s ORDER BY s.code") // é uma query à entidade não à tabela
 })
 public class Software implements Serializable {
-    
+
     @Id
     private int code;
-    
+
     @NotNull
     private String name;
-    
+
     @NotNull
     private String description;
-    
+
     @NotNull
     private List<String> versions;
-    
+
     @NotNull
     @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
     private List<ConfigurationSuper> templates;
-    
+
     @NotNull
     @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
     private List<Extension> extensions;
-    
+
     @NotNull
     @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
     private List<Module> modules;
 
     public Software() {
-        this.templates=new LinkedList<>();
-        this.versions=new LinkedList<>();
-        this.extensions=new LinkedList<>();
-        this.modules=new LinkedList<>();
+        this.templates = new LinkedList<>();
+        this.versions = new LinkedList<>();
+        this.extensions = new LinkedList<>();
+        this.modules = new LinkedList<>();
     }
 
     public Software(int code, String name, String description) {
         this.code = code;
         this.name = name;
         this.description = description;
-        this.templates=new LinkedList<>();
-        this.versions=new LinkedList<>();
-        this.extensions=new LinkedList<>();
-        this.modules=new LinkedList<>();
+        this.templates = new LinkedList<>();
+        this.versions = new LinkedList<>();
+        this.extensions = new LinkedList<>();
+        this.modules = new LinkedList<>();
     }
 
     public String getDescription() {
@@ -106,7 +101,7 @@ public class Software implements Serializable {
     public void setCode(int code) {
         this.code = code;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -130,7 +125,7 @@ public class Software implements Serializable {
     public void setModules(List<Module> modules) {
         this.modules = modules;
     }
-    
+
     public void addConfiguration(ConfigurationSuper configuration) {
 
         if (configuration != null && !templates.contains(configuration)) {
@@ -144,8 +139,8 @@ public class Software implements Serializable {
             templates.remove(configuration);
         }
     }
-    
-     public void addExtension(Extension extension) {
+
+    public void addExtension(Extension extension) {
         if (extension != null && !extensions.contains(extension)) {
             extensions.add(extension);
         }
@@ -156,23 +151,23 @@ public class Software implements Serializable {
             extensions.remove(extension);
         }
     }
-    
+
     public void addVersion(String version) {
         if (version != null && !versions.contains(version)) {
             versions.add(version);
         }
     }
-    
+
     public void removeModule(Module module) {
         if (module != null && modules.contains(module)) {
             modules.remove(module);
         }
     }
-    
+
     public void addModule(Module module) {
         if (module != null && !modules.contains(module)) {
             modules.add(module);
         }
     }
-    
+
 }

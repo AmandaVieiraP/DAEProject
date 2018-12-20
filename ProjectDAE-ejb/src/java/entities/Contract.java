@@ -28,16 +28,12 @@ import javax.validation.constraints.NotNull;
 @Table(name = "CONTRACTS")
 @NamedQueries({
     @NamedQuery(name = "getAllContracts", 
-                query = "SELECT c from Contract c ORDER BY c.code")  // é uma query à entidade não à tabela
+                query = "SELECT c from Contract c ORDER BY c.code")
 })
 public class Contract implements Serializable {
 
     @Id
     private int code;
-
-    /*@NotNull
-    @ManyToMany(mappedBy = "contracts")
-    private List<ContractParameter> contractParameters;*/
     
     @NotNull
     @ManyToMany

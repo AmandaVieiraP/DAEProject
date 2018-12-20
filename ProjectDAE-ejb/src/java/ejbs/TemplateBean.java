@@ -5,9 +5,7 @@
  */
 package ejbs;
 
-import dtos.AdministratorDTO;
 import dtos.TemplateDTO;
-import entities.Administrator;
 import entities.Contract;
 import entities.Extension;
 import entities.Software;
@@ -55,17 +53,17 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @POST
     @Path("/create")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create (TemplateDTO temp) throws EntityExistsException {
+    public void create(TemplateDTO temp) throws EntityExistsException {
         try {
             Template template = em.find(Template.class, temp.getCode());
             if (template != null) {
                 throw new EntityExistsException("ERROR: Can't create new template because already exists a template with the code: " + temp.getCode());
             }
-            
+
             Software software = em.find(Software.class, temp.getSoftwareCode());
 
             if (software == null) {
@@ -89,16 +87,16 @@ public class TemplateBean {
             throw e;
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
-        }        
+        }
     }
-    
+
     @POST
     @Path("/{templateId}/extension/{extensionId}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateExtensionToTemplateRest(@PathParam("extensionId") int extensionCode, @PathParam("templateId") int templateCode) {
         try {
-            
-            System.out.println("recebido extensionId: "+extensionCode + " templateId: " + templateCode);
+
+            System.out.println("recebido extensionId: " + extensionCode + " templateId: " + templateCode);
 
             Extension extension = em.find(Extension.class, extensionCode);
             Template template = em.find(Template.class, templateCode);
@@ -116,26 +114,25 @@ public class TemplateBean {
 
             em.merge(template);
             em.merge(extension);
-            
+
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
+    //Para usar no config Bean para popular a BD
     public void create(int code, String description, int software_code, int contract_code, String version) {
         try {
             Template template = em.find(Template.class, code);
 
             if (template != null) {
                 return;
-                //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
             Software software = em.find(Software.class, software_code);
 
             if (software == null) {
                 return;
-                // throw new EntityDoesNotExistException("The course does not exists");
             }
 
             Contract contract = em.find(Contract.class, contract_code);

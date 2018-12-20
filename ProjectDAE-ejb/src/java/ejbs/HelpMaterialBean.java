@@ -77,7 +77,6 @@ public class HelpMaterialBean {
 
             if (helpMaterial != null) {
                 return;
-                //throw new EntityExistsException("Can't create student. The username already exists on database");
             }
 
             helpMaterial = new HelpMaterial(filename,mimetype);

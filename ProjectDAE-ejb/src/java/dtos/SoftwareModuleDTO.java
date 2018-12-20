@@ -16,17 +16,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "SoftwareModule")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SoftwareModuleDTO extends ModuleDTO implements Serializable{
+public class SoftwareModuleDTO extends ModuleDTO implements Serializable {
 
     public SoftwareModuleDTO() {
     }
 
-    public SoftwareModuleDTO(int code, String description, int softwareCode, String softwareName) {
-        super(code, description, softwareCode, softwareName);
+    public SoftwareModuleDTO(int code, String description, int softwareCode, String softwareName, String version) {
+        super(code, description, softwareCode, softwareName,version);
     }
-    
+
     @Override
-    public void reset(){
+    public void reset() {
         super.reset();
     }
 }

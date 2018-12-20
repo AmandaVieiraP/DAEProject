@@ -23,16 +23,18 @@ public class ExtensionDTO implements Serializable {
     private String description;
     private int softwareCode;
     private String softwareName;
+    private String version;
 
     public ExtensionDTO() {
     }
 
-    public ExtensionDTO(int code, String name, String description, int softwareCode, String softwareName) {
+    public ExtensionDTO(int code, String name, String description, int softwareCode, String softwareName, String version) {
         this.code = code;
         this.name = name;
         this.description = description;
         this.softwareCode = softwareCode;
         this.softwareName = softwareName;
+        this.version = version;
     }
 
     public void reset() {
@@ -41,7 +43,16 @@ public class ExtensionDTO implements Serializable {
         setDescription(null);
         setSoftwareCode(0);
         setSoftwareName(null);
+        setVersion(null);
 
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public int getCode() {

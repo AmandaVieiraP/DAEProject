@@ -16,8 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Software")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SoftwareDTO implements Serializable{
-    
+public class SoftwareDTO implements Serializable {
+
     private int code;
     private String name;
     private String description;
@@ -30,13 +30,13 @@ public class SoftwareDTO implements Serializable{
         this.name = name;
         this.description = description;
     }
-    
-    public void reset(){
+
+    public void reset() {
         setCode(0);
         setName(null);
         setDescription(null);
     }
-    
+
     public int getCode() {
         return code;
     }
@@ -60,6 +60,5 @@ public class SoftwareDTO implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
+
 }
