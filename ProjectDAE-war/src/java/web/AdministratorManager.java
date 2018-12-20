@@ -6,11 +6,14 @@
 package web;
 
 import dtos.AdministratorDTO;
+import dtos.ArtefactDTO;
 import dtos.ClientDTO;
 import dtos.ConfigurationDTO;
+import dtos.ConfigurationModuleDTO;
 import dtos.ContractDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
+import dtos.HelpMaterialDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
 import dtos.TemplateDTO;
@@ -54,6 +57,7 @@ public class AdministratorManager implements Serializable {
     private List<String> selectedSoftwareModules;
     private List<ExtensionDTO> softwareExtensions;
     private List<String> selectedSoftwareExtensions;
+    private int moduleCode;
 
     private UIComponent component;
 
@@ -374,7 +378,7 @@ public class AdministratorManager implements Serializable {
 
         return contractParameters;*/
     }
-    
+
     public List<ContractParameterDTO> getClientConfigurationsContractParameters() {
         return getCurrentContractParametersForAllConfiguration(String.valueOf(currentConfiguration.getContractCode()));
         /*List<ContractParameterDTO> contractParameters = new LinkedList<>();
@@ -394,7 +398,7 @@ public class AdministratorManager implements Serializable {
 
         return contractParameters;*/
     }
-    
+
     public List<ContractParameterDTO> getCurrentContractParametersForAllConfiguration(String code) {
         List<ContractParameterDTO> contractParameters = new LinkedList<>();
 
@@ -407,14 +411,33 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            
+
+        }
+
+        return contractParameters;
+    }
+
+    public List<ContractParameterDTO> getCurrentConfigurationParameters() {
+        List<ContractParameterDTO> contractParameters = new LinkedList<>();
+
+        try {
+
+            String code = String.valueOf(currentConfiguration.getCode());
+
+            contractParameters = client.target(baseUri).path("/contract_parameters/configurations").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+
         }
 
         return contractParameters;
     }
 
     //todo ADICIONARRRRRR
-    
     //Para usar o metodo comum---------------------------------------
     public SoftwareDTO getCurrentSoftware() {
         return getSoftwareDTOByConfigurationCode(String.valueOf(currentTemplate.getSoftwareCode()));
@@ -475,11 +498,11 @@ public class AdministratorManager implements Serializable {
 
         return versions;*/
     }
-    
-    public List<String> getClientConfigurationSoftwareVersions(){
+
+    public List<String> getClientConfigurationSoftwareVersions() {
         return getCurrentSoftwareVersionsAllConfigurations(String.valueOf(currentConfiguration.getSoftwareCode()));
     }
-    
+
     private List<String> getCurrentSoftwareVersionsAllConfigurations(String code) {
         List<String> versions = new LinkedList<>();
 
@@ -537,12 +560,34 @@ public class AdministratorManager implements Serializable {
     }
 
     public List<ExtensionDTO> getCurrentTemplateExtensions() {
-        List<ExtensionDTO> extensions = new LinkedList<>();
+        return getExtensionsDTOByConfigurationCode(String.valueOf(currentTemplate.getCode()));
+        /*List<ExtensionDTO> extensions = new LinkedList<>();
 
         try {
             String code = String.valueOf(currentTemplate.getCode());
 
-            extensions = client.target(baseUri).path("/extensions/templates").path(code)
+            extensions = client.target(baseUri).path("/extensions/configurations").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return extensions;*/
+    }
+
+    public List<ExtensionDTO> getCurrentConfigurationsExtensions() {
+        return getExtensionsDTOByConfigurationCode(String.valueOf(currentConfiguration.getCode()));
+    }
+
+    private List<ExtensionDTO> getExtensionsDTOByConfigurationCode(String code) {
+        List<ExtensionDTO> extensions = new LinkedList<>();
+
+        try {
+            extensions = client.target(baseUri).path("/extensions/configurations").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });
@@ -574,6 +619,24 @@ public class AdministratorManager implements Serializable {
         return softwareModules;
     }
 
+    public List<ConfigurationModuleDTO> getCurrentConfigurationsModules() {
+        List<ConfigurationModuleDTO> configurationModulesDTO = new LinkedList<>();
+
+        try {
+            String code = String.valueOf(currentConfiguration.getCode());
+
+            configurationModulesDTO = client.target(baseUri).path("/configurationModules").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ConfigurationModuleDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        return configurationModulesDTO;
+    }
+
     public List<String> getCurrentTemplateArtefacts() {
         List<String> artefacts = new LinkedList<>();
 
@@ -593,6 +656,26 @@ public class AdministratorManager implements Serializable {
         return artefacts;
     }
 
+    public List<ArtefactDTO> getCurrentArtefacts() {
+        List<ArtefactDTO> artefacts = new LinkedList<>();
+
+        try {
+
+            String code = String.valueOf(currentConfiguration.getCode());
+
+            artefacts = client.target(baseUri).path("/artefacts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ArtefactDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return artefacts;
+    }
+
     public List<String> getCurrentTemplateHelpMaterials() {
         List<String> helpMaterials = new LinkedList<>();
 
@@ -603,6 +686,26 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_JSON).get(Response.class);
 
             helpMaterials = computeJsonResponseToStringList(serviceResponse);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return helpMaterials;
+    }
+
+    public List<HelpMaterialDTO> getCurrentHelpMaterials() {
+
+        List<HelpMaterialDTO> helpMaterials = new LinkedList<>();
+
+        try {
+            String code = String.valueOf(currentConfiguration.getCode());
+
+            helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<HelpMaterialDTO>>() {
+                    });
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -861,4 +964,11 @@ public class AdministratorManager implements Serializable {
         this.currentConfiguration = currentConfiguration;
     }
 
+    public int getModuleCode() {
+        return moduleCode;
+    }
+
+    public void setModuleCode(int moduleCode) {
+        this.moduleCode = moduleCode;
+    }
 }

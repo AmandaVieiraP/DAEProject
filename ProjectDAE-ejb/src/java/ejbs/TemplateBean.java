@@ -153,7 +153,7 @@ public class TemplateBean {
         }
     }
 
-    public void associateExtensionToTemplate(int extensionCode, int templateCode) {
+    /*public void associateExtensionToTemplate(int extensionCode, int templateCode) {
         try {
             Extension extension = em.find(Extension.class, extensionCode);
             Template template = em.find(Template.class, templateCode);
@@ -174,7 +174,7 @@ public class TemplateBean {
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
-    }
+    }*/
 
     public void associateModuleToTemplate(int moduleCode, int templateCode) {
         try {

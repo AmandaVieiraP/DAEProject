@@ -58,6 +58,9 @@ public class ConfigBean {
     
     @EJB
     private ServiceBean serviceBean;
+    
+    @EJB
+    private ConfigurationModuleBean configurationModuleBean;
 
     @PostConstruct
     public void populateDB() {
@@ -169,17 +172,16 @@ public class ConfigBean {
             responsabilidades,
             disponibilidade...*/
             
-
-            templateBean.associateExtensionToTemplate(12, 1);
-            templateBean.associateExtensionToTemplate(13, 2);
-            templateBean.associateExtensionToTemplate(14, 3);
-            templateBean.associateExtensionToTemplate(15, 4);
-            templateBean.associateExtensionToTemplate(16, 5);
-            templateBean.associateExtensionToTemplate(17, 6);
-            templateBean.associateExtensionToTemplate(18, 1);
-            templateBean.associateExtensionToTemplate(19, 2);
-            templateBean.associateExtensionToTemplate(20, 3);
-
+            configurationSuperBean.associateExtensionToConfiguration(12, 1);
+            configurationSuperBean.associateExtensionToConfiguration(13, 2);
+            configurationSuperBean.associateExtensionToConfiguration(14, 3);
+            configurationSuperBean.associateExtensionToConfiguration(15, 4);
+            configurationSuperBean.associateExtensionToConfiguration(16, 5);
+            configurationSuperBean.associateExtensionToConfiguration(17, 6);
+            configurationSuperBean.associateExtensionToConfiguration(18, 1);
+            configurationSuperBean.associateExtensionToConfiguration(19, 2);
+            configurationSuperBean.associateExtensionToConfiguration(20, 3);
+           
             templateBean.associateModuleToTemplate(100, 1);
             templateBean.associateModuleToTemplate(101, 2);
             templateBean.associateModuleToTemplate(102, 1);
@@ -207,18 +209,23 @@ public class ConfigBean {
             artefactBean.create("database.sql", "application/sql");
             artefactBean.create("dae_esquema.png", "image/png");
 
-            configurationSuperBean.addHelpMaterialToConfiguration(1, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(1, "User_Manual.pdf");
-            configurationSuperBean.addHelpMaterialToConfiguration(2, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(2, "User_Manual.pdf");
-            configurationSuperBean.addHelpMaterialToConfiguration(3, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(3, "User_Manual.pdf");
-            configurationSuperBean.addHelpMaterialToConfiguration(4, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(4, "User_Manual.pdf");
-            configurationSuperBean.addHelpMaterialToConfiguration(5, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(5, "User_Manual.pdf");
-            configurationSuperBean.addHelpMaterialToConfiguration(6, "Error_procedure.txt");
-            configurationSuperBean.addHelpMaterialToConfiguration(6, "User_Manual.pdf");
+            configurationSuperBean.addArtefactsToConfiguration(1, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(2, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(3, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(4, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(5, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(6, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(1, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(2, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(3, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(4, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(5, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(6, "dae_esquema.png");
+
+            
+            configurationModuleBean.create(105, "Module HR", 1000, "Version 1.1", "164.0.0.1", "189.1.1.3");
+            configurationModuleBean.create(106, "Module HR", 1002, "Version 1.1", "164.0.0.1", "189.1.1.3");
+            configurationModuleBean.create(107, "Module HR", 1001, "Version 1.1", "164.0.0.1", "189.1.1.3");
             
             //Criar configuração para associar a um cliente
             configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1");
@@ -230,6 +237,57 @@ public class ConfigBean {
             configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6");
             configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6");
             configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6");
+            
+            configurationSuperBean.associateExtensionToConfiguration(12, 30);
+            configurationSuperBean.associateExtensionToConfiguration(13, 31);
+            configurationSuperBean.associateExtensionToConfiguration(14, 32);
+            configurationSuperBean.associateExtensionToConfiguration(15, 33);
+            configurationSuperBean.associateExtensionToConfiguration(16, 34);
+            configurationSuperBean.associateExtensionToConfiguration(17, 35);
+            configurationSuperBean.associateExtensionToConfiguration(18, 36);
+            configurationSuperBean.associateExtensionToConfiguration(19, 30);
+            configurationSuperBean.associateExtensionToConfiguration(20, 33);
+            
+            configurationModuleBean.associateModuleToConfiguration(105, 30);
+            configurationModuleBean.associateModuleToConfiguration(105, 31);
+            configurationModuleBean.associateModuleToConfiguration(105, 32);
+            configurationModuleBean.associateModuleToConfiguration(106, 33);
+            configurationModuleBean.associateModuleToConfiguration(106, 34);
+            configurationModuleBean.associateModuleToConfiguration(106, 35);
+            configurationModuleBean.associateModuleToConfiguration(106, 36);
+            configurationModuleBean.associateModuleToConfiguration(107, 37);
+            configurationModuleBean.associateModuleToConfiguration(107, 38);
+            configurationModuleBean.associateModuleToConfiguration(106, 35);
+            
+            configurationSuperBean.addArtefactsToConfiguration(31, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(32, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(33, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(34, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(35, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(36, "database.sql");
+            configurationSuperBean.addArtefactsToConfiguration(31, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(32, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(33, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(34, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(35, "dae_esquema.png");
+            configurationSuperBean.addArtefactsToConfiguration(36, "dae_esquema.png");
+            
+            configurationSuperBean.addHelpMaterialToConfiguration(31, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(31, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(32, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(32, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(33, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(34, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(34, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(35, "User_Manual.pdf");
+            configurationSuperBean.addHelpMaterialToConfiguration(36, "Error_procedure.txt");
+            configurationSuperBean.addHelpMaterialToConfiguration(36, "User_Manual.pdf");
+            
+            contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Maintenance Hours");
+            contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Contract Price");
+            contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Contract Duration");
+            contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Maintenance Schedule");
+            contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Guarantee of Support");
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

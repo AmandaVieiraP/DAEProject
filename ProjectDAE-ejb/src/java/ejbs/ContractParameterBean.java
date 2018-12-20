@@ -6,6 +6,7 @@
 package ejbs;
 
 import dtos.ContractParameterDTO;
+import entities.Configuration;
 import entities.Contract;
 import entities.Parameter;
 import java.util.LinkedList;
@@ -43,6 +44,24 @@ public class ContractParameterBean {
             }
 
             return contractParameterListToContractParameterDTOList(contract.getContractParameters());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("configurations/{id}")
+    public List<ContractParameterDTO> getParameterByConfigurationCode(@PathParam("id") int configurationCode) {
+        try {
+            Configuration configuration = em.find(Configuration.class, configurationCode);
+
+            if (configuration == null) {
+                return null;
+            }
+
+            return contractParameterListToContractParameterDTOList(configuration.getConfigurationParameters());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
@@ -108,6 +127,29 @@ public class ContractParameterBean {
 
             em.merge(parameter);
             em.merge(contract);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void associateParameterToAConfiguration(int configCode, String parameterName) {
+        try {
+            Configuration configuration = em.find(Configuration.class, configCode);
+            Parameter parameter = em.find(Parameter.class, parameterName);
+
+            if (configuration == null || parameter == null) {
+                return;
+            }
+
+            if (configuration.getConfigurationParameters().contains(parameter)) {
+                return;
+            }
+
+            configuration.addParameters(parameter);
+            parameter.addConfigurations(configuration);
+
+            em.merge(parameter);
+            em.merge(configuration);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }

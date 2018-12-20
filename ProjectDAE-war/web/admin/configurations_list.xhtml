@@ -26,18 +26,17 @@
                 </p:column>
 
                 <p:column headerText="Other Configuration Details">
-                    <div align="center"><h:commandLink value="Extensions | Modules | Help Materials | Artefacts Repository |Parameters" 
+                    <div align="center"><h:commandLink value="Extensions | Modules | Help Materials | Artefacts | Parameters" 
                                                        action="configurations_other_details?faces-redirect=true">
                             <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
                         </h:commandLink></div>
                 </p:column>
                 
-                <p:column headerText="Other Configuration Details">
+                <p:column headerText="Actions">
                     <div align="center"><h:commandLink value="Update" action="configurations_other_details?faces-redirect=true" class="btn btn-outline-success btn-sm">
                             <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
                         </h:commandLink></div>
-                </p:column>
-                <p:column headerText="Other Configuration Details">
+                    <br/>
                     <div align="center"><h:commandLink value="Remove" action="configurations_other_details?faces-redirect=true" class="btn btn-outline-danger btn-sm">
                             <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
                         </h:commandLink></div>

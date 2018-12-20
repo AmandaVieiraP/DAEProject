@@ -6,6 +6,8 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
+import entities.Configuration;
+import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.Software;
 import entities.Template;
@@ -53,21 +55,39 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("templates/{id}")
-    public List<ExtensionDTO> getExtensionByTemplateCode(@PathParam("id") int template_code) {
+    @Path("configurations/{id}")
+    public List<ExtensionDTO> getExtensionByTemplateCode(@PathParam("id") int code) {
         try {
-            Template template = em.find(Template.class, template_code);
+            ConfigurationSuper conf = em.find(ConfigurationSuper.class, code);
 
-            if (template == null) {
+            if (conf == null) {
                 return null;
             }
 
-            return extensionListToExtensionDTOList(template.getExtensions());
+            return extensionListToExtensionDTOList(conf.getExtensions());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    /*@GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("configurations/{id}")
+    public List<ExtensionDTO> getExtensionByConfigurationCode(@PathParam("id") int configurationCode) {
+        try {
+            Configuration configuration = em.find(Configuration.class, configurationCode);
+
+            if (configuration == null) {
+                return null;
+            }
+
+            return extensionListToExtensionDTOList(configuration.getExtensions());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }*/
 
     private List<ExtensionDTO> extensionListToExtensionDTOList(List<Extension> extensions) {
         try {

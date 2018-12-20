@@ -66,6 +66,9 @@
                     <p:column headerText="Description" sortBy="#{module.description}" filterBy="#{module.description}" filterMatchMode="contains">
                         <div align="center"><h:outputText value="#{module.description}"/></div>
                     </p:column>
+                    <p:column headerText="Version" sortBy="#{module.version}" filterBy="#{module.version}" filterMatchMode="contains">
+                        <div align="center"><h:outputText value="#{module.version}"/></div>
+                    </p:column>
                 </p:dataTable>
 
             </h:form> 

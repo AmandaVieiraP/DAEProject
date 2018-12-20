@@ -25,7 +25,8 @@
                 rows="10"
                 paginator="true"
                 paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"
-                rowsPerPageTemplate="5,10,15">
+                rowsPerPageTemplate="5,10,15"
+                class="datatable">
                 
                 <f:facet name="header" rendered="#{not empty cc.attrs.title}">
                     <h:outputText value="${cc.attrs.title}" />

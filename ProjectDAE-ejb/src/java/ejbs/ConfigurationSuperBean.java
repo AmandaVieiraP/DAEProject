@@ -7,7 +7,11 @@ package ejbs;
 
 import entities.Artefact;
 import entities.ConfigurationSuper;
+import entities.Extension;
 import entities.HelpMaterial;
+import entities.Module;
+import entities.SoftwareModule;
+import entities.Template;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -77,6 +81,29 @@ public class ConfigurationSuperBean {
             em.merge(conf);
             em.merge(artefact);
 
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void associateExtensionToConfiguration(int extensionCode, int configurationCode) {
+        try {
+            Extension extension = em.find(Extension.class, extensionCode);
+            ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configurationCode);
+
+            if (extension == null || configurationSuper == null) {
+                return;
+            }
+
+            if (configurationSuper.getExtensions().contains(extension)) {
+                return;
+            }
+
+            configurationSuper.addExtension(extension);
+            extension.addConfiguration(configurationSuper);
+
+            em.merge(configurationSuper);
+            em.merge(extension);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }

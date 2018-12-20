@@ -9,7 +9,6 @@ import dtos.ArtefactDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
-import dtos.ModuleDTO;
 import dtos.ServiceDTO;
 import dtos.TemplateDTO;
 import dtos.SoftwareDTO;
@@ -135,7 +134,7 @@ public class AnonymousManager implements Serializable {
         try {
             String code = String.valueOf(currentTemplate.getCode());
             
-            extensions = client.target(baseUri).path("/extensions/templates").path(code)
+            extensions = client.target(baseUri).path("/extensions/configurations").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });

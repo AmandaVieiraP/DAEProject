@@ -12,41 +12,42 @@ and open the template in the editor.
 .tableFilter {
     text-align: right !important;
 }
-     
+
 .ui-button-text-only .ui-button-text {
     padding: 0.3em 0.4em;
 }
-     
-     
+
+
 .ui-filter-column .ui-column-customfilter .custom-filter {
     width: 100%;
     box-sizing: border-box;
 }
-    
-@media (min-width: 576px) {.jumbotron {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        background-color: #454d54;
-        color: #f1f2f4;
-        font-weight: bold;
-    }
+
+@media (min-width: 576px) 
+{.jumbotron {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                background-color: #454d54;
+                color: #f1f2f4;
+                font-weight: bold;
+            }
 }
 
 body {
-  background-color: #e3e6e8;
+    background-color: #e3e6e8;
 }
 
 #main {
-  background-color: #e3e6e8;
-  margin: 1rem 1rem 0 1rem;
+    background-color: #e3e6e8;
+    margin: 1rem 1rem 0 1rem;
 }
 
 
 #login{
-  padding-top: 1%;
-  padding-left: 40%;
-  padding-right: 40%;
-  padding-bottom: 1%;
+    padding-top: 1%;
+    padding-left: 40%;
+    padding-right: 40%;
+    padding-bottom: 1%;
 }
-     
- 
+
+
