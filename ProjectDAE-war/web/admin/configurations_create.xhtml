@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">New Configuration</ui:define>
+
+        <ui:define name="main">
+            <div class="container">
+                <h:form> 
+
+                    <div class="form-group">   
+                        <h:outputLabel for="code" value="Code: " />
+                        <h:inputText size="20" class="form-control" id="code" required="true" requiredMessage="Error: Code cannot be empty and must be unic" 
+                                     value="#{administratorManager.newConfigurationDTO.code}" />   
+                        <h:message for="code" errorStyle="color:red" />
+                    </div>  
+
+                    <div class="form-group">   
+                        <h:outputLabel for="description" value="Description: " />
+                        <p:inputTextarea class="form-control" id="description" required="true" requiredMessage="Error: Description cannot be empty and must be unic"
+                                         rows="5" cols="30" counter="display" maxlength="200" counterTemplate="{0} characters remaining." autoResize="false"
+                                         value="#{administratorManager.newConfigurationDTO.description}"/>
+                        <br />
+                        <h:outputText id="display" />
+                        <h:message for="description" errorStyle="color:red" />
+                    </div> 
+
+                    <div class="form-group">   
+                        <h:outputLabel for="version" value="Version: " />
+                        <h:inputText size="20" class="form-control" id="version" required="true" requiredMessage="Error: Version cannot be empty and must be unic" 
+                                     value="#{administratorManager.newConfigurationDTO.version}" />   
+                        <h:message for="version" errorStyle="color:red" />
+                    </div> 
+
+                    <div class="form-group"> 
+                        <h:outputLabel for="software" value="Software: " />
+                        <h:selectOneMenu id="software" value="#{administratorManager.newConfigurationDTO.softwareCode}" >
+                            <f:selectItems value="#{administratorManager.allSoftwares}" var="sof" itemValue="#{sof.code}" itemLabel="#{sof.name} - #{sof.description}" />
+                        </h:selectOneMenu>   
+                    </div>
+                    
+                    <div class="form-group"> 
+                        <h:outputLabel for="contract" value="Contract: " />
+                        <h:selectOneMenu id="contract" value="#{administratorManager.newConfigurationDTO.contractCode}" >
+                            <f:selectItems value="#{administratorManager.allContracts}" var="c" itemValue="#{c.code}" itemLabel="#{c.code}" />
+                        </h:selectOneMenu>   
+                    </div>
+
+                    <br></br>
+
+                    <h:commandButton class="btn btn-outline-secondary" value="Save" action="#{administratorManager.createNewConfiguration()}" /> 
+                    &nbsp;
+                    <p:link value="Cancel" outcome="configurations_list" class="btn btn-outline-secondary"/>
+
+                </h:form> 
+
+            </div>    
+
+        </ui:define>
+
+
+    </ui:composition>   
+
+</html>

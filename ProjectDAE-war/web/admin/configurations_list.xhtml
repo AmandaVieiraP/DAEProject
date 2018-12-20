@@ -12,7 +12,9 @@
         <ui:define name="title">Client #{administratorManager.currentClient.username} Configurations</ui:define>
 
         <ui:define name="main">
-
+            <br/>
+            <p:link value="+ Add New Configuration" outcome="configurations_create" class="btn btn-outline-info btn-sm"/>
+            
             <em:dt headers="#{['Code', 'Description','Version']}" 
                    props="#{['code', 'description','version']}" 
                    list="#{administratorManager.clientConfigurations}" 

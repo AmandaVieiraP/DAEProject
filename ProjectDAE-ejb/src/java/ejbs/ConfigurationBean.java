@@ -16,7 +16,9 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -51,6 +53,21 @@ public class ConfigurationBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @POST
+    @Path("/create")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(ConfigurationDTO configurationDTO){
+        try {
+            this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
+                    configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername());
+            
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    
 
     public void create(int code, String description, int software_code, int contract_code, String version, String client_username) {
         try {
@@ -112,7 +129,8 @@ public class ConfigurationBean {
                     c.getSoftware().getCode(),
                     c.getSoftware().getName(),
                     c.getContract().getCode(),
-                    c.getVersion());
+                    c.getVersion(),
+                    c.getClient().getUsername());
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }

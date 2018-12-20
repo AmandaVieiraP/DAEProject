@@ -60,6 +60,8 @@ public class AdministratorManager implements Serializable {
     private List<ExtensionDTO> softwareExtensions;
     private List<String> selectedSoftwareExtensions;
     private int moduleCode;
+    
+    private ConfigurationDTO newConfigurationDTO;
 
     private UIComponent component;
 
@@ -84,6 +86,7 @@ public class AdministratorManager implements Serializable {
         this.newClientDTO = new ClientDTO();
         this.newTemplateDTO = new TemplateDTO();
         this.currentAdminLogged = new AdministratorDTO();
+        this.newConfigurationDTO=new ConfigurationDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -95,6 +98,7 @@ public class AdministratorManager implements Serializable {
         this.getAdministratorLogged();
     }
 
+    //**** Métodos de Criar ****//
     public String createNewAdministrator() {
 
         try {
@@ -202,7 +206,25 @@ public class AdministratorManager implements Serializable {
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para está página  
     }
+    
+    public String createNewConfiguration(){
+        try {
+            this.newConfigurationDTO.setClientUsername(this.currentClient.getUsername());
+            
+            client.target(baseUri)
+                    .path("/configurations/create")
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
 
+            clearConfigurationDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());   
+            return null;
+        }
+
+        return "configurations_list?faces-redirect=true";
+    }
+
+    //**** Métodos de Listar ****//
     public void getAdministratorLogged() {
 
         AdministratorDTO admin;
@@ -438,8 +460,8 @@ public class AdministratorManager implements Serializable {
 
         return contractParameters;
     }
-    
-    public List<ContractParameterDTO> getCurrentConfigurationModuleParameters(){
+
+    public List<ContractParameterDTO> getCurrentConfigurationModuleParameters() {
         List<ContractParameterDTO> contractParameters = new LinkedList<>();
 
         try {
@@ -459,7 +481,6 @@ public class AdministratorManager implements Serializable {
         return contractParameters;
     }
 
-    //todo ADICIONARRRRRR
     //Para usar o metodo comum---------------------------------------
     public SoftwareDTO getCurrentSoftware() {
         return getSoftwareDTOByConfigurationCode(String.valueOf(currentTemplate.getSoftwareCode()));
@@ -500,7 +521,6 @@ public class AdministratorManager implements Serializable {
         return null;
     }
 
-    //ADICIONARRRRRR
     public List<String> getCurrentSoftwareVersions() {
         return getCurrentSoftwareVersionsAllConfigurations(String.valueOf(currentTemplate.getSoftwareCode()));
         /*List<String> versions = new LinkedList<>();
@@ -755,10 +775,10 @@ public class AdministratorManager implements Serializable {
 
         return configurationsDTO;
     }
-    
-    public List<LicenseDTO> getCurrentConfigurationsModuleLicenses(){
-        List<LicenseDTO> licensesDTO=new LinkedList<>();
-        
+
+    public List<LicenseDTO> getCurrentConfigurationsModuleLicenses() {
+        List<LicenseDTO> licensesDTO = new LinkedList<>();
+
         try {
             String code = String.valueOf(this.moduleCode);
 
@@ -770,31 +790,28 @@ public class AdministratorManager implements Serializable {
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
-        
+
         return licensesDTO;
     }
-    
-    public List<ServiceDTO> getCurrentConfigurationModuleServices(){
+
+    public List<ServiceDTO> getCurrentConfigurationModuleServices() {
         List<ServiceDTO> servicesDTO = new LinkedList<>();
-        
+
         try {
             String code = String.valueOf(moduleCode);
-            
+
             servicesDTO = client.target(baseUri).path("/services").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ServiceDTO>>(){
-             });
-            
-            
+                    .get(new GenericType<List<ServiceDTO>>() {
+                    });
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return servicesDTO;
     }
-    
-    
 
     //adicionar
     private List<String> computeJsonResponseToStringList(Response serviceResponse) {
@@ -896,6 +913,10 @@ public class AdministratorManager implements Serializable {
 
     public void clearNewClient() {
         newClientDTO = new ClientDTO();
+    }
+    
+    public void clearConfigurationDTO() {
+        newConfigurationDTO=new ConfigurationDTO();
     }
 
     public AdministratorDTO getNewAdministratorDTO() {
@@ -1032,5 +1053,13 @@ public class AdministratorManager implements Serializable {
 
     public void setModuleCode(int moduleCode) {
         this.moduleCode = moduleCode;
+    }
+
+    public ConfigurationDTO getNewConfigurationDTO() {
+        return newConfigurationDTO;
+    }
+
+    public void setNewConfigurationDTO(ConfigurationDTO newConfigurationDTO) {
+        this.newConfigurationDTO = newConfigurationDTO;
     }
 }

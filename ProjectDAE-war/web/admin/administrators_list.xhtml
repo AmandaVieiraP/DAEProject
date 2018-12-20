@@ -6,77 +6,35 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
-    
+
 
     <ui:composition template="./admin_templates/admin_skeleton.xhtml">
         <ui:define name="title">List of Administrators</ui:define>
-        
+
         <ui:define name="main">
             <div class="jumbotron">
                 <h1>List of Administrators</h1>
             </div>
-            
+
             <em:dt
-                   headers="#{['Username', 'Name', 'Email', 'Job Role']}" 
-                   props="#{['username', 'name', 'email', 'jobRole']}" 
-                   list="#{administratorManager.allAdministrators}" 
-                   widgetVar="adminsTable">
-                
+                headers="#{['Username', 'Name', 'Email', 'Job Role']}" 
+                props="#{['username', 'name', 'email', 'jobRole']}" 
+                list="#{administratorManager.allAdministrators}" 
+                widgetVar="adminsTable">
+
                 <p:column headerText="Actions"> 
-                <!--    <h:form> -->
-                        <h:commandLink value="Update" action="update_admin?faces-redirect=true">
-                            <f:setPropertyActionListener target="#{administratorManager.currentAdmin}" value="#{object}" />
-                        </h:commandLink>
-                        &nbsp;
-                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeAdministrator}">
-                            <f:param name="deleteAdminUsername" id="deleteAdminUsername" value="#{object.username}" />    
-                        </h:commandLink>
-                 <!--   </h:form> -->
+                    <h:commandLink value="Update" action="update_admin?faces-redirect=true">
+                        <f:setPropertyActionListener target="#{administratorManager.currentAdmin}" value="#{object}" />
+                    </h:commandLink>
+                    &nbsp;
+                    <h:commandLink value="Remove" actionListener="#{administratorManager.removeAdministrator}">
+                        <f:param name="deleteAdminUsername" id="deleteAdminUsername" value="#{object.username}" />    
+                    </h:commandLink>
                 </p:column>
-            
+
             </em:dt> 
-            
-       <!--     <h:form>
-                <p:dataTable
-                    var="administrator"   
-                    summary="List of all Administrators"
-                    value="#{administratorManager.allAdministrators}" widgetVar="adminsTable">
-
-                    <f:facet name="header">
-                        <h:outputText value="Liast of all Administrators" />
-                    </f:facet>
-                    
-                    <f:facet name="header">
-                        <p:outputPanel>
-                            <h:outputText value="Search all fields:" />
-                            <p:inputText id="globalFilter" onkeyup="PF('adminsTable').filter()" style="width:150px" placeholder="Enter keyword"/>
-                        </p:outputPanel>
-                    </f:facet> 
-
-
-
-                    <p:column filterBy="#{administrator.username}" headerText="Username" filterMatchMode="contains" filterStyle="display:none;">   
-                        <h:outputText value="#{administrator.username}"/>
-                    </p:column>
-
-                    <p:column filterBy="#{administrator.name}" headerText="Name" filterMatchMode="contains" filterStyle="display:none;"> 
-                        <h:outputText value="#{administrator.name}" />
-                    </p:column>
-
-                    <p:column filterBy="#{administrator.email}" headerText="Email" filterStyle="display:none;"> 
-                        <h:outputText value="#{administrator.email}" />
-                    </p:column>
-
-                    <p:column filterBy="#{administrator.jobRole}" headerText="Job Role" filterStyle="display:none;"> 
-                        <h:outputText value="#{administrator.jobRole}" />
-                    </p:column>
-
-                </p:dataTable>  
-            </h:form>  -->
         </ui:define>
-        
-        
     </ui:composition>  
-    
+
 </html>
 

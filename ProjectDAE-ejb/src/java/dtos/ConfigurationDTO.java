@@ -17,17 +17,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Configuration")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ConfigurationDTO extends ConfigurationSuperDTO implements Serializable{
+    
+    private String clientUsername;
 
     public ConfigurationDTO() {
     }
 
-    public ConfigurationDTO(int code, String description, int softwareCode, String softwareName, int contractCode, String version) {
+    public ConfigurationDTO(int code, String description, int softwareCode, String softwareName, int contractCode, String version, String username) {
         super(code, description, softwareCode, softwareName, contractCode, version);
+        this.clientUsername=username;
     }
 
     @Override
     public void reset(){
         super.reset();
+        setClientUsername(null);
     }
 
+    public String getClientUsername() {
+        return clientUsername;
+    }
+
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
+    }
 }
