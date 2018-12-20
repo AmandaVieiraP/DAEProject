@@ -14,6 +14,8 @@ import dtos.ContractDTO;
 import dtos.ContractParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
+import dtos.LicenseDTO;
+import dtos.ServiceDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
 import dtos.TemplateDTO;
@@ -436,6 +438,26 @@ public class AdministratorManager implements Serializable {
 
         return contractParameters;
     }
+    
+    public List<ContractParameterDTO> getCurrentConfigurationModuleParameters(){
+        List<ContractParameterDTO> contractParameters = new LinkedList<>();
+
+        try {
+
+            String code = String.valueOf(this.moduleCode);
+
+            contractParameters = client.target(baseUri).path("/contract_parameters/modules").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+
+        }
+
+        return contractParameters;
+    }
 
     //todo ADICIONARRRRRR
     //Para usar o metodo comum---------------------------------------
@@ -733,6 +755,46 @@ public class AdministratorManager implements Serializable {
 
         return configurationsDTO;
     }
+    
+    public List<LicenseDTO> getCurrentConfigurationsModuleLicenses(){
+        List<LicenseDTO> licensesDTO=new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(this.moduleCode);
+
+            licensesDTO = client.target(baseUri).path("/licenses").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<LicenseDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+        
+        return licensesDTO;
+    }
+    
+    public List<ServiceDTO> getCurrentConfigurationModuleServices(){
+        List<ServiceDTO> servicesDTO = new LinkedList<>();
+        
+        try {
+            String code = String.valueOf(moduleCode);
+            
+            servicesDTO = client.target(baseUri).path("/services").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ServiceDTO>>(){
+             });
+            
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+        
+        return servicesDTO;
+    }
+    
+    
 
     //adicionar
     private List<String> computeJsonResponseToStringList(Response serviceResponse) {

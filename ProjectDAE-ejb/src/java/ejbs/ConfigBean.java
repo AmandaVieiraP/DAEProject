@@ -61,6 +61,9 @@ public class ConfigBean {
     
     @EJB
     private ConfigurationModuleBean configurationModuleBean;
+    
+    @EJB
+    private LicenseBean licenseBean;
 
     @PostConstruct
     public void populateDB() {
@@ -288,6 +291,27 @@ public class ConfigBean {
             contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Contract Duration");
             contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Maintenance Schedule");
             contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Guarantee of Support");
+            
+            //Criar licensas
+            licenseBean.create(1, "License Nr 1", 105);
+            licenseBean.create(2, "License Nr 1", 106);
+            licenseBean.create(3, "License Nr 1", 107);
+            licenseBean.create(4, "License Nr 2", 105);
+            licenseBean.create(5, "License Nr 2", 106);
+            licenseBean.create(6, "License Nr 2", 107);
+            
+            contractParameterBean.associateParameterToAModule(105, "Type 1 - Maintenance Schedule");
+            contractParameterBean.associateParameterToAModule(106, "Type 1 - Guarantee of Support");
+            contractParameterBean.associateParameterToAModule(107, "Type 1 - Guarantee of Support");
+            
+            serviceBean.associateServiceToModule(1, 105);
+            serviceBean.associateServiceToModule(2, 106);
+            serviceBean.associateServiceToModule(3, 107);
+            serviceBean.associateServiceToModule(1, 106);
+            serviceBean.associateServiceToModule(2, 107);
+            serviceBean.associateServiceToModule(1, 107);
+            serviceBean.associateServiceToModule(3, 105);
+            serviceBean.associateServiceToModule(4, 105);
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());

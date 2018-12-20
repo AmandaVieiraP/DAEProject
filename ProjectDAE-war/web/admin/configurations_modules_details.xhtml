@@ -9,81 +9,35 @@
 
 
     <ui:composition template="./admin_templates/admin_skeleton.xhtml">
-        <ui:define name="title">Client #{administratorManager.currentClient.username} Configurations</ui:define>
+        <ui:define name="title">Module Details</ui:define>
 
         <ui:define name="main">
 
-            <!--Extensions-->
-            <div align="center"> <p class="h5"><strong>Configuration #{administratorManager.currentConfiguration.code} Extensions</strong></p></div>
+            <div align="center"> <p class="h5"><strong>Licences</strong></p></div>
 
-            <em:dt headers="#{['Code','Name','Description','Version']}" 
-                   props="#{['code','name','description','version']}" 
-                   list="#{administratorManager.currentConfigurationsExtensions}" 
+            <em:dt headers="#{['Code','Value']}" 
+                   props="#{['code','licenceValue']}" 
+                   list="#{administratorManager.currentConfigurationsModuleLicenses}" 
                    widgetVar="extensionsTable">
             </em:dt>
 
-            <div align="center"> <p class="h5"><strong>Configuration #{administratorManager.currentConfiguration.code} Modules</strong></p></div>
-
-            <em:dt headers="#{['Code', 'Description','Software','Version','DB Server IP','Application Server IP']}" 
-                   props="#{['code', 'description','softwareName','version','dbServerIp','applicationServerIp']}" 
-                   list="#{administratorManager.currentConfigurationsModules}" 
-                   widgetVar="extensionsTable">
-
-                <p:column headerText="Licenses | Parameters | Services">
-                    <div align="center">
-                        <h:commandLink value="View Details" action="configurations_modules_details?faces-redirect=true" class="btn btn-outline-success btn-sm">
-                            <f:setPropertyActionListener target="#{administratorManager.moduleCode}" value="#{object.code}" />
-                        </h:commandLink>
-                    </div>
-                </p:column>
-            </em:dt> 
-
-            <div align="center"> <p class="h5"><strong>Configuration #{administratorManager.currentConfiguration.code} Artefatcs and Help Materials</strong></p></div>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <em:dt headers="#{[]}" 
-                               props="#{[]}" 
-                               list="#{administratorManager.currentArtefacts}" 
-                               widgetVar="extensionsTable">
-
-                            <p:column headerText="Files Content" sortBy="#{object.filename}" filterBy="#{object.filename}" filterMatchMode="contains">
-                                <div align="center"><p:commandButton value="Download #{object.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
-                                        <p:fileDownload value="#{downloadManager.downloadFile(object.mimetype, object.filename)}" />
-                                    </p:commandButton></div>
-                            </p:column>
-                        </em:dt> 
-                    </div>
-                    <div class="col">
-
-                        <em:dt headers="#{[]}" 
-                               props="#{[]}" 
-                               list="#{administratorManager.currentHelpMaterials}" 
-                               widgetVar="extensionsTable">
-
-                            <p:column headerText="Help Materials" sortBy="#{object.filename}" filterBy="#{object.filename}" filterMatchMode="contains">
-                                <div align="center"><p:commandButton value="Download #{object.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
-                                        <p:fileDownload value="#{downloadManager.downloadFile(object.mimetype,object.filename)}" />
-                                    </p:commandButton></div>
-
-                            </p:column>
-                        </em:dt>
-                    </div>
-                </div>
-            </div>
-
-            <div align="center"> <p class="h5"><strong>Configuration #{administratorManager.currentConfiguration.code} Parameters</strong></p></div>
+            <div align="center"> <p class="h5"><strong>Parameters</strong></p></div>
 
             <em:dt headers="#{['Name', 'Description','Value']}" 
                    props="#{['name', 'description','paramValue']}" 
-                   list="#{administratorManager.currentConfigurationParameters}" 
+                   list="#{administratorManager.currentConfigurationModuleParameters}" 
                    widgetVar="parametersTable">
+            </em:dt> 
+
+            <div align="center"> <p class="h5"><strong>Services</strong></p></div>
+
+            <em:dt headers="#{['Code','Name','Description','Version']}" 
+                   props="#{['code','name','description','version']}" 
+                   list="#{administratorManager.currentConfigurationModuleServices}" 
+                   widgetVar="extensionsTable">
             </em:dt> 
 
         </ui:define>
     </ui:composition>  
 
 </html>
-
-
-<!-- licenses; moduleParameters; services-->

@@ -7,6 +7,7 @@ package ejbs;
 
 import dtos.ContractParameterDTO;
 import entities.Configuration;
+import entities.ConfigurationModule;
 import entities.Contract;
 import entities.Parameter;
 import java.util.LinkedList;
@@ -49,7 +50,7 @@ public class ContractParameterBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("configurations/{id}")
@@ -62,6 +63,24 @@ public class ContractParameterBean {
             }
 
             return contractParameterListToContractParameterDTOList(configuration.getConfigurationParameters());
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("modules/{id}")
+    public List<ContractParameterDTO> getParameterByModuleCode(@PathParam("id") int moduleCode) {
+        try {
+            ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
+
+            if (module == null) {
+                return null;
+            }
+
+            return contractParameterListToContractParameterDTOList(module.getModuleParameters());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
@@ -131,7 +150,7 @@ public class ContractParameterBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     public void associateParameterToAConfiguration(int configCode, String parameterName) {
         try {
             Configuration configuration = em.find(Configuration.class, configCode);
@@ -150,6 +169,29 @@ public class ContractParameterBean {
 
             em.merge(parameter);
             em.merge(configuration);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
+    public void associateParameterToAModule(int moduleCode, String parameterName) {
+        try {
+            ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
+            Parameter parameter = em.find(Parameter.class, parameterName);
+
+            if (module == null || parameter == null) {
+                return;
+            }
+
+            if (module.getModuleParameters().contains(parameter)) {
+                return;
+            }
+
+            module.addParameter(parameter);
+            parameter.addModule(module);
+
+            em.merge(parameter);
+            em.merge(module);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
