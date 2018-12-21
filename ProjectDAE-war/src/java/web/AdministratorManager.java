@@ -21,8 +21,10 @@ import dtos.SoftwareModuleDTO;
 import dtos.TemplateDTO;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -37,6 +39,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
@@ -59,8 +62,9 @@ public class AdministratorManager implements Serializable {
     private List<String> selectedSoftwareModules;
     private List<ExtensionDTO> softwareExtensions;
     private List<String> selectedSoftwareExtensions;
+    private ExtensionDTO selectedExtension;
     private int moduleCode;
-    
+
     private ConfigurationDTO newConfigurationDTO;
 
     private UIComponent component;
@@ -76,6 +80,7 @@ public class AdministratorManager implements Serializable {
     private TemplateDTO currentTemplate;
     private ClientDTO currentClient;
     private ConfigurationDTO currentConfiguration;
+    private int code;
 
     @ManagedProperty("#{userManager}")
     private UserManager userManager;
@@ -86,7 +91,7 @@ public class AdministratorManager implements Serializable {
         this.newClientDTO = new ClientDTO();
         this.newTemplateDTO = new TemplateDTO();
         this.currentAdminLogged = new AdministratorDTO();
-        this.newConfigurationDTO=new ConfigurationDTO();
+        this.newConfigurationDTO = new ConfigurationDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -206,22 +211,22 @@ public class AdministratorManager implements Serializable {
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para está página  
     }
-    
-    public String createNewConfiguration(){
+
+    public String createNewConfiguration() {
         try {
             this.newConfigurationDTO.setClientUsername(this.currentClient.getUsername());
-            
+
             client.target(baseUri)
                     .path("/configurations/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
 
-            clearConfigurationDTO();
+           // clearConfigurationDTO();
         } catch (Exception e) {
-            logger.warning(e.getMessage());   
+            logger.warning(e.getMessage());
             return null;
         }
 
-        return "configurations_list?faces-redirect=true";
+        return "configurations_associations?faces-redirect=true";
     }
 
     //**** Métodos de Listar ****//
@@ -329,6 +334,21 @@ public class AdministratorManager implements Serializable {
             return null;
         }
         return returnedContracts;
+    }
+
+    public List<ExtensionDTO> getAllExtensions() {
+        List<ExtensionDTO> extensionsDTO = new LinkedList<>();
+
+        try {
+            extensionsDTO = client.target(baseUri).path("/extensions/all").request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ExtensionDTO>>() {
+                    });
+        } catch (Exception ex) {
+
+            logger.warning("Problem getting all contracts with REST");
+            return null;
+        }
+        return extensionsDTO;
     }
 
     //allSoftwaresModulesFromASoftware
@@ -870,6 +890,26 @@ public class AdministratorManager implements Serializable {
         return "admin_index?faces-redirect=true";
     }
 
+    //******************* Update Methods
+    public void associateExtensionsToConfiguration() {
+        try {
+            
+            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            
+            selectedExtension=new ExtensionDTO(this.code,null,null,0,null,null);
+            
+            client.target(baseUri)
+                    .path("/configurations/associateExtensions").path(codeC)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            //return null;
+        }
+
+        //return null;
+    }
+
     public String updateAdministrator() {
         try {
             client.target(baseUri)
@@ -914,9 +954,9 @@ public class AdministratorManager implements Serializable {
     public void clearNewClient() {
         newClientDTO = new ClientDTO();
     }
-    
+
     public void clearConfigurationDTO() {
-        newConfigurationDTO=new ConfigurationDTO();
+        newConfigurationDTO = new ConfigurationDTO();
     }
 
     public AdministratorDTO getNewAdministratorDTO() {
@@ -1062,4 +1102,22 @@ public class AdministratorManager implements Serializable {
     public void setNewConfigurationDTO(ConfigurationDTO newConfigurationDTO) {
         this.newConfigurationDTO = newConfigurationDTO;
     }
+
+    public ExtensionDTO getSelectedExtension() {
+        return selectedExtension;
+    }
+
+    public void setSelectedExtension(ExtensionDTO selectedExtension) {
+        this.selectedExtension = selectedExtension;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+    
+    
 }

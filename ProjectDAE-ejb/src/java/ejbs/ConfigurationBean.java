@@ -5,11 +5,15 @@
  */
 package ejbs;
 
+import dtos.ClientDTO;
 import dtos.ConfigurationDTO;
+import dtos.ExtensionDTO;
 import entities.Client;
 import entities.Configuration;
 import entities.Contract;
+import entities.Extension;
 import entities.Software;
+import exceptions.EntityDoesNotExistsException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -19,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -65,10 +70,8 @@ public class ConfigurationBean {
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
-    }
-    
-    
-
+    }      
+            
     public void create(int code, String description, int software_code, int contract_code, String version, String client_username) {
         try {
             Configuration configuration = em.find(Configuration.class, code);

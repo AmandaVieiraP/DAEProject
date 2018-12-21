@@ -26,7 +26,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "EXTENSIONS")
 @NamedQueries({
-    @NamedQuery(name = "getAllExtensionsBySoftware", query = "SELECT e FROM Extension e WHERE e.software.code=?1"),})
+    @NamedQuery(name = "getAllExtensionsBySoftware", query = "SELECT e FROM Extension e WHERE e.software.code=?1"),
+    @NamedQuery(name = "getAllExtensions", query = "SELECT e FROM Extension e"),
+})
 public class Extension implements Serializable {
 
     @Id

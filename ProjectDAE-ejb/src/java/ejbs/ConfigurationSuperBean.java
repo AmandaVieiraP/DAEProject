@@ -5,18 +5,23 @@
  */
 package ejbs;
 
+import dtos.ClientDTO;
+import dtos.ExtensionDTO;
 import entities.Artefact;
+import entities.Client;
 import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.HelpMaterial;
-import entities.Module;
-import entities.SoftwareModule;
-import entities.Template;
+import exceptions.EntityDoesNotExistsException;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -28,6 +33,19 @@ public class ConfigurationSuperBean {
 
     @PersistenceContext
     EntityManager em;
+    
+    @PUT
+    @Path("/associateExtensions/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateRest(@PathParam("id") int code, ExtensionDTO extension) {
+        try {
+            
+            associateExtensionToConfiguration(extension.getCode(),code);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     public void addHelpMaterialToConfiguration(int configCode, String filename) {
         try {

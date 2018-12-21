@@ -25,19 +25,19 @@ and open the template in the editor.
 
 @media (min-width: 576px) 
 {.jumbotron {
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-                background-color: #454d54;
-                color: #f1f2f4;
-                font-weight: bold;
-            }
+     padding-top: 1rem;
+     padding-bottom: 1rem;
+     background-color: #454d54;
+     color: #f1f2f4;
+     font-weight: bold;
+ }
 }
 
 body {
     background-color: #e3e6e8;
 }
 
-#main {
+.main {
     background-color: #e3e6e8;
     margin: 1rem 1rem 0 1rem;
 }
@@ -50,4 +50,9 @@ body {
     padding-bottom: 1%;
 }
 
+.centered{
+
+    display:table;
+    margin: 0 auto;
+}
 

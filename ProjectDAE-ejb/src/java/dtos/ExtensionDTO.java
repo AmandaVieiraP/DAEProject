@@ -94,5 +94,9 @@ public class ExtensionDTO implements Serializable {
     public void setSoftwareName(String softwareName) {
         this.softwareName = softwareName;
     }
+    
+    public String toString(){
+        return code+";"+softwareName;
+    }
 
 }

@@ -6,6 +6,7 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
+import dtos.SoftwareDTO;
 import entities.Configuration;
 import entities.ConfigurationSuper;
 import entities.Extension;
@@ -35,6 +36,18 @@ public class ExtensionBean {
     @PersistenceContext
     EntityManager em;
 
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all")
+    public List<ExtensionDTO> getAll() {
+        try {
+            List<Extension> extensions = em.createNamedQuery("getAllExtensions").getResultList();
+            return extensionListToExtensionDTOList(extensions);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("softwares/{id}")
@@ -70,24 +83,6 @@ public class ExtensionBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
-    /*@GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("configurations/{id}")
-    public List<ExtensionDTO> getExtensionByConfigurationCode(@PathParam("id") int configurationCode) {
-        try {
-            Configuration configuration = em.find(Configuration.class, configurationCode);
-
-            if (configuration == null) {
-                return null;
-            }
-
-            return extensionListToExtensionDTOList(configuration.getExtensions());
-
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }*/
 
     private List<ExtensionDTO> extensionListToExtensionDTOList(List<Extension> extensions) {
         try {
@@ -116,7 +111,6 @@ public class ExtensionBean {
         }
     }
 
-    //Change to REST if necessary
     public void create(int code, String name, String description, int softwareCode, String version) {
         try {
             Extension extension = em.find(Extension.class, code);
