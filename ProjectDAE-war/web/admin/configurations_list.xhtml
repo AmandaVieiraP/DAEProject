@@ -14,7 +14,7 @@
         <ui:define name="main">
             <br/>
             <p:link value="+ Add New Configuration" outcome="configurations_create" class="btn btn-outline-info btn-sm"/>
-            
+
             <em:dt headers="#{['Code', 'Description','Version']}" 
                    props="#{['code', 'description','version']}" 
                    list="#{administratorManager.clientConfigurations}" 
@@ -33,15 +33,17 @@
                             <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
                         </h:commandLink></div>
                 </p:column>
-                
+
                 <p:column headerText="Actions">
-                    <div align="center"><h:commandLink value="Update" action="configurations_other_details?faces-redirect=true" class="btn btn-outline-success btn-sm">
+                    <div align="center">
+                        <h:commandLink value="Update" action="configurations_other_details?faces-redirect=true" class="btn btn-outline-success btn-sm">
                             <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
-                        </h:commandLink></div>
-                    <br/>
-                    <div align="center"><h:commandLink value="Remove" action="configurations_other_details?faces-redirect=true" class="btn btn-outline-danger btn-sm">
-                            <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
-                        </h:commandLink></div>
+                        </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeConfiguration}" class="btn btn-outline-danger btn-sm">
+                            <f:param name="deleteConfigurationCode" id="deleteConfigurationCode" value="#{object.code}" />    
+                        </h:commandLink>
+                    </div>
                 </p:column>
             </em:dt> 
         </ui:define>

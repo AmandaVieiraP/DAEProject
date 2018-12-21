@@ -371,7 +371,7 @@ public class AdministratorManager implements Serializable {
 
         return modulesDTO;
     }
-    
+
     public List<ParameterDTO> getAllParametersFromConfiguration() {
         List<ParameterDTO> parameter = new LinkedList<>();
 
@@ -868,7 +868,6 @@ public class AdministratorManager implements Serializable {
         return servicesDTO;
     }
 
-    //adicionar
     private List<String> computeJsonResponseToStringList(Response serviceResponse) {
         List<String> response = new LinkedList();
         try {
@@ -889,6 +888,7 @@ public class AdministratorManager implements Serializable {
         }
     }
 
+    //******************* Remove Methods
     public String removeClient(ActionEvent event) {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteClientUsername");
@@ -924,6 +924,23 @@ public class AdministratorManager implements Serializable {
         }
         return "admin_index?faces-redirect=true";
     }
+    
+    public String removeConfiguration (ActionEvent event){
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteConfigurationCode");
+            String code = param.getValue().toString();
+
+            client.target(baseUri).path("/configurations")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .delete();
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+        return "configurations_list?faces-redirect=true";
+    }
 
     //******************* Update Methods
     public void associateExtensionsToConfiguration() {
@@ -934,15 +951,15 @@ public class AdministratorManager implements Serializable {
             selectedExtension = new ExtensionDTO(this.code, null, null, 0, null, null);
 
             client.target(baseUri)
-                    .path("/configurations/associateExtensions").path(codeC)
+                    .path("/configurationsSuper/associateExtensions").path(codeC)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
 
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void associateConfigurationModuleToConfiguration(){
+
+    public void associateConfigurationModuleToConfiguration() {
         try {
 
             String codeC = String.valueOf(this.newConfigurationDTO.getCode());
@@ -957,13 +974,13 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void associateParameterToConfiguration(){
+
+    public void associateParameterToConfiguration() {
         try {
 
             String codeC = String.valueOf(this.newConfigurationDTO.getCode());
 
-            ParameterDTO parameterDTO = new ParameterDTO(this.paramName,null,null);
+            ParameterDTO parameterDTO = new ParameterDTO(this.paramName, null, null);
 
             client.target(baseUri)
                     .path("/contract_parameters/associateConfigurations").path(codeC)
@@ -1045,7 +1062,7 @@ public class AdministratorManager implements Serializable {
             ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
 
             client.target(baseUri)
-                    .path("/configurations/associateArtefacts").path(codeC)
+                    .path("/configurationsSuper/associateArtefacts").path(codeC)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(artefactDTO));
 
         } catch (Exception e) {
@@ -1061,7 +1078,7 @@ public class AdministratorManager implements Serializable {
             HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
 
             client.target(baseUri)
-                    .path("/configurations/associateHelpMaterials").path(codeC)
+                    .path("/configurationsSuper/associateHelpMaterials").path(codeC)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(helpMaterialDTO));
 
         } catch (Exception e) {

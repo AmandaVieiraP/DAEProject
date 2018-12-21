@@ -6,17 +6,26 @@
 package ejbs;
 
 import dtos.ConfigurationDTO;
+import entities.Administrator;
+import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
+import entities.ConfigurationModule;
 import entities.Contract;
+import entities.Extension;
+import entities.HelpMaterial;
+import entities.Parameter;
 import entities.Software;
+import exceptions.EntityDoesNotExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -53,20 +62,59 @@ public class ConfigurationBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @POST
     @Path("/create")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void createREST(ConfigurationDTO configurationDTO){
+    public void createREST(ConfigurationDTO configurationDTO) {
         try {
             this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
                     configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername());
-            
+
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
-    }      
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void remove(@PathParam("id") int code) {
+        try {
+            Configuration configuration = em.find(Configuration.class, code);
+
+            if (configuration == null) {
+                return;
+            }
             
+            configuration.getClient().removeConfiguration(configuration);
+            
+            configuration.getSoftware().removeConfiguration(configuration);
+            
+            configuration.getContract().removeConfiguration(configuration);
+            
+            for(Extension e: configuration.getExtensions()){
+                e.removeConfiguration(configuration);
+            }
+            
+            for(Artefact a: configuration.getArtefactsRepository()){
+                a.removeConfigurations(configuration);
+            }
+            
+            for(HelpMaterial h: configuration.getHelpMaterials()){
+                h.removeConfigurations(configuration);
+            }
+            
+            for(Parameter p: configuration.getConfigurationParameters()){
+                p.removeConfigurations(configuration);
+            }
+            
+            em.remove(configuration);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
     public void create(int code, String description, int software_code, int contract_code, String version, String client_username) {
         try {
             Configuration configuration = em.find(Configuration.class, code);

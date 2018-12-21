@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
  * @author Iolanda
  */
 @Stateless
-@Path("/configurations")
+@Path("/configurationsSuper")
 public class ConfigurationSuperBean {
 
     @PersistenceContext
