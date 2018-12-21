@@ -17,6 +17,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +30,9 @@ import javax.validation.constraints.NotNull;
 @Table(name = "CONFIGURATIONS")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CONFIG_TYPE", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(name = "getMaxConfigurationsCode", query = "SELECT MAX(c.code) FROM ConfigurationSuper c"),
+})
 public class ConfigurationSuper implements Serializable {
 
     @Id

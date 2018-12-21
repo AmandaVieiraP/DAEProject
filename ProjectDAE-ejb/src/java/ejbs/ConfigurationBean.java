@@ -5,9 +5,7 @@
  */
 package ejbs;
 
-import dtos.AdministratorDTO;
 import dtos.ConfigurationDTO;
-import entities.Administrator;
 import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
@@ -16,7 +14,7 @@ import entities.Extension;
 import entities.HelpMaterial;
 import entities.Parameter;
 import entities.Software;
-import exceptions.EntityDoesNotExistsException;
+import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
@@ -70,6 +68,60 @@ public class ConfigurationBean {
         try {
             this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
                     configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername());
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @POST
+    @Path("/createByTemplate/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createByTemplateREST(@PathParam("id") int code, ConfigurationDTO configurationDTO) {
+        try {
+            
+            Template t=em.find(Template.class, code);
+            
+            if(t==null){
+                return;
+            }
+
+            Client client = em.find(Client.class, configurationDTO.getClientUsername());
+            if (client == null) {
+                return;
+            }
+            
+            int lastCode = (Integer)em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
+            
+            lastCode=lastCode+1;
+            Configuration configuration = new Configuration(lastCode, t.getDescription(), t.getSoftware(), t.getContract(), t.getVersion(), client);
+
+            t.getSoftware().addConfiguration(configuration);
+
+            t.getContract().addConfiguration(configuration);
+
+            client.addConfiguration(configuration);
+            
+            configuration.setExtensions(t.getExtensions());
+            
+            for(Extension e: t.getExtensions()){
+                e.addConfiguration(configuration);
+            }
+            
+            configuration.setArtefactsRepository(t.getArtefactsRepository());
+            
+            for(Artefact a:t.getArtefactsRepository()){
+                a.addConfigurations(configuration);
+            }
+            
+            configuration.setHelpMaterials(t.getHelpMaterials());
+            
+            for(HelpMaterial h:t.getHelpMaterials()){
+                h.addConfigurations(configuration);
+            }
+
+            em.persist(configuration);
+
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());

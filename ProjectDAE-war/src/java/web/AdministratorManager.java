@@ -238,6 +238,23 @@ public class AdministratorManager implements Serializable {
         return "configurations_associations?faces-redirect=true";
     }
 
+    public String createNewConfigurationFromTemplate() {
+        try {
+            this.newConfigurationDTO = new ConfigurationDTO(0, null, 0, null, 0, null, this.currentClient.getUsername());
+
+            client.target(baseUri)
+                    .path("/configurations/createByTemplate")
+                    .path(String.valueOf(this.code))
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+
+        return "configurations_list?faces-redirect=true";
+    }
+
     //**** Métodos de Listar ****//
     public void getAdministratorLogged() {
 
@@ -964,15 +981,15 @@ public class AdministratorManager implements Serializable {
         }
     }
 
-    public void associateConfigurationModuleToConfiguration() { 
+    public void associateConfigurationModuleToConfiguration() {
         associateConfigurationModule(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
-    public void associateConfigurationModuleToConfigurationOnUpdate(){
+
+    public void associateConfigurationModuleToConfigurationOnUpdate() {
         associateConfigurationModule(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public void associateConfigurationModule(String configCode){
+
+    public void associateConfigurationModule(String configCode) {
         try {
             selectedConfigurationModule = new ConfigurationModuleDTO(null, null, this.code, null, 0, null, null);
 
@@ -987,14 +1004,14 @@ public class AdministratorManager implements Serializable {
 
     public void associateParameterToConfiguration() {
         associateParameter(String.valueOf(this.newConfigurationDTO.getCode()));
-        
+
     }
-    
-    public void associateParameterToConfigurationOnUpdate(){
+
+    public void associateParameterToConfigurationOnUpdate() {
         associateParameter(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public void associateParameter(String configCode){
+
+    public void associateParameter(String configCode) {
         try {
             ParameterDTO parameterDTO = new ParameterDTO(this.paramName, null, null);
 
@@ -1025,8 +1042,8 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void dissociateModuleFromConfiguration(ActionEvent event){
+
+    public void dissociateModuleFromConfiguration(ActionEvent event) {
         try {
             String configCode = String.valueOf(this.currentConfiguration.getCode());
 
@@ -1043,8 +1060,8 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void dissociateParameterFromConfiguration(ActionEvent event){
+
+    public void dissociateParameterFromConfiguration(ActionEvent event) {
         try {
             String configCode = String.valueOf(this.currentConfiguration.getCode());
 
@@ -1061,10 +1078,10 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void dissociateArtefactFromConfiguration(ActionEvent event){
+
+    public void dissociateArtefactFromConfiguration(ActionEvent event) {
         try {
-            
+
             String configCode = String.valueOf(this.currentConfiguration.getCode());
 
             UIParameter param = (UIParameter) event.getComponent().findComponent("filenameArt");
@@ -1080,10 +1097,10 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void dissociateHelpMaterialFromConfiguration(ActionEvent event){
+
+    public void dissociateHelpMaterialFromConfiguration(ActionEvent event) {
         try {
-            
+
             String configCode = String.valueOf(this.currentConfiguration.getCode());
 
             UIParameter param = (UIParameter) event.getComponent().findComponent("filenameHelp");
@@ -1152,9 +1169,9 @@ public class AdministratorManager implements Serializable {
                 InputStream in = file.getInputstream();
 
                 //com este path ele coloca dentro de C:\Users\Iolanda\Documents\DAE\PL\DAEProject\dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
-                path=FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
+                path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
                 //com este path ele coloca dentro de \dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
-                FileOutputStream out = new FileOutputStream(path+"/"+filename);
+                FileOutputStream out = new FileOutputStream(path + "/" + filename);
                 //Se quiserem ver na pasta files colocar caminho à mão
                 //FileOutputStream out = new FileOutputStream("C:/Users/Iolanda/Documents/DAE/PL/DAEProject/ProjectDAE-war/web/resources/files/" + filename);
 
@@ -1181,14 +1198,12 @@ public class AdministratorManager implements Serializable {
 
     public void addArtefactToConfiguration(String filename, String mimetype) {
         try {
-            String codeC=null;
-            if(this.currentConfiguration!=null){
-               codeC= String.valueOf(this.currentConfiguration.getCode());
+            String codeC = null;
+            if (this.currentConfiguration != null) {
+                codeC = String.valueOf(this.currentConfiguration.getCode());
+            } else {
+                codeC = String.valueOf(this.newConfigurationDTO.getCode());
             }
-            else{
-               codeC = String.valueOf(this.newConfigurationDTO.getCode());
-            }
-             
 
             ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
 
@@ -1204,12 +1219,11 @@ public class AdministratorManager implements Serializable {
     public void addHelpMaterialToConfiguration(String filename, String mimetype) {
         try {
 
-            String codeC=null;
-            if(this.currentConfiguration!=null){
-               codeC= String.valueOf(this.currentConfiguration.getCode());
-            }
-            else{
-               codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            String codeC = null;
+            if (this.currentConfiguration != null) {
+                codeC = String.valueOf(this.currentConfiguration.getCode());
+            } else {
+                codeC = String.valueOf(this.newConfigurationDTO.getCode());
             }
 
             HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
