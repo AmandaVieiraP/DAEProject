@@ -45,6 +45,19 @@ public class ConfigurationSuperBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    @PUT
+    @Path("/dissociateExtensions/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateExtensionRest(@PathParam("id") int code, ExtensionDTO extension) {
+        try {
+
+            dissociateExtensionToConfiguration(extension.getCode(), code);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     @PUT
     @Path("/associateArtefacts/{id}")
@@ -164,6 +177,29 @@ public class ConfigurationSuperBean {
 
             configurationSuper.addExtension(extension);
             extension.addConfiguration(configurationSuper);
+
+            em.merge(configurationSuper);
+            em.merge(extension);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void dissociateExtensionToConfiguration(int extensionCode, int configurationCode) {
+        try {
+            Extension extension = em.find(Extension.class, extensionCode);
+            ConfigurationSuper configurationSuper = em.find(ConfigurationSuper.class, configurationCode);
+
+            if (extension == null || configurationSuper == null) {
+                return;
+            }
+
+            if (!configurationSuper.getExtensions().contains(extension)) {
+                return;
+            }
+
+            configurationSuper.removeExtension(extension);
+            extension.removeConfiguration(configurationSuper);
 
             em.merge(configurationSuper);
             em.merge(extension);

@@ -68,10 +68,23 @@ public class ConfigurationModuleBean {
     @PUT
     @Path("/associateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void associateExtensionRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
+    public void associateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
         try {
             
             associateModuleToConfiguration(configurationModule.getCode(), code);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/dissociateModuleConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
+        try {
+            
+            dissociateModuleToConfiguration(configurationModule.getCode(), code);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -147,6 +160,29 @@ public class ConfigurationModuleBean {
 
             configuration.addModule(module);
             module.addConfiguration(configuration);
+
+            em.merge(configuration);
+            em.merge(module);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void dissociateModuleToConfiguration(int moduleCode, int configCode) {
+        try {
+            ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
+            Configuration configuration= em.find(Configuration.class, configCode);
+
+            if (module == null || configuration == null) {
+                return;
+            }
+
+            if (!configuration.getModules().contains(module)) {
+                return;
+            }
+
+            configuration.removeModule(module);
+            module.removeConfiguration(configuration);
 
             em.merge(configuration);
             em.merge(module);

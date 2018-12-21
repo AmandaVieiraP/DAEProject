@@ -122,11 +122,20 @@ public class ParameterBean {
     @PUT
     @Path("/associateConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void associateExtensionRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
+    public void associateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
-            
             associateParameterToAConfiguration(code, parameterDTO.getName());
-
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/dissociateConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
+        try {
+            dissociateParameterToAConfiguration(code, parameterDTO.getName());
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
@@ -211,6 +220,29 @@ public class ParameterBean {
 
             configuration.addParameters(parameter);
             parameter.addConfigurations(configuration);
+
+            em.merge(parameter);
+            em.merge(configuration);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void dissociateParameterToAConfiguration(int configCode, String parameterName) {
+        try {
+            Configuration configuration = em.find(Configuration.class, configCode);
+            Parameter parameter = em.find(Parameter.class, parameterName);
+
+            if (configuration == null || parameter == null) {
+                return;
+            }
+
+            if (!configuration.getConfigurationParameters().contains(parameter)) {
+                return;
+            }
+
+            configuration.removeParameter(parameter);
+            parameter.removeConfigurations(configuration);
 
             em.merge(parameter);
             em.merge(configuration);

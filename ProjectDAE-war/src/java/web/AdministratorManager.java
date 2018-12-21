@@ -924,8 +924,8 @@ public class AdministratorManager implements Serializable {
         }
         return "admin_index?faces-redirect=true";
     }
-    
-    public String removeConfiguration (ActionEvent event){
+
+    public String removeConfiguration(ActionEvent event) {
         try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteConfigurationCode");
             String code = param.getValue().toString();
@@ -942,16 +942,21 @@ public class AdministratorManager implements Serializable {
         return "configurations_list?faces-redirect=true";
     }
 
-    //******************* Update Methods
+    //******************* Associate Methods
     public void associateExtensionsToConfiguration() {
+        associateExtension(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+
+    public void associateExtensionsToConfigurationOnUpdate() {
+        associateExtension(String.valueOf(this.currentConfiguration.getCode()));
+    }
+
+    public void associateExtension(String configCode) {
         try {
-
-            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
-
             selectedExtension = new ExtensionDTO(this.code, null, null, 0, null, null);
 
             client.target(baseUri)
-                    .path("/configurationsSuper/associateExtensions").path(codeC)
+                    .path("/configurationsSuper/associateExtensions").path(configCode)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
 
         } catch (Exception e) {
@@ -959,15 +964,20 @@ public class AdministratorManager implements Serializable {
         }
     }
 
-    public void associateConfigurationModuleToConfiguration() {
+    public void associateConfigurationModuleToConfiguration() { 
+        associateConfigurationModule(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+    
+    public void associateConfigurationModuleToConfigurationOnUpdate(){
+        associateConfigurationModule(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public void associateConfigurationModule(String configCode){
         try {
-
-            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
-
             selectedConfigurationModule = new ConfigurationModuleDTO(null, null, this.code, null, 0, null, null);
 
             client.target(baseUri)
-                    .path("/configurationModules/associateModuleConfigurations").path(codeC)
+                    .path("/configurationModules/associateModuleConfigurations").path(configCode)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedConfigurationModule));
 
         } catch (Exception e) {
@@ -976,14 +986,20 @@ public class AdministratorManager implements Serializable {
     }
 
     public void associateParameterToConfiguration() {
+        associateParameter(String.valueOf(this.newConfigurationDTO.getCode()));
+        
+    }
+    
+    public void associateParameterToConfigurationOnUpdate(){
+        associateParameter(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public void associateParameter(String configCode){
         try {
-
-            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
-
             ParameterDTO parameterDTO = new ParameterDTO(this.paramName, null, null);
 
             client.target(baseUri)
-                    .path("/contract_parameters/associateConfigurations").path(codeC)
+                    .path("/contract_parameters/associateConfigurations").path(configCode)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(parameterDTO));
 
         } catch (Exception e) {
@@ -991,6 +1007,62 @@ public class AdministratorManager implements Serializable {
         }
     }
 
+    //******************* Dissociate Methods
+    public void dissociateExtensionFromConfiguration(ActionEvent event) {
+        try {
+            String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("extensionnCode");
+            int extensionCode = Integer.parseInt(param.getValue().toString());
+
+            selectedExtension = new ExtensionDTO(extensionCode, null, null, 0, null, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateExtensions").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void dissociateModuleFromConfiguration(ActionEvent event){
+        try {
+            String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("moduleCode");
+            int moduleCode = Integer.parseInt(param.getValue().toString());
+
+            selectedConfigurationModule = new ConfigurationModuleDTO(null, null, moduleCode, null, 0, null, null);
+
+            client.target(baseUri)
+                    .path("/configurationModules/dissociateModuleConfigurations").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedConfigurationModule));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void dissociateParameterFromConfiguration(ActionEvent event){
+        try {
+            String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("paramName");
+            String name = param.getValue().toString();
+
+            ParameterDTO parameterDTO = new ParameterDTO(name, null, null);
+
+            client.target(baseUri)
+                    .path("/contract_parameters/dissociateConfigurations").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(parameterDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+
+    //******************* Update Methods
     public String updateAdministrator() {
         try {
             client.target(baseUri)
@@ -1018,8 +1090,8 @@ public class AdministratorManager implements Serializable {
         // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
-    
-    public String updateConfiguration(){
+
+    public String updateConfiguration() {
         try {
             client.target(baseUri)
                     .path("/configurations/update")

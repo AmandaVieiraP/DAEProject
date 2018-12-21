@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title><ui:insert name="title">Configuration Other Details Update</ui:insert></title>
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+        <h:outputStylesheet library="css" name="app.css"  />
+
+    </h:head>
+    <h:body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <h:link class="nav-link" value="Return To Configurations List" outcome="configurations_list" /> 
+                    </li>    
+                </ul>
+            </div>
+        </nav>
+
+
+        <div align="center"><p class="h5"><strong>List of Configuration Extensions</strong></p></div>
+
+        <p:commandButton value="Add Extension" type="button" onclick="PF('extension').show();" class="btn btn-outline-secondary"/>
+
+        <p:dataTable
+            var="extension"
+            summary="Extensions"
+            value="#{administratorManager.currentConfigurationsExtensions}"
+            emptyMessage="No configuration extensions found">
+
+            <p:column headerText="Code">
+                <div align="center"> <h:outputText value="#{extension.code}"/> </div>
+            </p:column>
+
+            <p:column headerText="Name">
+                <div align="center"> <h:outputText value="#{extension.name}"/> </div>
+            </p:column>
+
+            <p:column headerText="Description">
+                <div align="center"> <h:outputText value="#{extension.description}"/></div>
+            </p:column>
+
+            <p:column headerText="Version">
+                <div align="center"> <h:outputText value="#{extension.version}"/></div>
+            </p:column>
+
+            <p:column headerText="Actions">
+                <h:form>
+                    <h:commandLink value="Remove" actionListener="#{administratorManager.dissociateExtensionFromConfiguration}" class="btn btn-outline-danger btn-sm">
+                        <f:param name="extensionnCode" id="extensionnCode" value="#{extension.code}" />    
+                    </h:commandLink>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+        <br/>
+        <div align="center"><p class="h5"><strong>List of Configuration Modules</strong></p></div>
+
+        <p:commandButton value="Add Configuration Module" type="button" onclick="PF('module').show();" class="btn btn-outline-secondary"/>
+
+        <p:dataTable
+            var="m"
+            summary="Modules"
+            value="#{administratorManager.currentConfigurationsModules}"
+            emptyMessage="No configuration modules found">
+
+            <p:column headerText="Code">
+                <div align="center"> <h:outputText value="#{m.code}"/> </div>
+            </p:column>
+
+            <p:column headerText="Description">
+                <div align="center"> <h:outputText value="#{m.description}"/> </div>
+            </p:column>
+
+            <p:column headerText="Software">
+                <div align="center"> <h:outputText value="#{m.softwareName}"/> </div>
+            </p:column>
+
+            <p:column headerText="Version">
+                <div align="center"> <h:outputText value="#{m.version}"/> </div>
+            </p:column>
+
+            <p:column headerText="DB Server IP">
+                <div align="center"> <h:outputText value="#{m.dbServerIp}"/> </div>
+            </p:column>
+
+            <p:column headerText="Application Server IP">
+                <div align="center"> <h:outputText value="#{m.applicationServerIp}"/> </div>
+            </p:column>
+
+            <p:column headerText="Actions">
+                <h:form>
+                    <h:commandLink value="Remove" actionListener="#{administratorManager.dissociateModuleFromConfiguration}" class="btn btn-outline-danger btn-sm">
+                        <f:param name="moduleCode" id="moduleCode" value="#{m.code}" />    
+                    </h:commandLink>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+        <br/>
+        <div align="center"><p class="h5"><strong>List of Parameters Modules</strong></p></div>
+        <p:commandButton value="Add Parameters" type="button" onclick="PF('parameters').show();" class="btn btn-outline-secondary"/>
+
+        <p:dataTable
+            var="p"
+            summary="Parameters"
+            value="#{administratorManager.currentConfigurationParameters}"
+            emptyMessage="No configuration modules found">
+
+            <p:column headerText="Name">
+                <div align="center"> <h:outputText value="#{p.name}"/> </div>
+            </p:column>
+
+            <p:column headerText="Description">
+                <div align="center"> <h:outputText value="#{p.description}"/> </div>
+            </p:column>
+
+            <p:column headerText="Value">
+                <div align="center"> <h:outputText value="#{p.paramValue}"/> </div>
+            </p:column>
+
+            <p:column headerText="Actions">
+                <h:form>
+                    <h:commandLink value="Remove" actionListener="#{administratorManager.dissociateParameterFromConfiguration}" class="btn btn-outline-danger btn-sm">
+                        <f:param name="paramName" id="paramName" value="#{p.name}" />    
+                    </h:commandLink>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+
+
+        <!--<p:commandButton value="Add Artefact" type="button" onclick="PF('artefact').show();" class="btn btn-outline-secondary"/>
+        <br/>
+        <br/>
+        <p:commandButton value="Add Help Material" type="button" onclick="PF('helpMaterial').show();" class="btn btn-outline-secondary"/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        -->
+
+
+
+
+
+        <p:dialog header="Select an Extension" widgetVar="extension" modal="true" height="200" width="40%">
+            <h:form>
+                <div align="center">
+                    <h:selectOneMenu value="#{administratorManager.code}">
+                        <f:selectItems value="#{administratorManager.allExtensions}" var="c" itemValue="#{c.code}" itemLabel="#{c.name}-#{c.version}" />
+                    </h:selectOneMenu>
+                    <br/><br/><br/>
+
+                    <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateExtensionsToConfigurationOnUpdate()}"/>
+                </div>
+            </h:form> 
+        </p:dialog>  
+
+        <p:dialog header="Select an Extension" widgetVar="artefact" modal="true" height="200" width="40%">
+
+            <h:form enctype="multipart/form-data">
+                <div align="center">
+                    <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(true)}"/>
+                </div>
+            </h:form>
+        </p:dialog> 
+
+        <p:dialog header="Select a Help Material" widgetVar="helpMaterial" modal="true" height="200" width="40%">
+
+            <h:form enctype="multipart/form-data">
+                <div align="center">
+                    <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(false)}"/>
+                </div>
+            </h:form>
+        </p:dialog>  
+
+        <p:dialog header="Select an Configuration Module" widgetVar="module" modal="true" height="200" width="40%">
+            <h:form>
+                <div align="center">
+                    <h:selectOneMenu value="#{administratorManager.code}">
+                        <f:selectItems value="#{administratorManager.allModulesFromConfiguration}" var="m" itemValue="#{m.code}" itemLabel="#{m.description} - Version: #{m.version}" />
+                    </h:selectOneMenu>
+                    <br/><br/><br/>
+
+                    <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateConfigurationModuleToConfigurationOnUpdate()}"/>
+                </div>
+            </h:form> 
+        </p:dialog> 
+
+        <p:dialog header="Select a Parameter" widgetVar="parameters" modal="true" height="200" width="60%">
+            <h:form>
+                <div align="center">
+                    <h:selectOneMenu value="#{administratorManager.paramName}">
+                        <f:selectItems value="#{administratorManager.allParametersFromConfiguration}" var="p" itemValue="#{p.name}" itemLabel="#{p.name}-#{p.paramValue}" />
+                    </h:selectOneMenu>
+                    <br/><br/><br/>
+
+                    <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateParameterToConfigurationOnUpdate()}"/>
+                </div>
+            </h:form> 
+        </p:dialog> 
+
+        <h:outputScript library="js" name="bootstrap.js"></h:outputScript>
+
+    </h:body>
+
+</html>
