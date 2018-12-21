@@ -19,29 +19,33 @@ import dtos.ServiceDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
 import dtos.TemplateDTO;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -50,6 +54,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 //@Named(value = "administratorManager")
 @ManagedBean(name = "administratorManager")
 @SessionScoped
+@Dependent
 public class AdministratorManager implements Serializable {
 
     private static final Logger logger = Logger.getLogger("web.AdministratorManager");
@@ -81,6 +86,9 @@ public class AdministratorManager implements Serializable {
     private ClientDTO currentClient;
     private ConfigurationDTO currentConfiguration;
     private int code;
+    
+    private UploadedFile file;
+    private String path;
 
     @ManagedProperty("#{userManager}")
     private UserManager userManager;
@@ -220,7 +228,7 @@ public class AdministratorManager implements Serializable {
                     .path("/configurations/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
 
-           // clearConfigurationDTO();
+            // clearConfigurationDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return null;
@@ -893,21 +901,18 @@ public class AdministratorManager implements Serializable {
     //******************* Update Methods
     public void associateExtensionsToConfiguration() {
         try {
-            
+
             String codeC = String.valueOf(this.newConfigurationDTO.getCode());
-            
-            selectedExtension=new ExtensionDTO(this.code,null,null,0,null,null);
-            
+
+            selectedExtension = new ExtensionDTO(this.code, null, null, 0, null, null);
+
             client.target(baseUri)
                     .path("/configurations/associateExtensions").path(codeC)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
 
         } catch (Exception e) {
             logger.warning(e.getMessage());
-            //return null;
         }
-
-        //return null;
     }
 
     public String updateAdministrator() {
@@ -937,6 +942,90 @@ public class AdministratorManager implements Serializable {
         // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
+    
+    public void upload(boolean isArtefact) {
+        if (file != null) {
+            try {
+                String filename = file.getFileName().substring(file.getFileName().lastIndexOf("\\") + 1);
+                String mimetype = FacesContext.getCurrentInstance().getExternalContext().getMimeType(filename);
+                
+                InputStream in = file.getInputstream();
+                
+                //com este path ele coloca dentro de C:\Users\Iolanda\Documents\DAE\PL\DAEProject\dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
+                //path=FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
+                
+                //com este path ele coloca dentro de \dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
+                //FileOutputStream out = new FileOutputStream(path+"/"+filename);
+                
+                FileOutputStream out = new FileOutputStream("C:/Users/Iolanda/Documents/DAE/PL/DAEProject/ProjectDAE-war/web/resources/files/" + filename);
+                
+                byte[] b = new byte[1024];
+                int readBytes = in.read(b);
+                while (readBytes != -1) {
+                    out.write(b, 0, readBytes);
+                    readBytes = in.read(b);
+                }
+                in.close();
+                out.close();
+                FacesMessage message = new FacesMessage("File: " + file.getFileName()+"uploaded successfully!");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+                
+                if(isArtefact){
+                    addArtefactToConfiguration(filename, mimetype);
+                }
+                else{
+                    addHelpMaterialToConfiguration(filename, mimetype);
+                }
+                
+            } catch (IOException e) {
+                FacesMessage message = new FacesMessage("ERROR :: File: " + file.getFileName() + " not uploaded!");
+                FacesContext.getCurrentInstance().addMessage(null, message);
+            }
+        }
+    } 
+    
+    public void addArtefactToConfiguration(String filename, String mimetype){
+        try {
+            
+            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+
+            ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
+
+            client.target(baseUri)
+                    .path("/configurations/associateArtefacts").path(codeC)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(artefactDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void addHelpMaterialToConfiguration(String filename, String mimetype){
+        try {
+            
+            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+
+            HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
+
+            client.target(baseUri)
+                    .path("/configurations/associateHelpMaterials").path(codeC)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(helpMaterialDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+    
+    
 
     public void clearNewTemplate() {
         //todo limnpar melhor
@@ -1118,6 +1207,5 @@ public class AdministratorManager implements Serializable {
     public void setCode(int code) {
         this.code = code;
     }
-    
-    
+
 }

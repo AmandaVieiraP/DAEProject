@@ -15,7 +15,7 @@
 
     </h:head>
     <h:body>
-        
+
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,18 +28,19 @@
                 </ul>
             </div>
         </nav>
-        
+
         <div align="center"> 
             <p class="h5"><strong>Associate To Configurations</strong></p>
             <br/>
-            <p:commandButton value="Add Extension" type="button" onclick="PF('extensions').show();" class="btn btn-outline-secondary"/>
-            
+            <p:commandButton value="Add Extension" type="button" onclick="PF('extension').show();" class="btn btn-outline-secondary"/>
+            <p:commandButton value="Add Artefact" type="button" onclick="PF('artefact').show();" class="btn btn-outline-secondary"/>
+            <p:commandButton value="Add Help Material" type="button" onclick="PF('helpMaterial').show();" class="btn btn-outline-secondary"/>
+
         </div>
 
 
 
-        <p:dialog header="Select an Extension" widgetVar="extensions" modal="true" height="200" width="40%">
-
+        <p:dialog header="Select an Extension" widgetVar="extension" modal="true" height="200" width="40%">
             <h:form>
                 <div align="center">
                     <h:selectOneMenu value="#{administratorManager.code}">
@@ -50,9 +51,27 @@
                     <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateExtensionsToConfiguration()}"/>
                 </div>
             </h:form> 
-        </p:dialog>   
+        </p:dialog>  
 
+        <p:dialog header="Select an Extension" widgetVar="artefact" modal="true" height="200" width="40%">
 
+            <h:form enctype="multipart/form-data">
+                <div align="center">
+                    <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(true)}"/>
+                </div>
+            </h:form>
+        </p:dialog> 
+        
+        <p:dialog header="Select a Help Material" widgetVar="helpMaterial" modal="true" height="200" width="40%">
+
+            <h:form enctype="multipart/form-data">
+                <div align="center">
+                    <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(false)}"/>
+                </div>
+            </h:form>
+        </p:dialog>  
 
         <h:outputScript library="js" name="bootstrap.js"></h:outputScript>
 
