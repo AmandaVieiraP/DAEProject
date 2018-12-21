@@ -16,19 +16,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "ContractParameters")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ContractParameterDTO implements Serializable{
+public class ParameterDTO implements Serializable{
     
     private String name;
     private String description;
     private String paramValue;
 
-    public ContractParameterDTO(String name, String description, String paramValue) {
+    public ParameterDTO(String name, String description, String paramValue) {
         this.name = name;
         this.description = description;
         this.paramValue = paramValue;
     }
 
-    public ContractParameterDTO() {
+    public ParameterDTO() {
     }
 
     public String getName() {

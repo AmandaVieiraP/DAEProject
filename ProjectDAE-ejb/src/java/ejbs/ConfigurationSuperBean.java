@@ -45,46 +45,46 @@ public class ConfigurationSuperBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/associateArtefacts/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateArtefactRest(@PathParam("id") int code, ArtefactDTO artefactDTO) {
         try {
             Artefact artefact = em.find(Artefact.class, artefactDTO.getFilename());
-            
-            if(artefact!=null){
+
+            if (artefact != null) {
                 addArtefactsToConfiguration(code, artefactDTO.getFilename());
                 return;
             }
-           
-            artefact=new Artefact(artefactDTO.getFilename(),artefactDTO.getMimetype());
-            
+
+            artefact = new Artefact(artefactDTO.getFilename(), artefactDTO.getMimetype());
+
             em.persist(artefact);
-            
+
             addArtefactsToConfiguration(code, artefactDTO.getFilename());
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/associateHelpMaterials/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateHelpMaterialsRest(@PathParam("id") int code, HelpMaterialDTO helpMaterialDTO) {
         try {
             HelpMaterial helpMaterial = em.find(HelpMaterial.class, helpMaterialDTO.getFilename());
-            
-            if(helpMaterial!=null){
+
+            if (helpMaterial != null) {
                 addHelpMaterialToConfiguration(code, helpMaterialDTO.getFilename());
                 return;
             }
-           
-            helpMaterial=new HelpMaterial(helpMaterialDTO.getFilename(),helpMaterialDTO.getMimetype());
-            
+
+            helpMaterial = new HelpMaterial(helpMaterialDTO.getFilename(), helpMaterialDTO.getMimetype());
+
             em.persist(helpMaterial);
-            
+
             addHelpMaterialToConfiguration(code, helpMaterialDTO.getFilename());
 
         } catch (Exception e) {

@@ -6,12 +6,9 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
-import dtos.SoftwareDTO;
-import entities.Configuration;
 import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.Software;
-import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;

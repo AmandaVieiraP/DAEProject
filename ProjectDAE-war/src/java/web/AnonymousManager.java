@@ -6,7 +6,7 @@
 package web;
 
 import dtos.ArtefactDTO;
-import dtos.ContractParameterDTO;
+import dtos.ParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
 import dtos.ServiceDTO;
@@ -207,15 +207,15 @@ public class AnonymousManager implements Serializable {
         return softwareModules;
     }
     
-    public List<ContractParameterDTO> getCurrentContractParameters(){
-        List<ContractParameterDTO> contractParameters=new LinkedList<>();
+    public List<ParameterDTO> getCurrentContractParameters(){
+        List<ParameterDTO> contractParameters=new LinkedList<>();
         
         try {
             String code = String.valueOf(currentTemplate.getContractCode());
             
             contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    .get(new GenericType<List<ParameterDTO>>() {
                     });
             
         } catch (Exception e) {

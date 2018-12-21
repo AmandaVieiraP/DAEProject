@@ -42,7 +42,7 @@ public class ConfigBean {
     private SoftwareModuleBean softwareModuleBean;
 
     @EJB
-    private ContractParameterBean contractParameterBean;
+    private ParameterBean contractParameterBean;
 
     @EJB
     private ConfigurationSuperBean configurationSuperBean;

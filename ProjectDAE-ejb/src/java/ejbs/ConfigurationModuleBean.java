@@ -6,20 +6,18 @@
 package ejbs;
 
 import dtos.ConfigurationModuleDTO;
-import dtos.SoftwareModuleDTO;
 import entities.Configuration;
 import entities.ConfigurationModule;
 import entities.Software;
-import entities.SoftwareModule;
-import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -38,6 +36,19 @@ public class ConfigurationModuleBean {
     
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all")
+    public List<ConfigurationModuleDTO> getAll() {
+        try {
+            List<ConfigurationModule> configurationModules = em.createNamedQuery("getAllConfigurationModules").getResultList();
+            
+            return configurationModuleListToConfigurationModuleDTOList(configurationModules);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")
     public List<ConfigurationModuleDTO> getConfigurationModuleByConfigurationCode(@PathParam("id") int configurationCode) {
         try {
@@ -51,6 +62,19 @@ public class ConfigurationModuleBean {
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/associateModuleConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void associateExtensionRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
+        try {
+            
+            associateModuleToConfiguration(configurationModule.getCode(), code);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 

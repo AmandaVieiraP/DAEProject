@@ -5,7 +5,8 @@
  */
 package ejbs;
 
-import dtos.ContractParameterDTO;
+import dtos.ConfigurationModuleDTO;
+import dtos.ParameterDTO;
 import entities.Configuration;
 import entities.ConfigurationModule;
 import entities.Contract;
@@ -16,7 +17,9 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -28,15 +31,44 @@ import javax.ws.rs.core.MediaType;
  */
 @Stateless
 @Path("/contract_parameters")
-public class ContractParameterBean {
+public class ParameterBean {
 
     @PersistenceContext
     EntityManager em;
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all/configurations")
+    public List<ParameterDTO> getAllParametersFromConfigurations() {
+        try {
+            //Vai buscar todas as configurações
+            List<Parameter> allParameters = new LinkedList<>();
+
+            List<Configuration> configurations = em.createNamedQuery("getAllConfigurations").getResultList();
+
+            for (Configuration c : configurations) {
+
+                List<Parameter> parameterConfiguration = c.getConfigurationParameters();
+
+                for (Parameter p : parameterConfiguration) {
+                    if (!allParameters.contains(p)) {
+                        allParameters.add(p);
+                    }
+                }
+
+            }
+
+            return contractParameterListToContractParameterDTOList(allParameters);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("contracts/{id}")
-    public List<ContractParameterDTO> getContractParameterByContractCode(@PathParam("id") int contract_code) {
+    public List<ParameterDTO> getContractParameterByContractCode(@PathParam("id") int contract_code) {
         try {
             Contract contract = em.find(Contract.class, contract_code);
 
@@ -54,7 +86,7 @@ public class ContractParameterBean {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("configurations/{id}")
-    public List<ContractParameterDTO> getParameterByConfigurationCode(@PathParam("id") int configurationCode) {
+    public List<ParameterDTO> getParameterByConfigurationCode(@PathParam("id") int configurationCode) {
         try {
             Configuration configuration = em.find(Configuration.class, configurationCode);
 
@@ -72,7 +104,7 @@ public class ContractParameterBean {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("modules/{id}")
-    public List<ContractParameterDTO> getParameterByModuleCode(@PathParam("id") int moduleCode) {
+    public List<ParameterDTO> getParameterByModuleCode(@PathParam("id") int moduleCode) {
         try {
             ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
 
@@ -87,9 +119,22 @@ public class ContractParameterBean {
         }
     }
 
-    private List<ContractParameterDTO> contractParameterListToContractParameterDTOList(List<Parameter> contractParameters) {
+    @PUT
+    @Path("/associateConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void associateExtensionRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
-            List<ContractParameterDTO> contractParametersDTO = new LinkedList<>();
+            
+            associateParameterToAConfiguration(code, parameterDTO.getName());
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+
+    private List<ParameterDTO> contractParameterListToContractParameterDTOList(List<Parameter> contractParameters) {
+        try {
+            List<ParameterDTO> contractParametersDTO = new LinkedList<>();
 
             contractParameters.forEach((c) -> {
                 contractParametersDTO.add(contractParameterTocontractParameterDTO(c));
@@ -101,9 +146,9 @@ public class ContractParameterBean {
         }
     }
 
-    private ContractParameterDTO contractParameterTocontractParameterDTO(Parameter c) {
+    private ParameterDTO contractParameterTocontractParameterDTO(Parameter c) {
         try {
-            return new ContractParameterDTO(c.getName(), c.getDescription(), c.getParamValue());
+            return new ParameterDTO(c.getName(), c.getDescription(), c.getParamValue());
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());

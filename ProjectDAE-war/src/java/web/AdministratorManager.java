@@ -11,7 +11,7 @@ import dtos.ClientDTO;
 import dtos.ConfigurationDTO;
 import dtos.ConfigurationModuleDTO;
 import dtos.ContractDTO;
-import dtos.ContractParameterDTO;
+import dtos.ParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
 import dtos.LicenseDTO;
@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -68,6 +67,7 @@ public class AdministratorManager implements Serializable {
     private List<ExtensionDTO> softwareExtensions;
     private List<String> selectedSoftwareExtensions;
     private ExtensionDTO selectedExtension;
+    private ConfigurationModuleDTO selectedConfigurationModule;
     private int moduleCode;
 
     private ConfigurationDTO newConfigurationDTO;
@@ -86,7 +86,8 @@ public class AdministratorManager implements Serializable {
     private ClientDTO currentClient;
     private ConfigurationDTO currentConfiguration;
     private int code;
-    
+    private String paramName;
+
     private UploadedFile file;
     private String path;
 
@@ -352,11 +353,37 @@ public class AdministratorManager implements Serializable {
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });
         } catch (Exception ex) {
-
-            logger.warning("Problem getting all contracts with REST");
-            return null;
+            logger.warning(ex.getMessage());
         }
         return extensionsDTO;
+    }
+
+    public List<ConfigurationModuleDTO> getAllModulesFromConfiguration() {
+        List<ConfigurationModuleDTO> modulesDTO = new LinkedList<>();
+
+        try {
+            modulesDTO = client.target(baseUri).path("/configurationModules/all").request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ConfigurationModuleDTO>>() {
+                    });
+        } catch (Exception ex) {
+            logger.warning(ex.getMessage());
+        }
+
+        return modulesDTO;
+    }
+    
+    public List<ParameterDTO> getAllParametersFromConfiguration() {
+        List<ParameterDTO> parameter = new LinkedList<>();
+
+        try {
+            parameter = client.target(baseUri).path("/contract_parameters/all/configurations").request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ParameterDTO>>() {
+                    });
+        } catch (Exception ex) {
+            logger.warning(ex.getMessage());
+        }
+
+        return parameter;
     }
 
     //allSoftwaresModulesFromASoftware
@@ -411,7 +438,7 @@ public class AdministratorManager implements Serializable {
 
     //todo ADICIONARRRRR metod é exatamente igualk ao do anonymousamanger
     //Juntar com Iolanda
-    public List<ContractParameterDTO> getCurrentContractParameters() {
+    public List<ParameterDTO> getCurrentContractParameters() {
         return getCurrentContractParametersForAllConfiguration(String.valueOf(currentTemplate.getContractCode()));
         /*List<ContractParameterDTO> contractParameters = new LinkedList<>();
 
@@ -431,7 +458,7 @@ public class AdministratorManager implements Serializable {
         return contractParameters;*/
     }
 
-    public List<ContractParameterDTO> getClientConfigurationsContractParameters() {
+    public List<ParameterDTO> getClientConfigurationsContractParameters() {
         return getCurrentContractParametersForAllConfiguration(String.valueOf(currentConfiguration.getContractCode()));
         /*List<ContractParameterDTO> contractParameters = new LinkedList<>();
 
@@ -451,14 +478,14 @@ public class AdministratorManager implements Serializable {
         return contractParameters;*/
     }
 
-    public List<ContractParameterDTO> getCurrentContractParametersForAllConfiguration(String code) {
-        List<ContractParameterDTO> contractParameters = new LinkedList<>();
+    public List<ParameterDTO> getCurrentContractParametersForAllConfiguration(String code) {
+        List<ParameterDTO> contractParameters = new LinkedList<>();
 
         try {
 
             contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    .get(new GenericType<List<ParameterDTO>>() {
                     });
 
         } catch (Exception e) {
@@ -469,8 +496,8 @@ public class AdministratorManager implements Serializable {
         return contractParameters;
     }
 
-    public List<ContractParameterDTO> getCurrentConfigurationParameters() {
-        List<ContractParameterDTO> contractParameters = new LinkedList<>();
+    public List<ParameterDTO> getCurrentConfigurationParameters() {
+        List<ParameterDTO> contractParameters = new LinkedList<>();
 
         try {
 
@@ -478,7 +505,7 @@ public class AdministratorManager implements Serializable {
 
             contractParameters = client.target(baseUri).path("/contract_parameters/configurations").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    .get(new GenericType<List<ParameterDTO>>() {
                     });
 
         } catch (Exception e) {
@@ -489,8 +516,8 @@ public class AdministratorManager implements Serializable {
         return contractParameters;
     }
 
-    public List<ContractParameterDTO> getCurrentConfigurationModuleParameters() {
-        List<ContractParameterDTO> contractParameters = new LinkedList<>();
+    public List<ParameterDTO> getCurrentConfigurationModuleParameters() {
+        List<ParameterDTO> contractParameters = new LinkedList<>();
 
         try {
 
@@ -498,7 +525,7 @@ public class AdministratorManager implements Serializable {
 
             contractParameters = client.target(baseUri).path("/contract_parameters/modules").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
+                    .get(new GenericType<List<ParameterDTO>>() {
                     });
 
         } catch (Exception e) {
@@ -914,6 +941,38 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    
+    public void associateConfigurationModuleToConfiguration(){
+        try {
+
+            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+
+            selectedConfigurationModule = new ConfigurationModuleDTO(null, null, this.code, null, 0, null, null);
+
+            client.target(baseUri)
+                    .path("/configurationModules/associateModuleConfigurations").path(codeC)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedConfigurationModule));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void associateParameterToConfiguration(){
+        try {
+
+            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+
+            ParameterDTO parameterDTO = new ParameterDTO(this.paramName,null,null);
+
+            client.target(baseUri)
+                    .path("/contract_parameters/associateConfigurations").path(codeC)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(parameterDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
 
     public String updateAdministrator() {
         try {
@@ -942,23 +1001,21 @@ public class AdministratorManager implements Serializable {
         // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
-    
+
     public void upload(boolean isArtefact) {
         if (file != null) {
             try {
                 String filename = file.getFileName().substring(file.getFileName().lastIndexOf("\\") + 1);
                 String mimetype = FacesContext.getCurrentInstance().getExternalContext().getMimeType(filename);
-                
+
                 InputStream in = file.getInputstream();
-                
+
                 //com este path ele coloca dentro de C:\Users\Iolanda\Documents\DAE\PL\DAEProject\dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
                 //path=FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
-                
                 //com este path ele coloca dentro de \dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
                 //FileOutputStream out = new FileOutputStream(path+"/"+filename);
-                
                 FileOutputStream out = new FileOutputStream("C:/Users/Iolanda/Documents/DAE/PL/DAEProject/ProjectDAE-war/web/resources/files/" + filename);
-                
+
                 byte[] b = new byte[1024];
                 int readBytes = in.read(b);
                 while (readBytes != -1) {
@@ -967,26 +1024,22 @@ public class AdministratorManager implements Serializable {
                 }
                 in.close();
                 out.close();
-                FacesMessage message = new FacesMessage("File: " + file.getFileName()+"uploaded successfully!");
-                FacesContext.getCurrentInstance().addMessage(null, message);
-                
-                if(isArtefact){
+
+                if (isArtefact) {
                     addArtefactToConfiguration(filename, mimetype);
-                }
-                else{
+                } else {
                     addHelpMaterialToConfiguration(filename, mimetype);
                 }
-                
+
             } catch (IOException e) {
-                FacesMessage message = new FacesMessage("ERROR :: File: " + file.getFileName() + " not uploaded!");
-                FacesContext.getCurrentInstance().addMessage(null, message);
+                logger.warning(e.getMessage() + "file" + file);
             }
         }
-    } 
-    
-    public void addArtefactToConfiguration(String filename, String mimetype){
+    }
+
+    public void addArtefactToConfiguration(String filename, String mimetype) {
         try {
-            
+
             String codeC = String.valueOf(this.newConfigurationDTO.getCode());
 
             ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
@@ -999,10 +1052,10 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void addHelpMaterialToConfiguration(String filename, String mimetype){
+
+    public void addHelpMaterialToConfiguration(String filename, String mimetype) {
         try {
-            
+
             String codeC = String.valueOf(this.newConfigurationDTO.getCode());
 
             HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
@@ -1015,7 +1068,6 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-    
 
     public UploadedFile getFile() {
         return file;
@@ -1024,8 +1076,6 @@ public class AdministratorManager implements Serializable {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-    
-    
 
     public void clearNewTemplate() {
         //todo limnpar melhor
@@ -1206,6 +1256,14 @@ public class AdministratorManager implements Serializable {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getParamName() {
+        return paramName;
+    }
+
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
     }
 
 }

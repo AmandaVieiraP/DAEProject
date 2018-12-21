@@ -32,9 +32,20 @@
         <div align="center"> 
             <p class="h5"><strong>Associate To Configurations</strong></p>
             <br/>
+            <br/>
             <p:commandButton value="Add Extension" type="button" onclick="PF('extension').show();" class="btn btn-outline-secondary"/>
+            <br/>
+            <br/>
             <p:commandButton value="Add Artefact" type="button" onclick="PF('artefact').show();" class="btn btn-outline-secondary"/>
+            <br/>
+            <br/>
             <p:commandButton value="Add Help Material" type="button" onclick="PF('helpMaterial').show();" class="btn btn-outline-secondary"/>
+            <br/>
+            <br/>
+            <p:commandButton value="Add Configuration Module" type="button" onclick="PF('module').show();" class="btn btn-outline-secondary"/>
+            <br/>
+            <br/>
+            <p:commandButton value="Add Parameters" type="button" onclick="PF('parameters').show();" class="btn btn-outline-secondary"/>
 
         </div>
 
@@ -72,6 +83,32 @@
                 </div>
             </h:form>
         </p:dialog>  
+        
+        <p:dialog header="Select an Configuration Module" widgetVar="module" modal="true" height="200" width="40%">
+            <h:form>
+                <div align="center">
+                    <h:selectOneMenu value="#{administratorManager.code}">
+                        <f:selectItems value="#{administratorManager.allModulesFromConfiguration}" var="m" itemValue="#{m.code}" itemLabel="#{m.description} - Verison: #{m.version}" />
+                    </h:selectOneMenu>
+                    <br/><br/><br/>
+
+                    <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateConfigurationModuleToConfiguration()}"/>
+                </div>
+            </h:form> 
+        </p:dialog> 
+        
+        <p:dialog header="Select a Parameter" widgetVar="parameters" modal="true" height="200" width="60%">
+            <h:form>
+                <div align="center">
+                    <h:selectOneMenu value="#{administratorManager.paramName}">
+                        <f:selectItems value="#{administratorManager.allParametersFromConfiguration}" var="p" itemValue="#{p.name}" itemLabel="#{p.name}-#{p.paramValue}" />
+                    </h:selectOneMenu>
+                    <br/><br/><br/>
+
+                    <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.associateParameterToConfiguration()}"/>
+                </div>
+            </h:form> 
+        </p:dialog> 
 
         <h:outputScript library="js" name="bootstrap.js"></h:outputScript>
 
