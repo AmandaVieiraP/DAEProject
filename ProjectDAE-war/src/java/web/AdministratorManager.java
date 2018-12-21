@@ -1152,10 +1152,11 @@ public class AdministratorManager implements Serializable {
                 InputStream in = file.getInputstream();
 
                 //com este path ele coloca dentro de C:\Users\Iolanda\Documents\DAE\PL\DAEProject\dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
-                //path=FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
+                path=FacesContext.getCurrentInstance().getExternalContext().getRealPath("resources/files/");
                 //com este path ele coloca dentro de \dist\gfdeploy\ProjectDAE\ProjectDAE-war_war\resources\files
-                //FileOutputStream out = new FileOutputStream(path+"/"+filename);
-                FileOutputStream out = new FileOutputStream("C:/Users/Iolanda/Documents/DAE/PL/DAEProject/ProjectDAE-war/web/resources/files/" + filename);
+                FileOutputStream out = new FileOutputStream(path+"/"+filename);
+                //Se quiserem ver na pasta files colocar caminho à mão
+                //FileOutputStream out = new FileOutputStream("C:/Users/Iolanda/Documents/DAE/PL/DAEProject/ProjectDAE-war/web/resources/files/" + filename);
 
                 byte[] b = new byte[1024];
                 int readBytes = in.read(b);
