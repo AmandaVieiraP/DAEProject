@@ -1018,6 +1018,20 @@ public class AdministratorManager implements Serializable {
         // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
+    
+    public String updateConfiguration(){
+        try {
+            client.target(baseUri)
+                    .path("/configurations/update")
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.currentConfiguration));
+
+        } catch (Exception e) {
+            logger.warning("Problem updating the client");
+            return "update_client";
+        }
+        // return "index?faces-redirect=true";
+        return "clients_list?faces-redirect=true";
+    }
 
     public void upload(boolean isArtefact) {
         if (file != null) {

@@ -5,12 +5,12 @@
  */
 package ejbs;
 
+import dtos.AdministratorDTO;
 import dtos.ConfigurationDTO;
 import entities.Administrator;
 import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
-import entities.ConfigurationModule;
 import entities.Contract;
 import entities.Extension;
 import entities.HelpMaterial;
@@ -19,7 +19,6 @@ import entities.Software;
 import exceptions.EntityDoesNotExistsException;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,6 +27,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -86,32 +86,76 @@ public class ConfigurationBean {
             if (configuration == null) {
                 return;
             }
-            
+
             configuration.getClient().removeConfiguration(configuration);
-            
+
             configuration.getSoftware().removeConfiguration(configuration);
-            
+
             configuration.getContract().removeConfiguration(configuration);
-            
-            for(Extension e: configuration.getExtensions()){
+
+            for (Extension e : configuration.getExtensions()) {
                 e.removeConfiguration(configuration);
             }
-            
-            for(Artefact a: configuration.getArtefactsRepository()){
+
+            for (Artefact a : configuration.getArtefactsRepository()) {
                 a.removeConfigurations(configuration);
             }
-            
-            for(HelpMaterial h: configuration.getHelpMaterials()){
+
+            for (HelpMaterial h : configuration.getHelpMaterials()) {
                 h.removeConfigurations(configuration);
             }
-            
-            for(Parameter p: configuration.getConfigurationParameters()){
+
+            for (Parameter p : configuration.getConfigurationParameters()) {
                 p.removeConfigurations(configuration);
             }
-            
+
             em.remove(configuration);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+
+    @PUT
+    @Path("/update")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateRest(ConfigurationDTO configurationDTO) {
+        try {
+            Configuration c = em.find(Configuration.class, configurationDTO.getCode());
+
+            if (c == null) {
+                return;
+            }
+
+            Software newSoftware = em.find(Software.class, configurationDTO.getSoftwareCode());
+
+            if (newSoftware == null) {
+                return;
+            }
+
+            Contract newContract = em.find(Contract.class, configurationDTO.getContractCode());
+
+            c.setDescription(configurationDTO.getDescription());
+            c.setVersion(configurationDTO.getVersion());
+            
+            //Vai buscar software antigo para trocar pelo novo
+            Software oldSoftware=c.getSoftware();
+            oldSoftware.removeConfiguration(c);
+            
+            c.setSoftware(newSoftware);
+            
+            newSoftware.addConfiguration(c);
+            
+            //Vai buscar o contrato antigo para trocar pelo novo
+            Contract oldContract=c.getContract();
+            
+            oldContract.removeConfiguration(c);
+            
+            newContract.addConfiguration(c);
+            
+            c.setContract(newContract);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 
