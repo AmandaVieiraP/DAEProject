@@ -109,6 +109,7 @@
         </p:dataTable>
         <br/>
         <div align="center"><p class="h5"><strong>List of Parameters Modules</strong></p></div>
+
         <p:commandButton value="Add Parameters" type="button" onclick="PF('parameters').show();" class="btn btn-outline-secondary"/>
 
         <p:dataTable
@@ -138,20 +139,68 @@
             </p:column>
         </p:dataTable>
 
+        <br/>
+        <div align="center"> <p class="h5"><strong>Configurations Artefatcs and Help Materials</strong></p></div>
 
-        <!--<p:commandButton value="Add Artefact" type="button" onclick="PF('artefact').show();" class="btn btn-outline-secondary"/>
-        <br/>
-        <br/>
-        <p:commandButton value="Add Help Material" type="button" onclick="PF('helpMaterial').show();" class="btn btn-outline-secondary"/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        -->
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p:commandButton value="Add Artefact" type="button" onclick="PF('artefact').show();" class="btn btn-outline-secondary"/>
 
+                    <p:dataTable
+                        var="repo"
+                        summary="Template Artefacts Repository"
+                        value="#{administratorManager.currentArtefacts}"
+                        emptyMessage="No template artefacts found for the given criteria">
+                        <p:column headerText="Files Content">
+                            <div align="center">
+                                <h:form>
+                                    <p:commandButton value="Download #{repo.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(repo.mimetype, repo.filename)}" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <h:form>
+                                <h:commandLink value="Remove" actionListener="#{administratorManager.dissociateArtefactFromConfiguration}" class="btn btn-outline-danger btn-sm">
+                                    <f:param name="filenameArt" id="filenameArt" value="#{repo.filename}" />    
+                                </h:commandLink>
+                            </h:form>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                <div class="col">
+                    <p:commandButton value="Add Help Material" type="button" onclick="PF('helpMaterial').show();" class="btn btn-outline-secondary"/>
 
+                    <p:dataTable
+                        var="help"
+                        summary="Help Materials Repository"
+                        value="#{administratorManager.currentHelpMaterials}"
+                        emptyMessage="No help material found for the given criteria">
+                        <p:column headerText="Help Materials">
+                            <div align="center">
+                                <h:form>
+                                    <p:commandButton value="Download #{help.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(help.mimetype,help.filename)}" />
+                                    </p:commandButton>
+                                </h:form>
+                            </div>
 
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <h:form>
+                                <h:commandLink value="Remove" actionListener="#{administratorManager.dissociateHelpMaterialFromConfiguration}" class="btn btn-outline-danger btn-sm">
+                                    <f:param name="filenameHelp" id="filenameHelp" value="#{help.filename}" />    
+                                </h:commandLink>
+                            </h:form>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
 
+        <!--Dialogs for Associations -->
 
         <p:dialog header="Select an Extension" widgetVar="extension" modal="true" height="200" width="40%">
             <h:form>

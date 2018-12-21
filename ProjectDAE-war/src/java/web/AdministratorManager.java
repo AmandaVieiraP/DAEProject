@@ -1061,6 +1061,44 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    
+    public void dissociateArtefactFromConfiguration(ActionEvent event){
+        try {
+            
+            String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("filenameArt");
+            String filename = param.getValue().toString();
+
+            ArtefactDTO artefactDTO = new ArtefactDTO(filename, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateArtefacts").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(artefactDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void dissociateHelpMaterialFromConfiguration(ActionEvent event){
+        try {
+            
+            String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("filenameHelp");
+            String filename = param.getValue().toString();
+
+            HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateHelpMaterial").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(helpMaterialDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
 
     //******************* Update Methods
     public String updateAdministrator() {
@@ -1142,8 +1180,14 @@ public class AdministratorManager implements Serializable {
 
     public void addArtefactToConfiguration(String filename, String mimetype) {
         try {
-
-            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            String codeC=null;
+            if(this.currentConfiguration!=null){
+               codeC= String.valueOf(this.currentConfiguration.getCode());
+            }
+            else{
+               codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            }
+             
 
             ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
 
@@ -1159,7 +1203,13 @@ public class AdministratorManager implements Serializable {
     public void addHelpMaterialToConfiguration(String filename, String mimetype) {
         try {
 
-            String codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            String codeC=null;
+            if(this.currentConfiguration!=null){
+               codeC= String.valueOf(this.currentConfiguration.getCode());
+            }
+            else{
+               codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            }
 
             HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
 

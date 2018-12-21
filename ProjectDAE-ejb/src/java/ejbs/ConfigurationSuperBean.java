@@ -81,6 +81,69 @@ public class ConfigurationSuperBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    @PUT
+    @Path("/dissociateArtefacts/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateArtefactRest(@PathParam("id") int code, ArtefactDTO artefactDTO) {
+        try {
+            ConfigurationSuper conf = em.find(ConfigurationSuper.class, code);
+            Artefact artefact = em.find(Artefact.class, artefactDTO.getFilename());
+
+            if (conf == null) {
+                return;
+            }
+
+            if (artefact == null) {
+                return;
+            }
+
+            if (!conf.getArtefactsRepository().contains(artefact)) {
+                return;
+            }
+
+            conf.removeArtefact(artefact);
+            artefact.removeConfigurations(conf);
+
+            em.merge(conf);
+            em.merge(artefact);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/dissociateHelpMaterial/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateHelpMaterial(@PathParam("id") int code, HelpMaterialDTO helpMaterialDTO){
+        try {
+
+            ConfigurationSuper conf = em.find(ConfigurationSuper.class, code);
+            HelpMaterial helpMaterial = em.find(HelpMaterial.class, helpMaterialDTO.getFilename());
+
+            if (conf == null) {
+                return;
+            }
+
+            if (helpMaterial == null) {
+                return;
+            }
+
+            if (!conf.getHelpMaterials().contains(helpMaterial)) {
+                return;
+            }
+
+            conf.removeHelpMaterial(helpMaterial);
+            helpMaterial.removeConfigurations(conf);
+
+            em.merge(conf);
+            em.merge(helpMaterial);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     @PUT
     @Path("/associateHelpMaterials/{id}")
