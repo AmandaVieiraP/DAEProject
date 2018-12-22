@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -28,8 +31,11 @@ import javax.validation.constraints.NotNull;
 @Table(name = "MODULES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "MODULE_TYPE", discriminatorType = DiscriminatorType.STRING)
+@NamedQueries({
+    @NamedQuery(name = "getMaxModulesCode", query = "SELECT MAX(c.code) FROM Module c"),
+})
 public class Module implements Serializable {
-
+    
     @Id
     private int code;
 
@@ -42,7 +48,7 @@ public class Module implements Serializable {
     private Software software;
 
     @NotNull
-    @ManyToMany(mappedBy = "modules")
+    @ManyToMany(mappedBy = "modules", cascade = CascadeType.ALL)
     private List<Service> services;
 
     @NotNull

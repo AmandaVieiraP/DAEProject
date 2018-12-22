@@ -71,6 +71,7 @@ public class AdministratorManager implements Serializable {
     private int moduleCode;
 
     private ConfigurationDTO newConfigurationDTO;
+    private ParameterDTO newParameterDTO;
 
     private UIComponent component;
 
@@ -101,6 +102,7 @@ public class AdministratorManager implements Serializable {
         this.newTemplateDTO = new TemplateDTO();
         this.currentAdminLogged = new AdministratorDTO();
         this.newConfigurationDTO = new ConfigurationDTO();
+        this.newParameterDTO = new ParameterDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -219,6 +221,20 @@ public class AdministratorManager implements Serializable {
             return null;
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para está página  
+    }
+    
+    public void createNewParameterAndAssociateToConfig(){
+        try {
+            client.target(baseUri)
+                    .path("/contract_parameters/create")
+                    .path(String.valueOf(this.currentConfiguration.getCode()))
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newParameterDTO));
+            
+            clearNewParameterDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+
     }
 
     public String createNewConfiguration() {
@@ -1244,6 +1260,10 @@ public class AdministratorManager implements Serializable {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
+    
+    public void clearNewParameterDTO(){
+        this.newParameterDTO.reset();
+    }
 
     public void clearNewTemplate() {
         //todo limnpar melhor
@@ -1434,4 +1454,11 @@ public class AdministratorManager implements Serializable {
         this.paramName = paramName;
     }
 
+    public ParameterDTO getNewParameterDTO() {
+        return newParameterDTO;
+    }
+
+    public void setNewParameterDTO(ParameterDTO newParameterDTO) {
+        this.newParameterDTO = newParameterDTO;
+    }
 }

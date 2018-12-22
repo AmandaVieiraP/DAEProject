@@ -9,11 +9,13 @@ import dtos.ConfigurationDTO;
 import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
+import entities.ConfigurationModule;
 import entities.Contract;
 import entities.Extension;
 import entities.HelpMaterial;
 import entities.Parameter;
 import entities.Software;
+import entities.SoftwareModule;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,8 +122,20 @@ public class ConfigurationBean {
             for (HelpMaterial h : t.getHelpMaterials()) {
                 h.addConfigurations(configuration);
             }
-
             em.persist(configuration);
+            
+            int modCode = (Integer) em.createNamedQuery("getMaxModulesCode").getSingleResult();
+
+            for(SoftwareModule s: t.getModules()){
+                modCode = modCode + 1;
+                ConfigurationModule cm= new ConfigurationModule(modCode,s.getDescription(),t.getSoftware(),t.getVersion());
+                
+                em.persist(cm);
+                
+                cm.addConfiguration(configuration);
+                configuration.addModule(cm);
+
+            }
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -188,6 +202,8 @@ public class ConfigurationBean {
 
             c.setDescription(configurationDTO.getDescription());
             c.setVersion(configurationDTO.getVersion());
+            c.setDbServerIp(configurationDTO.getDbServerIp());
+            c.setApplicationServerIp(configurationDTO.getApplicationServerIp());
 
             //Vai buscar software antigo para trocar pelo novo
             Software oldSoftware = c.getSoftware();

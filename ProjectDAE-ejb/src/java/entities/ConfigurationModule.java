@@ -32,7 +32,8 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("ConfigurationModule")
 @NamedQueries({
-    @NamedQuery(name = "getAllConfigurationModules", query = "SELECT m FROM ConfigurationModule m"),})
+    @NamedQuery(name = "getAllConfigurationModules", query = "SELECT m FROM ConfigurationModule m"),
+})
 public class ConfigurationModule extends Module implements Serializable {
 
     @NotNull
@@ -40,7 +41,7 @@ public class ConfigurationModule extends Module implements Serializable {
     private List<License> licenses;
 
     @NotNull
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "CONFIGURATIONS_MODULES", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "CONFIG_CODE", referencedColumnName = "CODE"))
     private List<Configuration> configurations;

@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -39,7 +40,7 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     private String applicationServerIp;
 
     @NotNull
-    @ManyToMany(mappedBy = "configurations")
+    @ManyToMany(mappedBy = "configurations",cascade = CascadeType.ALL)
     private List<ConfigurationModule> modules;
 
     @NotNull
