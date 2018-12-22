@@ -6,6 +6,7 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
+import entities.Configuration;
 import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.Software;
@@ -35,10 +36,20 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("all")
-    public List<ExtensionDTO> getAll() {
+    @Path("all/{id}")
+    public List<ExtensionDTO> getAll(@PathParam("id") int code) {
         try {
-            List<Extension> extensions = em.createNamedQuery("getAllExtensions").getResultList();
+            Configuration c = em.find(Configuration.class, code);
+            
+            if(c == null)
+                return null;
+            
+            Query query = em.createNamedQuery("getAllExtensionsBySoftware");
+
+            query.setParameter(1, c.getSoftware().getCode());
+
+            List<Extension> extensions = query.getResultList();
+            
             return extensionListToExtensionDTOList(extensions);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());

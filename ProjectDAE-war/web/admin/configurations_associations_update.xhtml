@@ -199,7 +199,7 @@
             <h:form>
                 <div align="center">
                     <h:selectOneMenu value="#{administratorManager.code}">
-                        <f:selectItems value="#{administratorManager.allExtensions}" var="c" itemValue="#{c.code}" itemLabel="#{c.name}-#{c.version}" />
+                        <f:selectItems value="#{administratorManager.allExtensionsOnUpdate}" var="c" itemValue="#{c.code}" itemLabel="#{c.name}-#{c.version}" />
                     </h:selectOneMenu>
                     <br/><br/><br/>
 
@@ -232,7 +232,7 @@
             <h:form>
                 <div align="center">
                     <h:selectOneMenu value="#{administratorManager.code}">
-                        <f:selectItems value="#{administratorManager.allModulesFromConfiguration}" var="m" itemValue="#{m.code}" itemLabel="#{m.description} - Version: #{m.version}" />
+                        <f:selectItems value="#{administratorManager.allModulesFromConfigurationOnUpdate}" var="m" itemValue="#{m.code}" itemLabel="#{m.description} - Version: #{m.version}" />
                     </h:selectOneMenu>
                     <br/><br/><br/>
 

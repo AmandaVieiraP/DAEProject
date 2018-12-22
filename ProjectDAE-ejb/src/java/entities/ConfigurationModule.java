@@ -31,9 +31,6 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("ConfigurationModule")
-@NamedQueries({
-    @NamedQuery(name = "getAllConfigurationModules", query = "SELECT m FROM ConfigurationModule m"),
-})
 public class ConfigurationModule extends Module implements Serializable {
 
     @NotNull

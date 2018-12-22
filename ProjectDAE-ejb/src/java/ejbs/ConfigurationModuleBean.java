@@ -15,6 +15,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -36,10 +37,20 @@ public class ConfigurationModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("all")
-    public List<ConfigurationModuleDTO> getAll() {
+    @Path("all/{id}")
+    public List<ConfigurationModuleDTO> getAll(@PathParam("id") int configurationCode) {
         try {
-            List<ConfigurationModule> configurationModules = em.createNamedQuery("getAllConfigurationModules").getResultList();
+            Configuration configuration = em.find(Configuration.class, configurationCode);
+
+            if (configuration == null) {
+                return null;
+            }
+            
+            Query query = em.createNamedQuery("getAllConfigurationModulesBySoftware");
+
+            query.setParameter(1, configuration.getSoftware().getCode());
+            
+            List<ConfigurationModule> configurationModules = query.getResultList();
 
             return configurationModuleListToConfigurationModuleDTOList(configurationModules);
         } catch (Exception e) {

@@ -221,6 +221,19 @@ public class ConfigurationBean {
             newContract.addConfiguration(c);
 
             c.setContract(newContract);
+            
+            if(oldSoftware.getCode() != newSoftware.getCode()){
+                for(Extension e:c.getExtensions()){
+                    e.removeConfiguration(c);
+                }
+                
+                for(ConfigurationModule m:c.getModules()){
+                    m.removeConfiguration(c);
+                }
+                
+                c.setExtensions(new LinkedList<>());
+                c.setModules(new LinkedList<>());
+            }
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());

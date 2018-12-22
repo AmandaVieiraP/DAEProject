@@ -185,15 +185,8 @@ public class AdministratorManager implements Serializable {
             }
 
             clearNewTemplate();
-        } /*catch (EntityExistsException e) {
-            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+        }catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
-        } */ catch (Exception e) {
-            System.err.println(e.getMessage());
-            //logger.warning("Unexpected error. Try again latter!");
-            // logger.warning("Problem creating student in method creatStudent.");   
-            //return "admin_students_create?faces-redirect=true";
             return null;
         }
         return "admin_index?faces-redirect=true"; // é redirecionado para esta página  
@@ -378,11 +371,21 @@ public class AdministratorManager implements Serializable {
         return returnedContracts;
     }
 
-    public List<ExtensionDTO> getAllExtensions() {
+    public List<ExtensionDTO> getAllExtensions() { 
+        return getAllExtensionsGeral(String.valueOf(this.newConfigurationDTO.getCode()));  
+    }
+    
+    public List<ExtensionDTO> getAllExtensionsOnUpdate(){
+        return getAllExtensionsGeral(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public List<ExtensionDTO> getAllExtensionsGeral(String code){
         List<ExtensionDTO> extensionsDTO = new LinkedList<>();
 
         try {
-            extensionsDTO = client.target(baseUri).path("/extensions/all").request(MediaType.APPLICATION_XML)
+            extensionsDTO = client.target(baseUri).path("/extensions/all")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });
         } catch (Exception ex) {
@@ -392,10 +395,20 @@ public class AdministratorManager implements Serializable {
     }
 
     public List<ConfigurationModuleDTO> getAllModulesFromConfiguration() {
+        return getAllModulesFromConfigurationGeral(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+    
+    public List<ConfigurationModuleDTO> getAllModulesFromConfigurationOnUpdate() {
+        return getAllModulesFromConfigurationGeral(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public List<ConfigurationModuleDTO> getAllModulesFromConfigurationGeral(String code) {
         List<ConfigurationModuleDTO> modulesDTO = new LinkedList<>();
 
         try {
-            modulesDTO = client.target(baseUri).path("/configurationModules/all").request(MediaType.APPLICATION_XML)
+            modulesDTO = client.target(baseUri).path("/configurationModules/all")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ConfigurationModuleDTO>>() {
                     });
         } catch (Exception ex) {
@@ -1144,7 +1157,6 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem updating the administrator");
             return "update_admin";
         }
-        // return "index?faces-redirect=true";
         return "administrators_list?faces-redirect=true";
     }
 
@@ -1158,7 +1170,6 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem updating the client");
             return "update_client";
         }
-        // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
 
@@ -1172,8 +1183,7 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem updating the client");
             return "update_client";
         }
-        // return "index?faces-redirect=true";
-        return "clients_list?faces-redirect=true";
+        return "configurations_list?faces-redirect=true";
     }
 
     public void upload(boolean isArtefact) {
