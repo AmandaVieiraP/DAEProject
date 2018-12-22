@@ -72,6 +72,7 @@ public class AdministratorManager implements Serializable {
 
     private ConfigurationDTO newConfigurationDTO;
     private ParameterDTO newParameterDTO;
+    private ExtensionDTO newExtensionDTO;
 
     private UIComponent component;
 
@@ -103,6 +104,7 @@ public class AdministratorManager implements Serializable {
         this.currentAdminLogged = new AdministratorDTO();
         this.newConfigurationDTO = new ConfigurationDTO();
         this.newParameterDTO = new ParameterDTO();
+        this.newExtensionDTO = new ExtensionDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -228,6 +230,27 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
 
+    }
+    
+    public void createNewExtensionAndAssociateToConfig(){
+        createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public void createNewExtensionAndAssociateToConfigOnCreate(){
+        createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+    
+    public void createNewExtensionAndAssociateToConfigGeral(String code){
+        try {
+            client.target(baseUri)
+                    .path("/extensions/createAndAssociateConfig")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newExtensionDTO));
+            
+            clearNewExtensionDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
     }
 
     public String createNewConfiguration() {
@@ -1274,6 +1297,10 @@ public class AdministratorManager implements Serializable {
     public void clearNewParameterDTO(){
         this.newParameterDTO.reset();
     }
+    
+    public void clearNewExtensionDTO(){
+        this.newExtensionDTO.reset();
+    }
 
     public void clearNewTemplate() {
         //todo limnpar melhor
@@ -1471,4 +1498,14 @@ public class AdministratorManager implements Serializable {
     public void setNewParameterDTO(ParameterDTO newParameterDTO) {
         this.newParameterDTO = newParameterDTO;
     }
+
+    public ExtensionDTO getNewExtensionDTO() {
+        return newExtensionDTO;
+    }
+
+    public void setNewExtensionDTO(ExtensionDTO newExtensionDTO) {
+        this.newExtensionDTO = newExtensionDTO;
+    }
+    
+    
 }

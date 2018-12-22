@@ -33,6 +33,7 @@
         <div align="center"><p class="h5"><strong>List of Configuration Extensions</strong></p></div>
 
         <p:commandButton value="Add Extension" type="button" onclick="PF('extension').show();" class="btn btn-outline-secondary"/>
+        <p:commandButton value="Create New Extension" type="button" onclick="PF('extensionNew').show();" class="btn btn-outline-secondary"/>
 
         <p:dataTable
             var="extension"
@@ -207,6 +208,37 @@
                 </div>
             </h:form> 
         </p:dialog>  
+        
+        <p:dialog header="Create a New Extension" widgetVar="extensionNew" modal="true" height="400" width="60%">
+            <h:form>
+                <div class="form-group">   
+                    <h:outputLabel for="extension_code" value="Code: " />
+                    <h:inputText size="20" class="form-control" id="extension_code" required="true" requiredMessage="Error: code cannot be empty and must be unic" 
+                                 value="#{administratorManager.newExtensionDTO.code}" />   
+                    <h:message for="extension_code" errorStyle="color:red" />
+                </div>
+                <div class="form-group">   
+                    <h:outputLabel for="extension_name" value="Name: " />
+                    <h:inputText size="20" class="form-control" id="extension_name" required="true" requiredMessage="Error: Name cannot be empty" 
+                                 value="#{administratorManager.newExtensionDTO.name}" />   
+                    <h:message for="extension_name" errorStyle="color:red" />
+                </div>
+                <div class="form-group">   
+                    <h:outputLabel for="extension_description" value="Description: " />
+                    <h:inputText size="20" class="form-control" id="extension_description" required="true" requiredMessage="Error: Description cannot be empty" 
+                                 value="#{administratorManager.newExtensionDTO.description}" />   
+                    <h:message for="extension_description" errorStyle="color:red" />
+                </div>
+                <div class="form-group">   
+                    <h:outputLabel for="extension_version" value="Version: " />
+                    <h:inputText size="20" class="form-control" id="extension_version" required="true" requiredMessage="Error: Version cannot be empty" 
+                                 value="#{administratorManager.newExtensionDTO.version}" />   
+                    <h:message for="extension_version" errorStyle="color:red" />
+                </div>
+                <br/>
+                <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.createNewExtensionAndAssociateToConfig()}"/>
+            </h:form> 
+        </p:dialog>  
 
         <p:dialog header="Select an Extension" widgetVar="artefact" modal="true" height="200" width="40%">
 
@@ -254,7 +286,7 @@
             </h:form> 
         </p:dialog> 
 
-        <p:dialog header="Insert New Data Parameter" widgetVar="parametersNew" modal="true" height="200" width="60%">
+        <p:dialog header="Insert New Data Parameter" widgetVar="parametersNew" modal="true" height="400" width="60%">
             <h:form>
                 <div class="form-group">   
                     <h:outputLabel for="name" value="Name: " />
@@ -274,11 +306,8 @@
                                  value="#{administratorManager.newParameterDTO.paramValue}" />   
                     <h:message for="value" errorStyle="color:red" />
                 </div>
-                
-                <br/><br/><br/>
-
+                <br/>
                 <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.createNewParameterAndAssociateToConfig()}"/>
-
             </h:form> 
         </p:dialog> 
 
