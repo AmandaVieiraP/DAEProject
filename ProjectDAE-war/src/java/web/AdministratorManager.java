@@ -326,7 +326,8 @@ public class AdministratorManager implements Serializable {
                     .path("/licenses/create")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newLinceseDTO));
-
+            
+            clearLicenseDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return null;
@@ -1352,6 +1353,14 @@ public class AdministratorManager implements Serializable {
     
     public void clearNewConfigurationModuleDTO(){
         this.newConfigurationModuleDTO.reset();
+    }
+    
+    public void clearLicenseDTO(){
+        this.newLinceseDTO.reset();
+    }
+    
+    public void clearServiceDTO(){
+        this.newServiceDTO.reset();
     }
     
     public void clearNewTemplate() {
