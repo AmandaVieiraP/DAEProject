@@ -5,13 +5,9 @@
  */
 package ejbs;
 
-import dtos.ParameterDTO;
 import dtos.ServiceDTO;
-import entities.Configuration;
 import entities.ConfigurationModule;
-import entities.Contract;
 import entities.Module;
-import entities.Parameter;
 import entities.Service;
 import java.util.LinkedList;
 import java.util.List;
