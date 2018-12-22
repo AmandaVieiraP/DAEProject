@@ -33,20 +33,20 @@ public class ConfigurationModuleBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("all")
     public List<ConfigurationModuleDTO> getAll() {
         try {
             List<ConfigurationModule> configurationModules = em.createNamedQuery("getAllConfigurationModules").getResultList();
-            
+
             return configurationModuleListToConfigurationModuleDTOList(configurationModules);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")
@@ -64,26 +64,26 @@ public class ConfigurationModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/associateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
         try {
-            
+
             associateModuleToConfiguration(configurationModule.getCode(), code);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/dissociateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
         try {
-            
+
             dissociateModuleToConfiguration(configurationModule.getCode(), code);
 
         } catch (Exception e) {
@@ -107,8 +107,7 @@ public class ConfigurationModuleBean {
 
     private ConfigurationModuleDTO configurationModuleToConfigurationModuletDTO(ConfigurationModule c) {
         try {
-            return new ConfigurationModuleDTO(c.getDbServerIp(),
-                    c.getApplicationServerIp(),
+            return new ConfigurationModuleDTO(
                     c.getCode(),
                     c.getDescription(),
                     c.getSoftware().getCode(),
@@ -118,8 +117,8 @@ public class ConfigurationModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
-    public void create(int code, String description, int softwareCode, String version,String dbServerIp,String appServerIp) {
+
+    public void create(int code, String description, int softwareCode, String version) {
         try {
             ConfigurationModule configurationModule = em.find(ConfigurationModule.class, code);
             if (configurationModule != null) {
@@ -134,7 +133,7 @@ public class ConfigurationModuleBean {
                 // throw new EntityDoesNotExistException("The course does not exists");
             }
 
-            configurationModule = new ConfigurationModule(code, description, software, version,dbServerIp,appServerIp);
+            configurationModule = new ConfigurationModule(code, description, software, version);
 
             software.addModule(configurationModule);
 
@@ -144,11 +143,11 @@ public class ConfigurationModuleBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     public void associateModuleToConfiguration(int moduleCode, int configCode) {
         try {
             ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
-            Configuration configuration= em.find(Configuration.class, configCode);
+            Configuration configuration = em.find(Configuration.class, configCode);
 
             if (module == null || configuration == null) {
                 return;
@@ -167,11 +166,11 @@ public class ConfigurationModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     public void dissociateModuleToConfiguration(int moduleCode, int configCode) {
         try {
             ConfigurationModule module = em.find(ConfigurationModule.class, moduleCode);
-            Configuration configuration= em.find(Configuration.class, configCode);
+            Configuration configuration = em.find(Configuration.class, configCode);
 
             if (module == null || configuration == null) {
                 return;

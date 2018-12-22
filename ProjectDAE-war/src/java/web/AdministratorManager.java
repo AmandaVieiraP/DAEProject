@@ -240,7 +240,7 @@ public class AdministratorManager implements Serializable {
 
     public String createNewConfigurationFromTemplate() {
         try {
-            this.newConfigurationDTO = new ConfigurationDTO(0, null, 0, null, 0, null, this.currentClient.getUsername());
+            this.newConfigurationDTO = new ConfigurationDTO(0, null, 0, null, 0, null, this.currentClient.getUsername(),null,null);
 
             client.target(baseUri)
                     .path("/configurations/createByTemplate")
@@ -991,7 +991,7 @@ public class AdministratorManager implements Serializable {
 
     public void associateConfigurationModule(String configCode) {
         try {
-            selectedConfigurationModule = new ConfigurationModuleDTO(null, null, this.code, null, 0, null, null);
+            selectedConfigurationModule = new ConfigurationModuleDTO(this.code, null, 0, null, null);
 
             client.target(baseUri)
                     .path("/configurationModules/associateModuleConfigurations").path(configCode)
@@ -1050,7 +1050,7 @@ public class AdministratorManager implements Serializable {
             UIParameter param = (UIParameter) event.getComponent().findComponent("moduleCode");
             int moduleCode = Integer.parseInt(param.getValue().toString());
 
-            selectedConfigurationModule = new ConfigurationModuleDTO(null, null, moduleCode, null, 0, null, null);
+            selectedConfigurationModule = new ConfigurationModuleDTO(moduleCode, null, 0, null, null);
 
             client.target(baseUri)
                     .path("/configurationModules/dissociateModuleConfigurations").path(configCode)

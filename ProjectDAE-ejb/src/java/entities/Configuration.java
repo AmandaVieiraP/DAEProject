@@ -31,9 +31,12 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Configuration")
 @NamedQueries({
-    @NamedQuery(name = "getAllConfigurations", query = "SELECT c FROM Configuration c"),
-})
+    @NamedQuery(name = "getAllConfigurations", query = "SELECT c FROM Configuration c"),})
 public class Configuration extends ConfigurationSuper implements Serializable {
+
+    private String dbServerIp;
+
+    private String applicationServerIp;
 
     @NotNull
     @ManyToMany(mappedBy = "configurations")
@@ -55,12 +58,30 @@ public class Configuration extends ConfigurationSuper implements Serializable {
         this.configurationParameters = new LinkedList<>();
     }
 
-    public Configuration(int code, String description, Software software, Contract contract, String version, Client client) {
+    public Configuration(int code, String description, Software software, Contract contract, String version, Client client, String dbServerIp, String appServerIp) {
         super(code, description, software, contract, version);
 
         this.modules = new LinkedList<>();
         this.configurationParameters = new LinkedList<>();
         this.client = client;
+        this.dbServerIp = dbServerIp;
+        this.applicationServerIp = appServerIp;
+    }
+
+    public String getDbServerIp() {
+        return dbServerIp;
+    }
+
+    public void setDbServerIp(String dbServerIp) {
+        this.dbServerIp = dbServerIp;
+    }
+
+    public String getApplicationServerIp() {
+        return applicationServerIp;
+    }
+
+    public void setApplicationServerIp(String applicationServerIp) {
+        this.applicationServerIp = applicationServerIp;
     }
 
     public List<ConfigurationModule> getModules() {

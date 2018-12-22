@@ -24,8 +24,8 @@
 
             <div align="center"> <p class="h5"><strong>Configuration #{administratorManager.currentConfiguration.code} Modules</strong></p></div>
 
-            <em:dt headers="#{['Code', 'Description','Software','Version','DB Server IP','Application Server IP']}" 
-                   props="#{['code', 'description','softwareName','version','dbServerIp','applicationServerIp']}" 
+            <em:dt headers="#{['Code', 'Description','Software','Version']}" 
+                   props="#{['code', 'description','softwareName','version']}" 
                    list="#{administratorManager.currentConfigurationsModules}" 
                    widgetVar="extensionsTable">
 
