@@ -59,9 +59,7 @@ public class ParameterBean {
                         allParameters.add(p);
                     }
                 }
-
             }
-
             return contractParameterListToContractParameterDTOList(allParameters);
 
         } catch (Exception ex) {
@@ -144,7 +142,7 @@ public class ParameterBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/update/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -161,12 +159,12 @@ public class ParameterBean {
             if (p == null) {
                 return;
             }
-            
+
             p.setDescription(parameterDTO.getDescription());
             p.setParamValue(parameterDTO.getParamValue());
-            
+
             em.merge(p);
-            
+
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
@@ -200,7 +198,7 @@ public class ParameterBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @POST
     @Path("/createForModule/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -221,7 +219,7 @@ public class ParameterBean {
             p = new Parameter(parameterDTO.getName(), parameterDTO.getDescription(), parameterDTO.getParamValue());
 
             em.persist(p);
-            
+
             p.addModule(m);
             m.addParameter(p);
 
@@ -230,34 +228,35 @@ public class ParameterBean {
         }
     }
 
-     @DELETE
+    @DELETE
     @Path("{name}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("name") String name) {
         try {
             Parameter p = em.find(Parameter.class, name);
- 
+
             if (p == null) {
                 return;
             }
-            
-            for(Configuration c:p.getConfigurations()){
+
+            for (Configuration c : p.getConfigurations()) {
                 c.removeParameter(p);
             }
-            
-            for(ConfigurationModule m:p.getModules()){
+
+            for (ConfigurationModule m : p.getModules()) {
                 m.removeParameter(p);
             }
-            
-            for(Contract c:p.getContracts()){
+
+            for (Contract c : p.getContracts()) {
                 c.removeParameter(p);
             }
-            
+
             em.remove(p);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
+
     private List<ParameterDTO> contractParameterListToContractParameterDTOList(List<Parameter> contractParameters) {
         try {
             List<ParameterDTO> contractParametersDTO = new LinkedList<>();

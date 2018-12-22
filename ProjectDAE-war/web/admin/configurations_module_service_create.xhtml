@@ -11,26 +11,42 @@
 
         <ui:define name="main">
             <div class="container">
-                <div align="center"> <p class="h5"><strong>New Module License</strong></p></div>
+                <div align="center"> <p class="h5"><strong>New Module Service</strong></p></div>
                 <h:form> 
 
                     <div class="form-group">   
                         <h:outputLabel for="code" value="Code: " />
                         <h:inputText size="20" class="form-control" id="code" required="true" requiredMessage="Error: Code cannot be empty and must be unic" 
-                                     value="#{administratorManager.newLinceseDTO.code}" />   
+                                     value="#{administratorManager.newServiceDTO.code}" />   
                         <h:message for="code" errorStyle="color:red" />
                     </div>  
+                     <div class="form-group">   
+                        <h:outputLabel for="name" value="Name: " />
+                        <h:inputText size="20" class="form-control" id="name" required="true" requiredMessage="Error: Name cannot be empty and must be unic" 
+                                     value="#{administratorManager.newServiceDTO.name}" />   
+                        <h:message for="name" errorStyle="color:red" />
+                    </div>
+
+                     <div class="form-group">   
+                        <h:outputLabel for="description" value="Description: " />
+                        <p:inputTextarea class="form-control" id="description" required="true" requiredMessage="Error: Description cannot be empty"
+                                         rows="3" cols="30" counter="display" maxlength="100" counterTemplate="{0} characters remaining." autoResize="false"
+                                         value="#{administratorManager.newServiceDTO.description}"/>
+                        <br />
+                        <h:outputText id="display" />
+                        <h:message for="description" errorStyle="color:red" />
+                    </div> 
 
                     <div class="form-group">   
-                        <h:outputLabel for="value" value="Value: " />
-                        <h:inputText size="20" class="form-control" id="value" required="true" requiredMessage="Error: Value cannot be empty" 
-                                     value="#{administratorManager.newLinceseDTO.licenceValue}" />   
-                        <h:message for="value" errorStyle="color:red" />
+                        <h:outputLabel for="version" value="Version: " />
+                        <h:inputText size="20" class="form-control" id="version" required="true" requiredMessage="Error: Version cannot be empty" 
+                                     value="#{administratorManager.newServiceDTO.version}" />   
+                        <h:message for="version" errorStyle="color:red" />
                     </div> 
                     
                     <br></br>
 
-                    <h:commandButton class="btn btn-outline-secondary" value="Save" action="#{administratorManager.createNewLicenseForModule()}" /> 
+                    <h:commandButton class="btn btn-outline-secondary" value="Save" action="#{administratorManager.createNewServiceForModule()}" /> 
                     &nbsp;
                     <p:link value="Cancel" outcome="configurations_modules_details" class="btn btn-outline-secondary"/>
 

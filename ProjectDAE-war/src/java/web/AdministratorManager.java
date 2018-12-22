@@ -351,6 +351,22 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_modules_details?faces-redirect=true";
     }
+    
+    public String createNewServiceForModule(){
+        try {
+            client.target(baseUri)
+                    .path("/services/create")
+                    .path(String.valueOf(this.moduleCode))
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newServiceDTO));
+            
+            this.clearServiceDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+
+        return "configurations_modules_details?faces-redirect=true";
+    }
 
     //**** Métodos de Listar ****//
     public void getAdministratorLogged() {
@@ -1112,10 +1128,10 @@ public class AdministratorManager implements Serializable {
     
     public String removeService(ActionEvent event){
        try {
-            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteLicenseCode");
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteServiceCode");
             String code = param.getValue().toString();
 
-            client.target(baseUri).path("/licenses")
+            client.target(baseUri).path("/services")
                     .path(code)
                     .request(MediaType.APPLICATION_XML)
                     .delete();
@@ -1349,6 +1365,22 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newParameterDTO));
             
             this.clearNewParameterDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return "configurations_modules_details?faces-redirect=true";
+        }
+
+        return "configurations_modules_details?faces-redirect=true";
+    }
+    
+        public String updateServiceForModule(){
+        try {
+            client.target(baseUri)
+                    .path("/services/update")
+                    .path(String.valueOf(this.moduleCode))
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newServiceDTO));
+            
+            this.clearServiceDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return "configurations_modules_details?faces-redirect=true";
