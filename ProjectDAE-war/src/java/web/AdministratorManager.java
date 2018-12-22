@@ -1059,6 +1059,23 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_list?faces-redirect=true";
     }
+    
+    public String removeLicense(ActionEvent event){
+       try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deleteLicenseCode");
+            String code = param.getValue().toString();
+
+            client.target(baseUri).path("/licenses")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .delete();
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+        return "configurations_modules_details?faces-redirect=true";
+    }
 
     //******************* Associate Methods
     public void associateExtensionsToConfiguration() {
@@ -1245,7 +1262,7 @@ public class AdministratorManager implements Serializable {
         return "clients_list?faces-redirect=true";
     }
 
-    public String updateConfiguration() {
+    public String updateConfiguration() { 
         try {
             client.target(baseUri)
                     .path("/configurations/update")
@@ -1253,9 +1270,25 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.warning("Problem updating the client");
-            return "update_client";
+            return "configurations_list?faces-redirect=true";
         }
         return "configurations_list?faces-redirect=true";
+    }
+    
+    public String updateLicenseForModule(){
+        try {
+            client.target(baseUri)
+                    .path("/licenses/update")
+                    .path(String.valueOf(this.moduleCode))
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newLinceseDTO));
+            
+            clearLicenseDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return "configurations_modules_details?faces-redirect=true";
+        }
+
+        return "configurations_modules_details?faces-redirect=true";
     }
 
     public void upload(boolean isArtefact) {
