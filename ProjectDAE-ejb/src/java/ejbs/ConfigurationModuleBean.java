@@ -6,8 +6,10 @@
 package ejbs;
 
 import dtos.ConfigurationModuleDTO;
+import dtos.ExtensionDTO;
 import entities.Configuration;
 import entities.ConfigurationModule;
+import entities.Extension;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +20,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -73,6 +76,35 @@ public class ConfigurationModuleBean {
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @POST
+    @Path("/createAndAssociateConfig/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(@PathParam("id") int code, ConfigurationModuleDTO configurationModuleDTO) {
+        try {
+            Configuration c = em.find(Configuration.class, code);
+
+            if (c == null) {
+                return;
+            }
+
+            ConfigurationModule m = em.find(ConfigurationModule.class, configurationModuleDTO.getCode());
+
+            if (m != null) {
+                return;
+            }
+
+            m = new ConfigurationModule(configurationModuleDTO.getCode(),configurationModuleDTO.getDescription(),c.getSoftware(),configurationModuleDTO.getVersion());
+
+            em.persist(m);
+
+            m.addConfiguration(c);
+            c.addModule(m);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 

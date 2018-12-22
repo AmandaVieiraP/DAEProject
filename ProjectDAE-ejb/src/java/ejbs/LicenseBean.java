@@ -5,6 +5,7 @@
  */
 package ejbs;
 
+import dtos.ConfigurationDTO;
 import dtos.HelpMaterialDTO;
 import dtos.LicenseDTO;
 import entities.ConfigurationModule;
@@ -21,7 +22,9 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -52,6 +55,32 @@ public class LicenseBean {
 
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    @POST
+    @Path("/create/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
+        try {
+            License license = em.find(License.class, licenseDTO.getCode());
+            
+            if(license!=null)
+                return;
+            
+            ConfigurationModule configurationModule = em.find(ConfigurationModule.class, moduleCode);
+            if (configurationModule == null) {
+                return;
+            }
+            
+            license = new License(licenseDTO.getCode(), licenseDTO.getLicenceValue(),configurationModule);
+            
+            configurationModule.addLicense(license);
+            
+            em.persist(license);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 

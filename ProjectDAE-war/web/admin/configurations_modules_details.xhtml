@@ -14,11 +14,15 @@
         <ui:define name="main">
 
             <div align="center"> <p class="h5"><strong>Licences</strong></p></div>
-
+            
+            <p:link value="+ Add New License" outcome="configurations_license_create" class="btn btn-outline-info btn-sm"/>
+            
             <em:dt headers="#{['Code','Value']}" 
                    props="#{['code','licenceValue']}" 
                    list="#{administratorManager.currentConfigurationsModuleLicenses}" 
                    widgetVar="extensionsTable">
+        
+                
             </em:dt>
 
             <div align="center"> <p class="h5"><strong>Parameters</strong></p></div>
@@ -27,6 +31,8 @@
                    props="#{['name', 'description','paramValue']}" 
                    list="#{administratorManager.currentConfigurationModuleParameters}" 
                    widgetVar="parametersTable">
+                
+                
             </em:dt> 
 
             <div align="center"> <p class="h5"><strong>Services</strong></p></div>
@@ -35,6 +41,7 @@
                    props="#{['code','name','description','version']}" 
                    list="#{administratorManager.currentConfigurationModuleServices}" 
                    widgetVar="extensionsTable">
+                
             </em:dt> 
 
         </ui:define>

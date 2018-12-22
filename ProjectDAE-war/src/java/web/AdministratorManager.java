@@ -73,6 +73,9 @@ public class AdministratorManager implements Serializable {
     private ConfigurationDTO newConfigurationDTO;
     private ParameterDTO newParameterDTO;
     private ExtensionDTO newExtensionDTO;
+    private ConfigurationModuleDTO newConfigurationModuleDTO;
+    private LicenseDTO newLinceseDTO;
+    private ServiceDTO newServiceDTO;
 
     private UIComponent component;
 
@@ -105,6 +108,9 @@ public class AdministratorManager implements Serializable {
         this.newConfigurationDTO = new ConfigurationDTO();
         this.newParameterDTO = new ParameterDTO();
         this.newExtensionDTO = new ExtensionDTO();
+        this.newConfigurationModuleDTO = new ConfigurationModuleDTO();
+        this.newLinceseDTO = new LicenseDTO();
+        this.newServiceDTO = new ServiceDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -219,19 +225,25 @@ public class AdministratorManager implements Serializable {
     }
     
     public void createNewParameterAndAssociateToConfig(){
+        createNewParameterAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public void createNewParameterAndAssociateToConfigOnCreate(){
+        createNewParameterAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+    
+    public void createNewParameterAndAssociateToConfigGeral(String code){
         try {
             client.target(baseUri)
                     .path("/contract_parameters/create")
-                    .path(String.valueOf(this.currentConfiguration.getCode()))
+                    .path(code)
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newParameterDTO));
             
             clearNewParameterDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
-
     }
-    
     public void createNewExtensionAndAssociateToConfig(){
         createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
@@ -246,6 +258,27 @@ public class AdministratorManager implements Serializable {
                     .path("/extensions/createAndAssociateConfig")
                     .path(code)
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newExtensionDTO));
+            
+            clearNewExtensionDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void createNewConfigurationModuleAndAssociateToConfig(){
+        createNewConfigurationModuleAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
+    }
+    
+    public void createNewConfigurationModuleAndAssociateToConfigOnCreate(){
+        createNewConfigurationModuleAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
+    }
+    
+    public void createNewConfigurationModuleAndAssociateToConfigGeral(String code){
+        try {
+            client.target(baseUri)
+                    .path("/configurationModules/createAndAssociateConfig")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newConfigurationModuleDTO));
             
             clearNewExtensionDTO();
         } catch (Exception e) {
@@ -285,6 +318,21 @@ public class AdministratorManager implements Serializable {
         }
 
         return "configurations_list?faces-redirect=true";
+    }
+    
+    public String createNewLicenseForModule(){
+        try {
+            client.target(baseUri)
+                    .path("/licenses/create")
+                    .path(String.valueOf(this.moduleCode))
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newLinceseDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+
+        return "configurations_modules_details?faces-redirect=true";
     }
 
     //**** Métodos de Listar ****//
@@ -1301,7 +1349,11 @@ public class AdministratorManager implements Serializable {
     public void clearNewExtensionDTO(){
         this.newExtensionDTO.reset();
     }
-
+    
+    public void clearNewConfigurationModuleDTO(){
+        this.newConfigurationModuleDTO.reset();
+    }
+    
     public void clearNewTemplate() {
         //todo limnpar melhor
         this.selectedSoftwareExtensions = null;
@@ -1506,6 +1558,31 @@ public class AdministratorManager implements Serializable {
     public void setNewExtensionDTO(ExtensionDTO newExtensionDTO) {
         this.newExtensionDTO = newExtensionDTO;
     }
+
+    public ConfigurationModuleDTO getNewConfigurationModuleDTO() {
+        return newConfigurationModuleDTO;
+    }
+
+    public void setNewConfigurationModuleDTO(ConfigurationModuleDTO newConfigurationModuleDTO) {
+        this.newConfigurationModuleDTO = newConfigurationModuleDTO;
+    }
+
+    public LicenseDTO getNewLinceseDTO() {
+        return newLinceseDTO;
+    }
+
+    public void setNewLinceseDTO(LicenseDTO newLinceseDTO) {
+        this.newLinceseDTO = newLinceseDTO;
+    }
+
+    public ServiceDTO getNewServiceDTO() {
+        return newServiceDTO;
+    }
+
+    public void setNewServiceDTO(ServiceDTO newServiceDTO) {
+        this.newServiceDTO = newServiceDTO;
+    }
+    
     
     
 }

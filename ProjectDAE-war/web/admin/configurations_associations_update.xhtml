@@ -69,6 +69,7 @@
         <div align="center"><p class="h5"><strong>List of Configuration Modules</strong></p></div>
 
         <p:commandButton value="Add Configuration Module" type="button" onclick="PF('module').show();" class="btn btn-outline-secondary"/>
+        <p:commandButton value="Create New Configuration Module" type="button" onclick="PF('moduleNew').show();" class="btn btn-outline-secondary"/>
 
         <p:dataTable
             var="m"
@@ -240,7 +241,7 @@
             </h:form> 
         </p:dialog>  
 
-        <p:dialog header="Select an Extension" widgetVar="artefact" modal="true" height="200" width="40%">
+        <p:dialog header="Select an Artefact" widgetVar="artefact" modal="true" height="200" width="40%">
 
             <h:form enctype="multipart/form-data">
                 <div align="center">
@@ -272,6 +273,33 @@
                 </div>
             </h:form> 
         </p:dialog> 
+        
+        <p:dialog header="Create a New Module" widgetVar="moduleNew" modal="true" height="400" width="60%">
+            <h:form>
+                <div class="form-group">   
+                    <h:outputLabel for="module_code" value="Code: " />
+                    <h:inputText size="20" class="form-control" id="module_code" required="true" requiredMessage="Error: code cannot be empty and must be unic" 
+                                 value="#{administratorManager.newConfigurationModuleDTO.code}" />   
+                    <h:message for="module_code" errorStyle="color:red" />
+                </div>
+                <div class="form-group">   
+                    <h:outputLabel for="module_description" value="Description: " />
+                    <h:inputText size="20" class="form-control" id="module_description" required="true" requiredMessage="Error: Description cannot be empty" 
+                                 value="#{administratorManager.newConfigurationModuleDTO.description}" />   
+                    <h:message for="module_description" errorStyle="color:red" />
+                </div>
+                <div class="form-group">   
+                    <h:outputLabel for="module_version" value="Version: " />
+                    <h:inputText size="20" class="form-control" id="module_version" required="true" requiredMessage="Error: Version cannot be empty" 
+                                 value="#{administratorManager.newConfigurationModuleDTO.version}" />   
+                    <h:message for="module_version" errorStyle="color:red" />
+                </div>
+                <br/>
+                <p:commandButton value="Submit" update="display" ajax="false"  action="#{administratorManager.createNewConfigurationModuleAndAssociateToConfig()}"/>
+            </h:form> 
+        </p:dialog>  
+        
+        
 
         <p:dialog header="Select a Parameter" widgetVar="parameters" modal="true" height="200" width="60%">
             <h:form>
