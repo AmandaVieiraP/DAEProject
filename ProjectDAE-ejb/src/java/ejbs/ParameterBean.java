@@ -5,11 +5,13 @@
  */
 package ejbs;
 
-import dtos.ConfigurationModuleDTO;
 import dtos.ParameterDTO;
+import entities.Artefact;
 import entities.Configuration;
 import entities.ConfigurationModule;
 import entities.Contract;
+import entities.Extension;
+import entities.HelpMaterial;
 import entities.Parameter;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +20,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -55,9 +59,7 @@ public class ParameterBean {
                         allParameters.add(p);
                     }
                 }
-
             }
-
             return contractParameterListToContractParameterDTOList(allParameters);
 
         } catch (Exception ex) {
@@ -129,7 +131,7 @@ public class ParameterBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/dissociateConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -138,6 +140,120 @@ public class ParameterBean {
             dissociateParameterToAConfiguration(code, parameterDTO.getName());
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
+        }
+    }
+
+    @PUT
+    @Path("/update/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateModuleParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
+        try {
+            ConfigurationModule m = em.find(ConfigurationModule.class, code);
+
+            if (m == null) {
+                return;
+            }
+
+            Parameter p = em.find(Parameter.class, parameterDTO.getName());
+
+            if (p == null) {
+                return;
+            }
+
+            p.setDescription(parameterDTO.getDescription());
+            p.setParamValue(parameterDTO.getParamValue());
+
+            em.merge(p);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+
+    @POST
+    @Path("/create/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
+        try {
+            Configuration c = em.find(Configuration.class, code);
+
+            if (c == null) {
+                return;
+            }
+
+            Parameter p = em.find(Parameter.class, parameterDTO.getName());
+
+            if (p != null) {
+                return;
+            }
+
+            p = new Parameter(parameterDTO.getName(), parameterDTO.getDescription(), parameterDTO.getParamValue());
+
+            em.persist(p);
+
+            p.addConfigurations(c);
+            c.addParameters(p);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+
+    @POST
+    @Path("/createForModule/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createForModuleREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
+        try {
+            ConfigurationModule m = em.find(ConfigurationModule.class, code);
+
+            if (m == null) {
+                return;
+            }
+
+            Parameter p = em.find(Parameter.class, parameterDTO.getName());
+
+            if (p != null) {
+                return;
+            }
+
+            p = new Parameter(parameterDTO.getName(), parameterDTO.getDescription(), parameterDTO.getParamValue());
+
+            em.persist(p);
+
+            p.addModule(m);
+            m.addParameter(p);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+
+    @DELETE
+    @Path("{name}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void remove(@PathParam("name") String name) {
+        try {
+            Parameter p = em.find(Parameter.class, name);
+
+            if (p == null) {
+                return;
+            }
+
+            for (Configuration c : p.getConfigurations()) {
+                c.removeParameter(p);
+            }
+
+            for (ConfigurationModule m : p.getModules()) {
+                m.removeParameter(p);
+            }
+
+            for (Contract c : p.getContracts()) {
+                c.removeParameter(p);
+            }
+
+            em.remove(p);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
         }
     }
 
@@ -227,7 +343,7 @@ public class ParameterBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     public void dissociateParameterToAConfiguration(int configCode, String parameterName) {
         try {
             Configuration configuration = em.find(Configuration.class, configCode);

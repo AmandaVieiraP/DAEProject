@@ -13,7 +13,7 @@
             <div class="container">
                 <div align="center"> <p class="h5"><strong>Update Configuration</strong></p></div>
                 <h:form> 
-                    
+
                     <div class="form-group">   
                         <h:outputLabel for="description" value="Description: " />
                         <p:inputTextarea class="form-control" id="description" required="true" requiredMessage="Error: Description cannot be empty and must be unic"
@@ -29,7 +29,26 @@
                         <h:inputText size="20" class="form-control" id="version" required="true" requiredMessage="Error: Version cannot be empty and must be unic" 
                                      value="#{administratorManager.currentConfiguration.version}" />   
                         <h:message for="version" errorStyle="color:red" />
-                    </div> 
+                    </div>
+
+                    <div class="form-group">   
+                        <h:outputLabel for="dbServer" value="Database Server IP: " />
+                        <h:inputText size="20" class="form-control" id="dbServer" required="true" requiredMessage="Error: Database Server IP cannot be empty" 
+                                     value="#{administratorManager.currentConfiguration.dbServerIp}" validatorMessage="IP address is not valid">
+                            <f:validateRegex pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" for="inputBoxId" />
+                        </h:inputText> 
+                        <h:message for="dbServer" errorStyle="color:red" />
+                    </div>
+
+                    <div class="form-group">   
+                        <h:outputLabel for="applicationServerIp" value="Application Server IP: " />
+                        <h:inputText size="20" class="form-control" id="applicationServerIp" required="true" requiredMessage="Error: Application Server IP cannot be empty" 
+                                     value="#{administratorManager.currentConfiguration.applicationServerIp}" validatorMessage="IP address is not valid">
+                            <f:validateRegex pattern="^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$" for="inputBoxId" />
+                        </h:inputText>
+
+                        <h:message for="applicationServerIp" errorStyle="color:red" />
+                    </div>
 
                     <div class="form-group"> 
                         <h:outputLabel for="software" value="Software: " />
@@ -37,7 +56,7 @@
                             <f:selectItems value="#{administratorManager.allSoftwares}" var="sof" itemValue="#{sof.code}" itemLabel="#{sof.name} - #{sof.description}" />
                         </h:selectOneMenu>   
                     </div>
-                    
+
                     <div class="form-group"> 
                         <h:outputLabel for="contract" value="Contract: " />
                         <h:selectOneMenu id="contract" value="#{administratorManager.currentConfiguration.contractCode}" >
@@ -46,7 +65,7 @@
                     </div>
 
                     <br></br>
-                    
+
                     <p:link value="Update Configuration Associations" outcome="configurations_associations_update" class="btn btn-outline-info"/>
 
                     <h:commandButton class="btn btn-outline-secondary" value="Save" action="#{administratorManager.updateConfiguration()}" /> 

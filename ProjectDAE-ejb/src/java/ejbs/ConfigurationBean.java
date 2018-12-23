@@ -9,11 +9,13 @@ import dtos.ConfigurationDTO;
 import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
+import entities.ConfigurationModule;
 import entities.Contract;
 import entities.Extension;
 import entities.HelpMaterial;
 import entities.Parameter;
 import entities.Software;
+import entities.SoftwareModule;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,22 +69,23 @@ public class ConfigurationBean {
     public void createREST(ConfigurationDTO configurationDTO) {
         try {
             this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
-                    configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername());
+                    configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername(),
+                    configurationDTO.getDbServerIp(),configurationDTO.getApplicationServerIp());
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @POST
     @Path("/createByTemplate/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createByTemplateREST(@PathParam("id") int code, ConfigurationDTO configurationDTO) {
         try {
-            
-            Template t=em.find(Template.class, code);
-            
-            if(t==null){
+
+            Template t = em.find(Template.class, code);
+
+            if (t == null) {
                 return;
             }
 
@@ -90,38 +93,49 @@ public class ConfigurationBean {
             if (client == null) {
                 return;
             }
-            
-            int lastCode = (Integer)em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
-            
-            lastCode=lastCode+1;
-            Configuration configuration = new Configuration(lastCode, t.getDescription(), t.getSoftware(), t.getContract(), t.getVersion(), client);
+
+            int lastCode = (Integer) em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
+
+            lastCode = lastCode + 1;
+            Configuration configuration = new Configuration(lastCode, t.getDescription(), t.getSoftware(), t.getContract(), t.getVersion(), client,null,null);
 
             t.getSoftware().addConfiguration(configuration);
 
             t.getContract().addConfiguration(configuration);
 
             client.addConfiguration(configuration);
-            
+
             configuration.setExtensions(t.getExtensions());
-            
-            for(Extension e: t.getExtensions()){
+
+            for (Extension e : t.getExtensions()) {
                 e.addConfiguration(configuration);
             }
-            
+
             configuration.setArtefactsRepository(t.getArtefactsRepository());
-            
-            for(Artefact a:t.getArtefactsRepository()){
+
+            for (Artefact a : t.getArtefactsRepository()) {
                 a.addConfigurations(configuration);
             }
-            
+
             configuration.setHelpMaterials(t.getHelpMaterials());
-            
-            for(HelpMaterial h:t.getHelpMaterials()){
+
+            for (HelpMaterial h : t.getHelpMaterials()) {
                 h.addConfigurations(configuration);
             }
-
             em.persist(configuration);
+            
+            int modCode = (Integer) em.createNamedQuery("getMaxModulesCode").getSingleResult();
 
+            for(SoftwareModule s: t.getModules()){
+                modCode = modCode + 1;
+                ConfigurationModule cm= new ConfigurationModule(modCode,s.getDescription(),t.getSoftware(),t.getVersion());
+                
+                em.persist(cm);
+                
+                cm.addConfiguration(configuration);
+                configuration.addModule(cm);
+
+            }
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -188,30 +202,45 @@ public class ConfigurationBean {
 
             c.setDescription(configurationDTO.getDescription());
             c.setVersion(configurationDTO.getVersion());
-            
+            c.setDbServerIp(configurationDTO.getDbServerIp());
+            c.setApplicationServerIp(configurationDTO.getApplicationServerIp());
+
             //Vai buscar software antigo para trocar pelo novo
-            Software oldSoftware=c.getSoftware();
+            Software oldSoftware = c.getSoftware();
             oldSoftware.removeConfiguration(c);
-            
+
             c.setSoftware(newSoftware);
-            
+
             newSoftware.addConfiguration(c);
-            
+
             //Vai buscar o contrato antigo para trocar pelo novo
-            Contract oldContract=c.getContract();
-            
+            Contract oldContract = c.getContract();
+
             oldContract.removeConfiguration(c);
-            
+
             newContract.addConfiguration(c);
-            
+
             c.setContract(newContract);
+            
+            if(oldSoftware.getCode() != newSoftware.getCode()){
+                for(Extension e:c.getExtensions()){
+                    e.removeConfiguration(c);
+                }
+                
+                for(ConfigurationModule m:c.getModules()){
+                    m.removeConfiguration(c);
+                }
+                
+                c.setExtensions(new LinkedList<>());
+                c.setModules(new LinkedList<>());
+            }
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
 
-    public void create(int code, String description, int software_code, int contract_code, String version, String client_username) {
+    public void create(int code, String description, int software_code, int contract_code, String version, String client_username, String dbServerIp, String appServerIp) {
         try {
             Configuration configuration = em.find(Configuration.class, code);
 
@@ -235,7 +264,7 @@ public class ConfigurationBean {
                 return;
             }
 
-            configuration = new Configuration(code, description, software, contract, version, client);
+            configuration = new Configuration(code, description, software, contract, version, client, dbServerIp, appServerIp);
 
             software.addConfiguration(configuration);
 
@@ -272,7 +301,9 @@ public class ConfigurationBean {
                     c.getSoftware().getName(),
                     c.getContract().getCode(),
                     c.getVersion(),
-                    c.getClient().getUsername());
+                    c.getClient().getUsername(),
+                    c.getDbServerIp(),
+                    c.getApplicationServerIp());
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }

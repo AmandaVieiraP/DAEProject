@@ -148,14 +148,20 @@ public class ConfigBean {
             serviceBean.associateServiceToModule(4, 104);
             
             //Criar Parametros para o contrato
-            contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 ours / month");
+            contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 hours / month");
             contractParameterBean.create("Type 1 - Contract Price", "Total price of the contract during the according time", "10000 €");
             contractParameterBean.create("Type 1 - Contract Duration", "Amount of years where the contract is valid", "3 years");
             contractParameterBean.create("Type 1 - Maintenance Schedule", "Maintenance horary for support of eventual problems", "From 8:00 am to 4:00 pm");
             contractParameterBean.create("Type 1 - Guarantee of Support", "Guarantee of response hover the time period of maintenance schedule", "If we miss your call we will return it during the next 10 min");
+            contractParameterBean.create("Type 1 - Adicional Maintenance Cost", "The aditional maintenance price per hour", "10 € / hour");
+            contractParameterBean.create("Type 1 - Quality of Service", "The time that is acceptable to resolute problems in the database", "1 hour");
+            contractParameterBean.create("Type 1 - Responsability", "The company responsability", "Not rise the price of contract during the contract period");
+            contractParameterBean.create("Type 1 - Avalaibality", "The period where the software access must be avaliable", "All the time less on a specific maintenance asked by the client");
 
             //Criar o contrat 10
             contractBean.create(10);
+            contractBean.create(11);
+            contractBean.create(12);
 
             templateBean.create(1, "Template 1", 1000, 10, "Version 1.0");
             templateBean.create(2, "Template 2", 1000, 10, "Version 1.0");
@@ -169,11 +175,10 @@ public class ConfigBean {
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Contract Duration");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Maintenance Schedule");
             contractParameterBean.associateParameterToAContract(10, "Type 1 - Guarantee of Support");
-            /* Outros Parametro Exemplos:
-            custo adicional por hora de manutençao
-            qualidade de serviço, 
-            responsabilidades,
-            disponibilidade...*/
+            contractParameterBean.associateParameterToAContract(11, "Type 1 - Adicional Maintenance Cost");
+            contractParameterBean.associateParameterToAContract(11, "Type 1 - Quality of Service");
+            contractParameterBean.associateParameterToAContract(12, "Type 1 - Responsability");
+            contractParameterBean.associateParameterToAContract(12, "Type 1 - Avalaibality");
             
             configurationSuperBean.associateExtensionToConfiguration(12, 1);
             configurationSuperBean.associateExtensionToConfiguration(13, 2);
@@ -226,20 +231,20 @@ public class ConfigBean {
             configurationSuperBean.addArtefactsToConfiguration(6, "dae_esquema.png");
 
             
-            configurationModuleBean.create(105, "Module HR", 1000, "Version 1.1", "164.0.0.1", "189.1.1.3");
-            configurationModuleBean.create(106, "Module HR", 1002, "Version 1.1", "164.0.0.1", "189.1.1.3");
-            configurationModuleBean.create(107, "Module HR", 1001, "Version 1.1", "164.0.0.1", "189.1.1.3");
+            configurationModuleBean.create(105, "Module HR", 1000, "Version 1.1");
+            configurationModuleBean.create(106, "Module HR", 1002, "Version 1.1");
+            configurationModuleBean.create(107, "Module HR", 1001, "Version 1.1");
             
             //Criar configuração para associar a um cliente
-            configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1");
-            configurationBean.create(31, "Configuration 2", 1001, 10, "Version 1.0", "client1");
-            configurationBean.create(32, "Configuration 3", 1002, 10, "Version 1.0", "client1");
-            configurationBean.create(33, "Configuration 1", 1001, 10, "Version 1.0", "client4");
-            configurationBean.create(34, "Configuration 2", 1001, 10, "Version 1.0", "client4");
-            configurationBean.create(35, "Configuration 3", 1001, 10, "Version 1.0", "client4");
-            configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6");
-            configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6");
-            configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6");
+            configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(31, "Configuration 2", 1001, 10, "Version 1.0", "client1","164.0.0.1", "189.1.1.3");
+            configurationBean.create(32, "Configuration 3", 1002, 10, "Version 1.0", "client1","164.0.0.1", "189.1.1.3");
+            configurationBean.create(33, "Configuration 1", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
+            configurationBean.create(34, "Configuration 2", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
+            configurationBean.create(35, "Configuration 3", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
+            configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
+            configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
+            configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
             
             configurationSuperBean.associateExtensionToConfiguration(12, 30);
             configurationSuperBean.associateExtensionToConfiguration(13, 31);

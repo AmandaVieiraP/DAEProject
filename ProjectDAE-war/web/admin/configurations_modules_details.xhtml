@@ -15,26 +15,71 @@
 
             <div align="center"> <p class="h5"><strong>Licences</strong></p></div>
 
+            <p:link value="+ Add New License" outcome="configurations_license_create" class="btn btn-outline-info btn-sm"/>
+
             <em:dt headers="#{['Code','Value']}" 
                    props="#{['code','licenceValue']}" 
                    list="#{administratorManager.currentConfigurationsModuleLicenses}" 
                    widgetVar="extensionsTable">
+
+                <p:column headerText="Actions">
+                    <div align="center">
+                        <h:commandLink value="Update" action="configurations_license_update?faces-redirect=true" class="btn btn-outline-success btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.newLinceseDTO}" value="#{object}" />
+                        </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeLicense}" class="btn btn-outline-danger btn-sm">
+                            <f:param name="deleteLicenseCode" id="deleteLicenseCode" value="#{object.code}" />    
+                        </h:commandLink>
+                    </div>
+                </p:column>
+
             </em:dt>
 
             <div align="center"> <p class="h5"><strong>Parameters</strong></p></div>
+            
+            <p:link value="+ Add New Module Parameter" outcome="configurations_module_parameter_create" class="btn btn-outline-info btn-sm"/>
 
             <em:dt headers="#{['Name', 'Description','Value']}" 
                    props="#{['name', 'description','paramValue']}" 
                    list="#{administratorManager.currentConfigurationModuleParameters}" 
                    widgetVar="parametersTable">
+                
+                <p:column headerText="Actions">
+                    <div align="center">
+                        <h:commandLink value="Update" action="configurations_module_parameter_update?faces-redirect=true" class="btn btn-outline-success btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.newParameterDTO}" value="#{object}" />
+                        </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeParameter}" class="btn btn-outline-danger btn-sm">
+                            <f:param name="deleteParameterCode" id="deleteParameterCode" value="#{object.name}" />    
+                        </h:commandLink>
+                    </div>
+                </p:column>
+
             </em:dt> 
 
             <div align="center"> <p class="h5"><strong>Services</strong></p></div>
+            
+            <p:link value="+ Add New Module Service" outcome="configurations_module_service_create" class="btn btn-outline-info btn-sm"/>
 
             <em:dt headers="#{['Code','Name','Description','Version']}" 
                    props="#{['code','name','description','version']}" 
                    list="#{administratorManager.currentConfigurationModuleServices}" 
                    widgetVar="extensionsTable">
+                
+                <p:column headerText="Actions">
+                    <div align="center">
+                        <h:commandLink value="Update" action="configurations_module_service_update?faces-redirect=true" class="btn btn-outline-success btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.newServiceDTO}" value="#{object}" />
+                        </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="Remove" actionListener="#{administratorManager.removeService}" class="btn btn-outline-danger btn-sm">
+                            <f:param name="deleteServiceCode" id="deleteServiceCode" value="#{object.code}" />    
+                        </h:commandLink>
+                    </div>
+                </p:column>
+
             </em:dt> 
 
         </ui:define>

@@ -5,13 +5,18 @@
  */
 package ejbs;
 
+import dtos.ConfigurationDTO;
 import dtos.HelpMaterialDTO;
 import dtos.LicenseDTO;
+import entities.Artefact;
+import entities.Configuration;
 import entities.ConfigurationModule;
 import entities.ConfigurationSuper;
 import entities.Contract;
+import entities.Extension;
 import entities.HelpMaterial;
 import entities.License;
+import entities.Parameter;
 import entities.Software;
 import entities.Template;
 import java.util.LinkedList;
@@ -21,7 +26,11 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -54,6 +63,75 @@ public class LicenseBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @POST
+    @Path("/create/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
+        try {
+            License license = em.find(License.class, licenseDTO.getCode());
+            
+            if(license!=null)
+                return;
+            
+            ConfigurationModule configurationModule = em.find(ConfigurationModule.class, moduleCode);
+            if (configurationModule == null) {
+                return;
+            }
+            
+            license = new License(licenseDTO.getCode(), licenseDTO.getLicenceValue(),configurationModule);
+            
+            configurationModule.addLicense(license);
+            
+            em.persist(license);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/update/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateRest(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
+        try {
+            License license = em.find(License.class, licenseDTO.getCode());
+            
+            if(license==null)
+                return;
+            
+            ConfigurationModule configurationModule = em.find(ConfigurationModule.class, moduleCode);
+            if (configurationModule == null) {
+                return;
+            }
+            
+            license.setLicenceValue(licenseDTO.getLicenceValue());
+            
+            em.merge(license);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @DELETE
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void remove(@PathParam("id") int code) {
+        try {
+             License license = em.find(License.class, code);
+            
+            if(license==null)
+                return;
+            
+            license.getConfigurationModule().removeLicense(license);
+            
+            em.remove(license);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
 
 
     public void create(int code, String value, int moduleCode) {

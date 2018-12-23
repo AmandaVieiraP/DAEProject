@@ -6,8 +6,11 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
+import dtos.ParameterDTO;
+import entities.Configuration;
 import entities.ConfigurationSuper;
 import entities.Extension;
+import entities.Parameter;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +19,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,10 +40,20 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Path("all")
-    public List<ExtensionDTO> getAll() {
+    @Path("all/{id}")
+    public List<ExtensionDTO> getAll(@PathParam("id") int code) {
         try {
-            List<Extension> extensions = em.createNamedQuery("getAllExtensions").getResultList();
+            Configuration c = em.find(Configuration.class, code);
+            
+            if(c == null)
+                return null;
+            
+            Query query = em.createNamedQuery("getAllExtensionsBySoftware");
+
+            query.setParameter(1, c.getSoftware().getCode());
+
+            List<Extension> extensions = query.getResultList();
+            
             return extensionListToExtensionDTOList(extensions);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -80,6 +95,36 @@ public class ExtensionBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @POST
+    @Path("/createAndAssociateConfig/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void createREST(@PathParam("id") int code, ExtensionDTO extensionDTO) {
+        try {
+            Configuration c = em.find(Configuration.class, code);
+
+            if (c == null) {
+                return;
+            }
+
+            Extension e = em.find(Extension.class, extensionDTO.getCode());
+
+            if (e != null) {
+                return;
+            }
+
+            e = new Extension(extensionDTO.getCode(),extensionDTO.getName(),extensionDTO.getDescription(),c.getSoftware(),extensionDTO.getVersion());
+
+            em.persist(e);
+
+            e.addConfiguration(c);
+            c.addExtension(e);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
 
     private List<ExtensionDTO> extensionListToExtensionDTOList(List<Extension> extensions) {
         try {

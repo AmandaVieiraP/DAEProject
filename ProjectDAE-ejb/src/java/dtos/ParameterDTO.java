@@ -30,6 +30,12 @@ public class ParameterDTO implements Serializable{
 
     public ParameterDTO() {
     }
+    
+    public void reset(){
+        this.name=null;
+        this.description=null;
+        this.paramValue=null;
+    }
 
     public String getName() {
         return name;

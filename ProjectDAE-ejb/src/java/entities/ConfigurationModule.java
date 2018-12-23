@@ -18,8 +18,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -31,23 +29,14 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("ConfigurationModule")
-@NamedQueries({
-    @NamedQuery(name = "getAllConfigurationModules", query = "SELECT m FROM ConfigurationModule m"),
-})
 public class ConfigurationModule extends Module implements Serializable {
-
-    @NotNull
-    private String dbServerIp;
-
-    @NotNull
-    private String applicationServerIp;
 
     @NotNull
     @OneToMany(mappedBy = "configurationModule", cascade = CascadeType.REMOVE)
     private List<License> licenses;
 
     @NotNull
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "CONFIGURATIONS_MODULES", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
             inverseJoinColumns = @JoinColumn(name = "CONFIG_CODE", referencedColumnName = "CODE"))
     private List<Configuration> configurations;
@@ -64,29 +53,11 @@ public class ConfigurationModule extends Module implements Serializable {
         this.moduleParameters = new LinkedList<>();
     }
 
-    public ConfigurationModule(int code, String description, Software software, String dbServerIp, String applicationServerIp, String version) {
+    public ConfigurationModule(int code, String description, Software software, String version) {
         super(code, description, software, version);
-        this.applicationServerIp = applicationServerIp;
-        this.dbServerIp = dbServerIp;
         this.configurations = new LinkedList<>();
         this.licenses = new LinkedList<>();
         this.moduleParameters = new LinkedList<>();
-    }
-
-    public String getDbServerIp() {
-        return dbServerIp;
-    }
-
-    public void setDbServerIp(String dbServerIp) {
-        this.dbServerIp = dbServerIp;
-    }
-
-    public String getApplicationServerIp() {
-        return applicationServerIp;
-    }
-
-    public void setApplicationServerIp(String applicationServerIp) {
-        this.applicationServerIp = applicationServerIp;
     }
 
     public List<License> getLicenses() {
