@@ -93,7 +93,8 @@ public class Contract implements Serializable {
             templates.remove(templateToRemove);
         }
     }
-
+    
+    
     public void addParameter(Parameter contractParameter) {
 
         if (contractParameter != null && !contractParameters.contains(contractParameter)) {

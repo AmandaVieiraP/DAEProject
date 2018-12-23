@@ -5,7 +5,10 @@
  */
 package ejbs;
 
+import dtos.ConfigurationModuleDTO;
 import dtos.SoftwareModuleDTO;
+import entities.Configuration;
+import entities.ConfigurationModule;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
@@ -16,7 +19,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -33,6 +38,21 @@ public class SoftwareModuleBean {
     @PersistenceContext
     EntityManager em;
 
+    @GET
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Path("all")
+    public List<SoftwareModuleDTO> getAll() {
+        try {
+            List<SoftwareModule> softwareModules = em.createNamedQuery("getAllSoftwareModules").getResultList();
+            
+            return softwareModuleListToSoftwareModuleDTOList(softwareModules);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+   
+    
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("softwares/{id}")
@@ -68,6 +88,34 @@ public class SoftwareModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @PUT
+    @Path("/associateModuleConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void associateConfigurationModuleRest(@PathParam("id") int templateCode, SoftwareModuleDTO softwareModule) {
+        try {
+            
+            associateModuleToConfiguration(softwareModule.getCode(), templateCode);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @PUT
+    @Path("/dissociateModuleConfigurations/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void dissociateConfigurationModuleRest(@PathParam("id") int code, SoftwareModuleDTO softwareModuleDTO) {
+        try {
+            
+            dissociateModuleToTemplateConfiguration(softwareModuleDTO.getCode(), code);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+  
 
     private List<SoftwareModuleDTO> softwareModuleListToSoftwareModuleDTOList(List<SoftwareModule> softwareModules) {
         try {
@@ -119,6 +167,67 @@ public class SoftwareModuleBean {
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
+        }
+    }
+    
+    
+    
+     public void dissociateModuleToTemplateConfiguration(int moduleCode, int templateCode) {
+        try {
+            SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
+            Template template= em.find(Template.class, templateCode);
+
+            if (module == null || template == null) {
+                return;
+            }
+
+            if (!template.getModules().contains(module)) {
+                return;
+            }
+
+            template.removeModule(module);
+            module.removeTemplate(template);
+            
+            em.merge(template);
+            em.merge(module);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    
+    
+    public void associateModuleToConfiguration(int moduleCode, int templateCode) {
+        try {
+            
+          
+            
+            SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
+            Template template= em.find(Template.class, templateCode);
+            if (module == null || template == null) {
+                return;
+            }
+            
+            Software templateSoftware = template.getSoftware();
+            Software moduleSoftware = module.getSoftware();
+
+            if(templateSoftware.getCode() != moduleSoftware.getCode())
+            {
+                 System.out.println("vem aqui");
+                 return;
+            }
+
+            if (template.getModules().contains(module)) {
+                return;
+            }
+
+            template.addModule(module);
+            module.addTemplate(template);
+
+            em.merge(template);
+            em.merge(module);
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
         }
     }
 }

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">Update Template Configuration </ui:define>
+
+        <ui:define name="main">
+            <div class="container">
+                <div align="center"> <p class="h5"><strong>Update Template Configuration </strong></p></div>
+                <h:form> 
+                    
+                    <div class="form-group">   
+                        <h:outputLabel for="description" value="Description: " />
+                        <p:inputTextarea class="form-control" id="description" required="true" requiredMessage="Error: Description cannot be empty and must be unique"
+                                         rows="3" cols="30" counter="display" maxlength="100" counterTemplate="{0} characters remaining." autoResize="false"
+                                         value="#{administratorManager.currentTemplate.description}"/>
+                        <br />
+                        <h:outputText id="display" />
+                        <h:message for="description" errorStyle="color:red" />
+                    </div> 
+
+                    <div class="form-group">   
+                        <h:outputLabel for="version" value="Version: " />
+                        <h:inputText size="20" class="form-control" id="version" required="true" requiredMessage="Error: Version cannot be empty and must be unique" 
+                                     value="#{administratorManager.currentTemplate.version}" />   
+                        <h:message for="version" errorStyle="color:red" />
+                    </div> 
+
+                    <div class="form-group"> 
+                        <h:outputLabel for="software" value="Software: " />
+                        <h:selectOneMenu id="software" value="#{administratorManager.currentTemplate.softwareCode}" >
+                            <f:selectItems value="#{administratorManager.allSoftwares}" var="sof" itemValue="#{sof.code}" itemLabel="#{sof.name} - #{sof.description}" />
+                        </h:selectOneMenu>   
+                    </div>
+                    
+                    <div class="form-group"> 
+                        <h:outputLabel for="contract" value="Contract: " />
+                        <h:selectOneMenu id="contract" value="#{administratorManager.currentTemplate.contractCode}" >
+                            <f:selectItems value="#{administratorManager.allContracts}" var="c" itemValue="#{c.code}" itemLabel="#{c.code}" />
+                        </h:selectOneMenu>   
+                    </div>
+
+                    <br></br>
+                    
+                    <p:link value="Update Template Configuration Associations" outcome="configurations_template_associations_update" class="btn btn-outline-info"/>
+
+                    <h:commandButton class="btn btn-outline-secondary" value="Save" action="#{administratorManager.updateTemplateConfiguration()}" /> 
+                    &nbsp;
+                    <p:link value="Cancel" outcome="templates_list" class="btn btn-outline-secondary"/>
+
+                </h:form> 
+
+            </div>    
+
+        </ui:define>
+
+
+    </ui:composition>   
+
+</html>
+
