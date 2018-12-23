@@ -92,6 +92,9 @@ public class AdministratorManager implements Serializable {
     private ConfigurationDTO currentConfiguration;
     private int code;
     private String paramName;
+    private String usernameClientSelectedToClone;
+    private int codeConfigurationSelectedToClone;
+   
 
     private UploadedFile file;
     private String path;
@@ -244,6 +247,7 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    
     public void createNewExtensionAndAssociateToConfig(){
         createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
@@ -980,6 +984,56 @@ public class AdministratorManager implements Serializable {
 
         return configurationsDTO;
     }
+    
+    public List<ConfigurationDTO> getClientConfigurations(String username) {
+
+        List<ConfigurationDTO> configurationsDTO = new LinkedList<>();
+
+        try {
+            configurationsDTO = client.target(baseUri).path("/configurations").path(username)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ConfigurationDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        return configurationsDTO;
+    }
+    
+    public List<ClientDTO> getClientsToCloneConfiguration() {
+        List<ClientDTO> clients = new LinkedList();
+        for (ClientDTO c : this.getAllClients()) {
+            List<ConfigurationDTO> confs = this.getClientConfigurations(c.getUsername());
+            if (!c.getUsername().equalsIgnoreCase(currentClient.getUsername()) && confs.size() != 0) {
+                clients.add(c);
+            }
+        }
+        
+        return clients;
+    }
+    
+    public List<ConfigurationDTO> getClientSelectToCloneConfigurations() {
+
+        List<ConfigurationDTO> configurationsDTO = new LinkedList<>();
+
+        try {
+            String username = this.usernameClientSelectedToClone;
+       
+            
+            configurationsDTO = client.target(baseUri).path("/configurations").path(username)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ConfigurationDTO>>() {
+                    });
+   
+            
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        return configurationsDTO;
+    }
 
     public List<LicenseDTO> getCurrentConfigurationsModuleLicenses() {
         List<LicenseDTO> licensesDTO = new LinkedList<>();
@@ -1300,7 +1354,18 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
-
+    
+    
+    //******************* Clone configuration 
+    public void cloneClientConfiguration() {
+        try {
+            
+        } catch (Exception e) {
+            logger.warning("Problem cloning client's configuration");
+            logger.warning(e.getMessage());
+        }
+    }
+    
     //******************* Update Methods
     public String updateAdministrator() {
         try {
@@ -1722,6 +1787,26 @@ public class AdministratorManager implements Serializable {
     public void setNewServiceDTO(ServiceDTO newServiceDTO) {
         this.newServiceDTO = newServiceDTO;
     }
+
+    public String getUsernameClientSelectedToClone() {
+        return usernameClientSelectedToClone;
+    }
+
+    public void setUsernameClientSelectedToClone(String usernameClientSelectedToClone) {
+        this.usernameClientSelectedToClone = usernameClientSelectedToClone;
+    }
+
+    public int getCodeConfigurationSelectedToClone() {
+        return codeConfigurationSelectedToClone;
+    }
+
+    public void setCodeConfigurationSelectedToClone(int codeConfigurationSelectedToClone) {
+        this.codeConfigurationSelectedToClone = codeConfigurationSelectedToClone;
+    }
+    
+  
+    
+    
     
     
     

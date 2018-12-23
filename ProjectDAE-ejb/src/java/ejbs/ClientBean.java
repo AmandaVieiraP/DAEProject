@@ -57,6 +57,7 @@ public class ClientBean {
     }
 
     @POST
+    @RolesAllowed({"Administrator"})
     @Path("/create")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(ClientDTO client) throws EntityExistsException {
@@ -111,6 +112,7 @@ public class ClientBean {
     }
 
     @PUT
+    @RolesAllowed({"Administrator"})
     @Path("/update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(ClientDTO client) throws EntityDoesNotExistsException {
