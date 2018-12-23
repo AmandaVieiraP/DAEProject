@@ -59,6 +59,17 @@
                                 <f:setPropertyActionListener target="#{administratorManager.currentTemplate}" value="#{temp}" />
                             </h:commandLink></div>
                     </p:column>
+                    <p:column headerText="Actions">
+                        <div align="center">
+                            <h:commandLink value="Update" action="configurations_template_update?faces-redirect=true" class="btn btn-outline-success btn-sm">
+                                <f:setPropertyActionListener target="#{administratorManager.currentTemplate}" value="#{temp}" />
+                            </h:commandLink>
+                            &nbsp;
+                            <h:commandLink value="Remove" actionListener="#{administratorManager.removeConfigurationTemplate}" class="btn btn-outline-danger btn-sm">
+                                <f:param name="deletedTemplateCode" id="deletedTemplateCode" value="#{temp.code}" />    
+                            </h:commandLink>
+                        </div>
+                    </p:column>
                 </p:dataTable>
             
             </h:form>

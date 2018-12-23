@@ -31,6 +31,7 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorValue("SoftwareModule")
 @NamedQueries({
     @NamedQuery(name = "getAllSoftwareModulesBySoftware", query = "SELECT m FROM SoftwareModule m WHERE m.software.code=?1"),
+    @NamedQuery(name = "getAllSoftwareModules", query = "SELECT m FROM SoftwareModule m")
 })
 public class SoftwareModule extends Module implements Serializable {
     

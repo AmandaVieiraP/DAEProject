@@ -68,6 +68,8 @@ public class AdministratorManager implements Serializable {
     private List<String> selectedSoftwareExtensions;
     private ExtensionDTO selectedExtension;
     private ConfigurationModuleDTO selectedConfigurationModule;
+    private SoftwareModuleDTO selectedTemplateConfigurationModule;
+
     private int moduleCode;
 
     private ConfigurationDTO newConfigurationDTO;
@@ -87,7 +89,6 @@ public class AdministratorManager implements Serializable {
     private ConfigurationDTO currentConfiguration;
     private int code;
     private String paramName;
-
     private UploadedFile file;
     private String path;
 
@@ -138,10 +139,8 @@ public class AdministratorManager implements Serializable {
     }
 
     public String createNewTemplateSoftware() {
-
         try {
 
-            System.out.println("selected extensions: " + this.selectedSoftwareExtensions.toString());
 
             SoftwareDTO soft = new SoftwareDTO();
             String code = String.valueOf(newTemplateDTO.getSoftwareCode());
@@ -157,7 +156,7 @@ public class AdministratorManager implements Serializable {
                     .path("/templates/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newTemplateDTO));
 
-            if (!selectedSoftwareExtensions.isEmpty()) {
+            /*if (!selectedSoftwareExtensions.isEmpty()) {
                 for (String extension : selectedSoftwareExtensions) {
 
                     System.out.println("enviado extensionId: " + extension + " templateId: " + newTemplateDTO.getCode());
@@ -180,7 +179,7 @@ public class AdministratorManager implements Serializable {
 
                 }
 
-            }
+            }*/
 
             clearNewTemplate();
         } /*catch (EntityExistsException e) {
@@ -381,6 +380,20 @@ public class AdministratorManager implements Serializable {
         try {
             modulesDTO = client.target(baseUri).path("/configurationModules/all").request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ConfigurationModuleDTO>>() {
+                    });
+        } catch (Exception ex) {
+            logger.warning(ex.getMessage());
+        }
+
+        return modulesDTO;
+    }
+    
+    public List<SoftwareModuleDTO> getAllModulesFromTemplate() {
+        List<SoftwareModuleDTO> modulesDTO = new LinkedList<>();
+
+        try {
+            modulesDTO = client.target(baseUri).path("/softwareModules/softwares").path(String.valueOf(this.currentTemplate.getSoftwareCode())).request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<SoftwareModuleDTO>>() {
                     });
         } catch (Exception ex) {
             logger.warning(ex.getMessage());
@@ -696,6 +709,10 @@ public class AdministratorManager implements Serializable {
     public List<ExtensionDTO> getCurrentConfigurationsExtensions() {
         return getExtensionsDTOByConfigurationCode(String.valueOf(currentConfiguration.getCode()));
     }
+    
+    public List<ExtensionDTO> getCurrentTemplateConfigurationsExtensions() {
+        return getExtensionsDTOByConfigurationCode(String.valueOf(currentTemplate.getCode()));
+    }
 
     private List<ExtensionDTO> getExtensionsDTOByConfigurationCode(String code) {
         List<ExtensionDTO> extensions = new LinkedList<>();
@@ -713,6 +730,7 @@ public class AdministratorManager implements Serializable {
 
         return extensions;
     }
+   
 
     public List<SoftwareModuleDTO> getCurrentTemplateModule() {
         List<SoftwareModuleDTO> softwareModules = new LinkedList<>();
@@ -750,6 +768,25 @@ public class AdministratorManager implements Serializable {
 
         return configurationModulesDTO;
     }
+    
+    public List<ConfigurationModuleDTO> getCurrentTemplateConfigurationsModules() {
+        List<ConfigurationModuleDTO> configurationModulesDTO = new LinkedList<>();
+
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
+
+            configurationModulesDTO = client.target(baseUri).path("/configurationModules").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ConfigurationModuleDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        return configurationModulesDTO;
+    }
+    
 
     public List<String> getCurrentTemplateArtefacts() {
         List<String> artefacts = new LinkedList<>();
@@ -789,6 +826,26 @@ public class AdministratorManager implements Serializable {
 
         return artefacts;
     }
+    
+    public List<ArtefactDTO> getCurrentTemplateConfigurationArtefacts() {
+        List<ArtefactDTO> artefacts = new LinkedList<>();
+
+        try {
+
+            String code = String.valueOf(currentTemplate.getCode());
+
+            artefacts = client.target(baseUri).path("/artefacts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ArtefactDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return artefacts;
+    }
 
     public List<String> getCurrentTemplateHelpMaterials() {
         List<String> helpMaterials = new LinkedList<>();
@@ -815,6 +872,26 @@ public class AdministratorManager implements Serializable {
 
         try {
             String code = String.valueOf(currentConfiguration.getCode());
+
+            helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<HelpMaterialDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
+        }
+
+        return helpMaterials;
+    }
+    
+    public List<HelpMaterialDTO> getCurrentTemplateConfigurationHelpMaterials() {
+
+        List<HelpMaterialDTO> helpMaterials = new LinkedList<>();
+
+        try {
+            String code = String.valueOf(currentTemplate.getCode());
 
             helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
                     .request(MediaType.APPLICATION_XML)
@@ -958,14 +1035,35 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_list?faces-redirect=true";
     }
+    //todo
+    public String removeConfigurationTemplate(ActionEvent event) {
+        try {
+            UIParameter param = (UIParameter) event.getComponent().findComponent("deletedTemplateCode");
+            String code = param.getValue().toString();
+            
+            client.target(baseUri).path("/templates")
+                    .path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .delete();
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+        return "configurations_list?faces-redirect=true";
+    }
 
     //******************* Associate Methods
     public void associateExtensionsToConfiguration() {
         associateExtension(String.valueOf(this.newConfigurationDTO.getCode()));
     }
 
+    public void associateExtensionsToTemplateConfigurationOnUpdate() {
+        associateExtension(String.valueOf(this.currentTemplate.getCode()));
+    }
+    
     public void associateExtensionsToConfigurationOnUpdate() {
-        associateExtension(String.valueOf(this.currentConfiguration.getCode()));
+        associateExtension(String.valueOf(this.currentTemplate.getCode()));
     }
 
     public void associateExtension(String configCode) {
@@ -985,8 +1083,10 @@ public class AdministratorManager implements Serializable {
         associateConfigurationModule(String.valueOf(this.newConfigurationDTO.getCode()));
     }
 
+    
+    
     public void associateConfigurationModuleToConfigurationOnUpdate() {
-        associateConfigurationModule(String.valueOf(this.currentConfiguration.getCode()));
+        associateConfigurationModule(String.valueOf(this.currentTemplate.getCode()));
     }
 
     public void associateConfigurationModule(String configCode) {
@@ -996,6 +1096,24 @@ public class AdministratorManager implements Serializable {
             client.target(baseUri)
                     .path("/configurationModules/associateModuleConfigurations").path(configCode)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedConfigurationModule));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void associateConfigurationModuleToTemplateConfigurationOnUpdate() {
+        associateTemplateConfigurationModule(String.valueOf(this.currentTemplate.getCode()));
+    }
+    
+    
+    public void associateTemplateConfigurationModule(String tempCode) {
+        try {
+            selectedTemplateConfigurationModule = new SoftwareModuleDTO(this.moduleCode,null,0,null,null);
+
+            client.target(baseUri)
+                    .path("/softwareModules/associateModuleConfigurations").path(tempCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedTemplateConfigurationModule));
 
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -1042,6 +1160,23 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    public void dissociateExtensionFromTemplateConfiguration(ActionEvent event) {
+        try {
+            String configCode = String.valueOf(this.currentTemplate.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("extensionnCode");
+            int extensionCode = Integer.parseInt(param.getValue().toString());
+
+            selectedExtension = new ExtensionDTO(extensionCode, null, null, 0, null, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateExtensions").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedExtension));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
 
     public void dissociateModuleFromConfiguration(ActionEvent event) {
         try {
@@ -1055,6 +1190,24 @@ public class AdministratorManager implements Serializable {
             client.target(baseUri)
                     .path("/configurationModules/dissociateModuleConfigurations").path(configCode)
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedConfigurationModule));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void dissociateModuleFromTemplateConfiguration(ActionEvent event) {
+        try {
+            String templateCode = String.valueOf(this.currentTemplate.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("moduleCode");
+            int moduleCode = Integer.parseInt(param.getValue().toString());
+
+            selectedTemplateConfigurationModule = new SoftwareModuleDTO(moduleCode,null,0,null,null);
+
+            client.target(baseUri)
+                    .path("/softwareModules/dissociateModuleConfigurations").path(templateCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.selectedTemplateConfigurationModule));
 
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -1097,11 +1250,49 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    public void dissociateArtefactFromTemplateConfiguration(ActionEvent event) {
+        try {
+
+            String configCode = String.valueOf(this.currentTemplate.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("filenameArt");
+            String filename = param.getValue().toString();
+
+            ArtefactDTO artefactDTO = new ArtefactDTO(filename, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateArtefacts").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(artefactDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
 
     public void dissociateHelpMaterialFromConfiguration(ActionEvent event) {
         try {
 
             String configCode = String.valueOf(this.currentConfiguration.getCode());
+
+            UIParameter param = (UIParameter) event.getComponent().findComponent("filenameHelp");
+            String filename = param.getValue().toString();
+
+            HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, null);
+
+            client.target(baseUri)
+                    .path("/configurationsSuper/dissociateHelpMaterial").path(configCode)
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(helpMaterialDTO));
+
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
+    }
+    
+    public void dissociateHelpMaterialFromTemplateConfiguration(ActionEvent event) {
+        try {
+
+            String configCode = String.valueOf(this.currentTemplate.getCode());
 
             UIParameter param = (UIParameter) event.getComponent().findComponent("filenameHelp");
             String filename = param.getValue().toString();
@@ -1159,8 +1350,22 @@ public class AdministratorManager implements Serializable {
         // return "index?faces-redirect=true";
         return "clients_list?faces-redirect=true";
     }
+    
+    public String updateTemplateConfiguration() {
+        try {
+            client.target(baseUri)
+                    .path("/templates/update")
+                    .request(MediaType.APPLICATION_XML).put(Entity.xml(this.currentTemplate));
 
-    public void upload(boolean isArtefact) {
+        } catch (Exception e) {
+            logger.warning("Problem updating the template configuration");
+            return "templates_list";
+        }
+        // return "index?faces-redirect=true";
+        return "templates_list?faces-redirect=true";
+    }
+
+    public void upload(boolean isArtefact, boolean isTemplate) {
         if (file != null) {
             try {
                 String filename = file.getFileName().substring(file.getFileName().lastIndexOf("\\") + 1);
@@ -1185,9 +1390,9 @@ public class AdministratorManager implements Serializable {
                 out.close();
 
                 if (isArtefact) {
-                    addArtefactToConfiguration(filename, mimetype);
+                    addArtefactToConfiguration(filename, mimetype,isTemplate);
                 } else {
-                    addHelpMaterialToConfiguration(filename, mimetype);
+                    addHelpMaterialToConfiguration(filename, mimetype,isTemplate);
                 }
 
             } catch (IOException e) {
@@ -1195,16 +1400,30 @@ public class AdministratorManager implements Serializable {
             }
         }
     }
-
-    public void addArtefactToConfiguration(String filename, String mimetype) {
+    
+   
+    
+    public void addArtefactToConfiguration(String filename, String mimetype,boolean isTemplate) {
         try {
+            
             String codeC = null;
-            if (this.currentConfiguration != null) {
-                codeC = String.valueOf(this.currentConfiguration.getCode());
-            } else {
-                codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            if(isTemplate)
+            {
+                if (this.currentTemplate != null) {
+                    codeC = String.valueOf(this.currentTemplate.getCode());
+                } else {
+                    codeC = String.valueOf(this.newTemplateDTO.getCode());
+                }
+                
+            }else
+            {
+                if (this.currentConfiguration != null) {
+                    codeC = String.valueOf(this.currentConfiguration.getCode());
+                } else {
+                    codeC = String.valueOf(this.newConfigurationDTO.getCode());
+                }
             }
-
+            
             ArtefactDTO artefactDTO = new ArtefactDTO(filename, mimetype);
 
             client.target(baseUri)
@@ -1215,15 +1434,27 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
         }
     }
+    
+   
 
-    public void addHelpMaterialToConfiguration(String filename, String mimetype) {
+    public void addHelpMaterialToConfiguration(String filename, String mimetype,boolean isTemplate) {
         try {
 
             String codeC = null;
-            if (this.currentConfiguration != null) {
-                codeC = String.valueOf(this.currentConfiguration.getCode());
-            } else {
-                codeC = String.valueOf(this.newConfigurationDTO.getCode());
+            if(isTemplate)
+            {
+                if (this.currentTemplate != null) {
+                    codeC = String.valueOf(this.currentTemplate.getCode());
+                } else {
+                    codeC = String.valueOf(this.newTemplateDTO.getCode());
+                }
+            }else
+            {
+                if (this.currentConfiguration != null) {
+                    codeC = String.valueOf(this.currentConfiguration.getCode());
+                } else {
+                    codeC = String.valueOf(this.newConfigurationDTO.getCode());
+                }
             }
 
             HelpMaterialDTO helpMaterialDTO = new HelpMaterialDTO(filename, mimetype);
@@ -1434,4 +1665,5 @@ public class AdministratorManager implements Serializable {
         this.paramName = paramName;
     }
 
+    
 }

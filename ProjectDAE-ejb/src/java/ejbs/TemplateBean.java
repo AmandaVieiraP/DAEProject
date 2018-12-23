@@ -5,9 +5,14 @@
  */
 package ejbs;
 
+import dtos.ConfigurationDTO;
 import dtos.TemplateDTO;
+import entities.Artefact;
+import entities.Configuration;
 import entities.Contract;
 import entities.Extension;
+import entities.HelpMaterial;
+import entities.Parameter;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
@@ -20,8 +25,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -119,6 +126,86 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
+    
+    @PUT
+    @Path("/update")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void updateRest(TemplateDTO templateDTO) {
+        try {
+            Template t = em.find(Template.class, templateDTO.getCode());
+
+            if (t == null) {
+                return;
+            }
+
+            Software newSoftware = em.find(Software.class, templateDTO.getSoftwareCode());
+
+            if (newSoftware == null) {
+                return;
+            }
+
+            Contract newContract = em.find(Contract.class, templateDTO.getContractCode());
+
+            t.setDescription(templateDTO.getDescription());
+            t.setVersion(templateDTO.getVersion());
+            
+            //Vai buscar software antigo para trocar pelo novo
+            Software oldSoftware=t.getSoftware();
+            oldSoftware.removeConfiguration(t);
+            
+            t.setSoftware(newSoftware);
+            
+            newSoftware.addConfiguration(t);
+            
+            //Vai buscar o contrato antigo para trocar pelo novo
+            Contract oldContract=t.getContract();
+            
+            oldContract.removeConfiguration(t);
+            
+            newContract.addConfiguration(t);
+            
+            t.setContract(newContract);
+
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
+    
+    @DELETE
+    @Path("{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void remove(@PathParam("id") int code) {
+        try {
+            Template template = em.find(Template.class, code);
+
+            if (template == null) {
+                return;
+            }
+
+
+            template.getSoftware().removeTemplate(template);
+
+            template.getContract().removeConfiguration(template);
+
+            for (Extension e : template.getExtensions()) {
+                e.removeConfiguration(template);
+            }
+
+            for (Artefact a : template.getArtefactsRepository()) {
+                a.removeConfigurations(template);
+            }
+
+            for (HelpMaterial h : template.getHelpMaterials()) {
+                h.removeConfigurations(template);
+            }
+
+            em.remove(template);
+
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
+    
 
     //Para usar no config Bean para popular a BD
     public void create(int code, String description, int software_code, int contract_code, String version) {
