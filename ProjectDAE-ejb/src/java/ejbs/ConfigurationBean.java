@@ -141,6 +141,38 @@ public class ConfigurationBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    @POST
+    @Path("clone/{idConfig}/{idClient}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void cloneConfiguration(@PathParam("idConfig") int code, @PathParam("idClient") String username) {
+        try {
+            System.out.println("********************* HERE ***********************");
+            System.out.println("CODE CONFIG: " + code);
+            System.out.println("Username Client: " + username);
+            
+            Configuration conf = em.find(Configuration.class, code);
+            
+            if (conf == null) {
+                return;
+            }
+            
+            Client client = em.find(Client.class, username);
+            
+            if (client == null) {
+                return;
+            }
+            
+            int lastCode = (Integer) em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
+            lastCode = lastCode + 1;
+            
+            this.create(lastCode, conf.getDescription(), conf.getSoftware().getCode(), conf.getContract().getCode(), conf.getVersion(), client.getUsername(), null,null); 
+            
+            System.out.println("NEW CONFIGURATION CREATED");
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     @DELETE
     @Path("{id}")

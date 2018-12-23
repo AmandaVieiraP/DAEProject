@@ -13,11 +13,13 @@
 
         <ui:define name="main">
             <div class="container">
-                <div align="center"> <p class="h5"><strong>New Configuration</strong></p></div>
+                <div align="center"> <p class="h5"><strong>Clone/Copy Configuration From a Client to Other client</strong></p></div>
                 <div align="center">
                 <h:form> 
-
+                     <br/>
+                    <h:outputText value="Client selected to clone to: #{administratorManager.currentClient.username} - #{administratorManager.currentClient.companyName}" />
                         <br/>
+                         <br/>
                         <h:selectOneListbox id="clients" value="#{administratorManager.usernameClientSelectedToClone}">
                             <f:selectItem itemLabel="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select a client &nbsp;&nbsp;" noSelectionOption="true" />  
                             <f:selectItems value="#{administratorManager.clientsToCloneConfiguration}" var="c" itemValue="#{c.username}" itemLabel="Client: #{c.username} - #{c.companyName}" />

@@ -1357,13 +1357,20 @@ public class AdministratorManager implements Serializable {
     
     
     //******************* Clone configuration 
-    public void cloneClientConfiguration() {
+    public String cloneClientConfiguration() {
         try {
-            
+            client.target(baseUri)
+                    .path("/configurations/clone")
+                    .path(String.valueOf(this.codeConfigurationSelectedToClone))
+                    .path(this.currentClient.getUsername())
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
         } catch (Exception e) {
             logger.warning("Problem cloning client's configuration");
             logger.warning(e.getMessage());
+            return null;
         }
+        
+        return "configurations_list?faces-redirect=true";
     }
     
     //******************* Update Methods
