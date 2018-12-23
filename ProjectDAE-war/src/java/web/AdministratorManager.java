@@ -921,22 +921,23 @@ public class AdministratorManager implements Serializable {
     }
     
 
-    public List<String> getCurrentTemplateArtefacts() {
-        List<String> artefacts = new LinkedList<>();
-
+    public List<ArtefactDTO> getCurrentTemplateArtefacts(){
+        List<ArtefactDTO> artefacts=new LinkedList<>();
+        
         try {
+            
             String code = String.valueOf(currentTemplate.getCode());
-
-            Response serviceResponse = client.target(baseUri).path("/configurations/artefacts").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-
-            artefacts = computeJsonResponseToStringList(serviceResponse);
-
+            
+            artefacts = client.target(baseUri).path("/artefacts").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<ArtefactDTO>>() {
+                    });     
+            
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-
+        
         return artefacts;
     }
 
@@ -980,22 +981,24 @@ public class AdministratorManager implements Serializable {
         return artefacts;
     }
 
-    public List<String> getCurrentTemplateHelpMaterials() {
-        List<String> helpMaterials = new LinkedList<>();
+    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials(){
 
+        List<HelpMaterialDTO> helpMaterials=new LinkedList<>();
+        
         try {
             String code = String.valueOf(currentTemplate.getCode());
-
-            Response serviceResponse = client.target(baseUri).path("/configurations/helpMaterials").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-
-            helpMaterials = computeJsonResponseToStringList(serviceResponse);
-
+            
+            helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<HelpMaterialDTO>>() {
+                    });
+            
+            
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-
+        
         return helpMaterials;
     }
 

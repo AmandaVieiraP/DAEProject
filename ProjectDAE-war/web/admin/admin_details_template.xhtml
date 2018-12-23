@@ -43,6 +43,7 @@
                         <div align="center"><h:outputText value="#{module.description}"/></div>
                     </p:column>
                 </p:dataTable>
+                
                 <div align="center"> <p class="h5"><strong>Template #{administratorManager.currentTemplate.code} Artefatcs and Help Materials</strong></p></div>
                 <div class="container">
                     <div class="row">
@@ -52,8 +53,10 @@
                                 summary="Template Artefacts Repository"
                                 value="#{administratorManager.currentTemplateArtefacts}"
                                 emptyMessage="No template artefacts found for the given criteria">
-                                <p:column headerText="Files Content" sortBy="#{repo}" filterBy="#{repo}" filterMatchMode="contains">
-                                    <div align="center"><h:outputText value="#{repo}"/></div>
+                                <p:column headerText="Files Content" sortBy="#{repo.filename}" filterBy="#{repo.filename}" filterMatchMode="contains">
+                                    <div align="center"><p:commandButton value="Download #{repo.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(repo.mimetype, repo.filename)}" />
+                                        </p:commandButton></div>
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -62,15 +65,19 @@
                                 var="help"
                                 summary="Help Materials Repository"
                                 value="#{administratorManager.currentTemplateHelpMaterials}"
-                                emptyMessage="No template artefacts found for the given criteria">
-                                <p:column headerText="Help Materials" sortBy="#{help}" filterBy="#{help}" filterMatchMode="contains">
-                                    <div align="center"><h:outputText value="#{help}"/></div>
+                                emptyMessage="No help material found for the given criteria">
+                                <p:column headerText="Help Materials" sortBy="#{help.filename}" filterBy="#{help.filename}" filterMatchMode="contains">
+                                    <div align="center"><p:commandButton value="Download #{help.filename}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                        <p:fileDownload value="#{downloadManager.downloadFile(help.mimetype,help.filename)}" />
+                                        </p:commandButton></div>
+                                    
                                 </p:column>
                             </p:dataTable>
                         </div>
                     </div>
                 </div>
-
+                
+             
             </h:form> 
 
         </ui:define>
