@@ -12,6 +12,7 @@ import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,8 +39,9 @@ public class ClientBean {
     // "Insert Code > Add Business Method")
     @PersistenceContext
     EntityManager em;
+    
 
-    public void create(String username, String password, String address, String companyName, String contactPerson) throws EntityExistsException {
+    public void create(String username, String email, String password, String address, String companyName, String contactPerson) throws EntityExistsException {
         try {
             Client c = em.find(Client.class, username);
 
@@ -47,7 +49,7 @@ public class ClientBean {
                 throw new EntityExistsException("ERROR: Can't create new client because already exists a client with the username: " + username);
             }
 
-            Client client = new Client(username, password, address, companyName, contactPerson);
+            Client client = new Client(username, email, password, address, companyName, contactPerson);
             em.persist(client);
         } catch (EntityExistsException e) {
             throw e;
@@ -67,7 +69,7 @@ public class ClientBean {
                 throw new EntityExistsException("ERROR: Can't create new client because already exists a client with the username: " + client.getUsername());
             }
 
-            Client c = new Client(client.getUsername(), client.getPassword(), client.getAddress(), client.getCompanyName(), client.getContactPerson());
+            Client c = new Client(client.getUsername(), client.getEmail(), client.getPassword(), client.getAddress(), client.getCompanyName(), client.getContactPerson());
             em.persist(c);
         } catch (EntityExistsException e) {
             throw e;
@@ -126,6 +128,7 @@ public class ClientBean {
             c.setUsername(client.getUsername());
             c.setAddress(client.getAddress());
             c.setCompanyName(client.getCompanyName());
+            c.setEmail(client.getEmail());
             c.setContactPerson(client.getContactPerson());
 
         } catch (Exception e) {
@@ -134,7 +137,7 @@ public class ClientBean {
     }
 
     public ClientDTO clientToDTO(Client c) {
-        return new ClientDTO(c.getAddress(), c.getCompanyName(), c.getContactPerson(), c.getUsername(), null);
+        return new ClientDTO(c.getAddress(), c.getCompanyName(), c.getEmail(), c.getContactPerson(), c.getUsername(), null);
     }
 
     public List<ClientDTO> clientsToDTOs(List<Client> clients) {

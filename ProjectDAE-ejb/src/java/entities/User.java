@@ -40,15 +40,18 @@ public abstract class User implements Serializable {
     private String username;
     @NotNull
     private String password;
+    @NotNull
+    private String email;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     protected UserGroup group;
 
     public User() {
     }
 
-    public User(String username, String password, GROUP group) {
+    public User(String username, String email, String password, GROUP group) {
         this.username = username;
         this.password = hashPassword(password);
+        this.email = email;
         this.group = new UserGroup(group, this);
     }
 
@@ -75,6 +78,14 @@ public abstract class User implements Serializable {
     public void setGroup(UserGroup group) {
         this.group = group;
     } 
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     
     
     private String hashPassword(String password) {

@@ -14,8 +14,8 @@
         <ui:define name="main">
             
             <em:dt title="List of Clients" 
-                   headers="#{['Username', 'Company Name', 'Address', 'Contact Person']}" 
-                   props="#{['username', 'companyName', 'address', 'contactPerson']}" 
+                   headers="#{['Username', 'Company Name', 'Email', 'Address', 'Contact Person']}" 
+                   props="#{['username', 'companyName', 'email', 'address', 'contactPerson']}" 
                    list="#{administratorManager.allClients}" 
                    widgetVar="clientsTable"
                    class="datatable">
@@ -32,6 +32,7 @@
                         <h:commandLink value="View Configurations" action="configurations_list?faces-redirect=true">
                             <f:setPropertyActionListener target="#{administratorManager.currentClient}" value="#{object}" />
                         </h:commandLink>
+                  
 
                 </p:column>
             

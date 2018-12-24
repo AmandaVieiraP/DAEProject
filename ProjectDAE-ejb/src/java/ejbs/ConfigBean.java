@@ -85,18 +85,18 @@ public class ConfigBean {
             administratorBean.create("admin12", "123", "Arturo Vidal", "vidal@email.com", "Administrator Of Things");
             administratorBean.create("admin13", "123", "Piqué", "shakira@email.com", "Administrator Of Things");
 
-            clientBean.create("client1", "123", "Rua fgfg gdf", "Marvel", "Kara - 1293715");
-            clientBean.create("client2", "123", "Rua qopwk", "Super Girl", "Dean - 758491453");
-            clientBean.create("client3", "123", "Rua wkeios", "MrPiracy", "Lena - 1237892");
-            clientBean.create("client4", "123", "Rua 20weke", "Amazon", "Harry - 8462781992");
-            clientBean.create("client5", "123", "Rua omoaslp", "Deadpool", "John - 84562145");
-            clientBean.create("client6", "123", "Rua fsdfsd2er", "GearBest", "Metal - 84562145");
-            clientBean.create("client7", "123", "Rua Super persons", "Apple", "Frank - 84562145");
-            clientBean.create("client8", "123", "Rua dkodok", "Trident", "Jen - 84562145");
-            clientBean.create("client9", "123", "Rua bvi90", "Asus", "Sam - 84562145");
-            clientBean.create("client10", "123", "Rua d03r8jer", "MSI", "Rock - 84562145");
-            clientBean.create("client11", "123", "Rua mmaso9a0jd", "Guardian", "Raven - 84562145");
-            clientBean.create("client12", "123", "Rua mdaosodp90q", "Manchester City", "Emily - 84562145");
+            clientBean.create("client1", "dae.project.ipl@gmail.com",  "123", "Rua fgfg gdf", "Marvel", "Kara - 1293715");
+            clientBean.create("client2", "dae.project.ipl@gmail.com", "123", "Rua qopwk", "Super Girl", "Dean - 758491453");
+            clientBean.create("client3", "dae.project.ipl@gmail.com", "123", "Rua wkeios", "MrPiracy", "Lena - 1237892");
+            clientBean.create("client4", "dae.project.ipl@gmail.com", "123", "Rua 20weke", "Amazon", "Harry - 8462781992");
+            clientBean.create("client5", "dae.project.ipl@gmail.com", "123", "Rua omoaslp", "Deadpool", "John - 84562145");
+            clientBean.create("client6", "dae.project.ipl@gmail.com", "123", "Rua fsdfsd2er", "GearBest", "Metal - 84562145");
+            clientBean.create("client7", "dae.project.ipl@gmail.com", "123", "Rua Super persons", "Apple", "Frank - 84562145");
+            clientBean.create("client8", "dae.project.ipl@gmail.com", "123", "Rua dkodok", "Trident", "Jen - 84562145");
+            clientBean.create("client9", "dae.project.ipl@gmail.com", "123", "Rua bvi90", "Asus", "Sam - 84562145");
+            clientBean.create("client10", "dae.project.ipl@gmail.com", "123", "Rua d03r8jer", "MSI", "Rock - 84562145");
+            clientBean.create("client11", "dae.project.ipl@gmail.com", "123", "Rua mmaso9a0jd", "Guardian", "Raven - 84562145");
+            clientBean.create("client12", "dae.project.ipl@gmail.com", "123", "Rua mdaosodp90q", "Manchester City", "Emily - 84562145");
 
             //Criar o softwares
             softwareBean.create(1000, "Spots", "A parking spot manager software");

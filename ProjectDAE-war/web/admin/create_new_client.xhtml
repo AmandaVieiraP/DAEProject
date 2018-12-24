@@ -35,7 +35,21 @@
                             requiredMessage="Error: password cannot be empty"
                             value="#{administratorManager.newClientDTO.password}" />
                         <h:message for="password"  errorStyle="color:red" />     
-                    </div>  
+                    </div> 
+                    
+                    <div class="form-group">     
+                        <h:outputLabel for="email" value="Email: " />
+                        <h:inputText
+                            class="form-control" 
+                            id="email"
+                            size="30"
+                            required="true"
+                            requiredMessage="Error: Email cannot be empty"
+                            value="#{administratorManager.newClientDTO.email}" >
+                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                        </h:inputText>    
+                        <h:message for="email"  errorStyle="color:red" />
+                    </div>      
                         
                     <div class="form-group">       
                         <h:outputLabel for="address" value="Address: " />

@@ -37,6 +37,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.mail.MessagingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -315,7 +316,7 @@ public class AdministratorManager implements Serializable {
                     .path("/configurations/createByTemplate")
                     .path(String.valueOf(this.code))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
-
+           
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return null;
@@ -1139,8 +1140,6 @@ public class AdministratorManager implements Serializable {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteClientUsername");
             String username = param.getValue().toString();
 
-            System.out.println("????????????? " + username);
-
             client.target(baseUri).path("/clients")
                     .path(username)
                     .request(MediaType.APPLICATION_XML)
@@ -1164,7 +1163,7 @@ public class AdministratorManager implements Serializable {
                     .delete();
 
         } catch (Exception e) {
-            logger.warning("Problem removing the client");
+            logger.warning("Problem removing the administrator");
             return null;
         }
         return "admin_index?faces-redirect=true";
@@ -1629,7 +1628,7 @@ public class AdministratorManager implements Serializable {
 
 
 
-    public void upload(boolean isArtefact) {
+    public void upload(boolean isArtefact, boolean isTemplate) {
         if (file != null) {
             try {
                 String filename = file.getFileName().substring(file.getFileName().lastIndexOf("\\") + 1);
@@ -1730,6 +1729,7 @@ public class AdministratorManager implements Serializable {
         }
     }
 
+    // **************************** GET's e SET's
     public UploadedFile getFile() {
         return file;
     }

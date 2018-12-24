@@ -48,8 +48,8 @@ public class Client extends User implements Serializable {
         this.configurations = new LinkedList<>();
     }
 
-    public Client(String username, String password, String address, String companyName, String contactPerson) {
-        super(username, password, GROUP.Client);
+    public Client(String username, String email, String password, String address, String companyName, String contactPerson) {
+        super(username, email, password, GROUP.Client);
         this.address = address;
         this.companyName = companyName;
         this.contactPerson = contactPerson;

@@ -31,7 +31,6 @@ import javax.persistence.NamedQuery;
 public class Administrator extends User implements Serializable {
 
     private String name;
-    private String email;
     private String jobRole;
 
     public Administrator() {
@@ -39,18 +38,13 @@ public class Administrator extends User implements Serializable {
     }
 
     public Administrator(String username, String password, String name, String email, String jobRole) {
-        super(username, password, GROUP.Administrator);
+        super(username, email, password, GROUP.Administrator);
         this.name = name;
-        this.email = email;
         this.jobRole = jobRole;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getJobRole() {
@@ -59,10 +53,6 @@ public class Administrator extends User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setJobRole(String jobRole) {

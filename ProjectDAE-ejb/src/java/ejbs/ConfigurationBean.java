@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -17,8 +17,10 @@ import entities.Parameter;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
+import exceptions.EntityDoesNotExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,6 +45,9 @@ public class ConfigurationBean {
 
     @PersistenceContext
     EntityManager em;
+    
+    @EJB
+    EmailBean emailBean;
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -68,9 +73,10 @@ public class ConfigurationBean {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(ConfigurationDTO configurationDTO) {
         try {
-            this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
+            Configuration config = this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
                     configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername(),
                     configurationDTO.getDbServerIp(),configurationDTO.getApplicationServerIp());
+            this.sendEmail(configurationDTO.getClientUsername(), config, "create");
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -136,6 +142,8 @@ public class ConfigurationBean {
                 configuration.addModule(cm);
 
             }
+            
+            this.sendEmail(client.getUsername(), configuration, "create");
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -147,10 +155,6 @@ public class ConfigurationBean {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void cloneConfiguration(@PathParam("idConfig") int code, @PathParam("idClient") String username) {
         try {
-            System.out.println("********************* HERE ***********************");
-            System.out.println("CODE CONFIG: " + code);
-            System.out.println("Username Client: " + username);
-            
             Configuration conf = em.find(Configuration.class, code);
             
             if (conf == null) {
@@ -166,9 +170,9 @@ public class ConfigurationBean {
             int lastCode = (Integer) em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
             lastCode = lastCode + 1;
             
-            this.create(lastCode, conf.getDescription(), conf.getSoftware().getCode(), conf.getContract().getCode(), conf.getVersion(), client.getUsername(), null,null); 
+            Configuration newConfig = this.create(lastCode, conf.getDescription(), conf.getSoftware().getCode(), conf.getContract().getCode(), conf.getVersion(), client.getUsername(), null,null); 
             
-            System.out.println("NEW CONFIGURATION CREATED");
+            this.sendEmail(client.getUsername(), newConfig, "create");
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
@@ -212,7 +216,7 @@ public class ConfigurationBean {
             throw new EJBException(ex.getMessage());
         }
     }
-
+    
     @PUT
     @Path("/update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -266,34 +270,36 @@ public class ConfigurationBean {
                 c.setExtensions(new LinkedList<>());
                 c.setModules(new LinkedList<>());
             }
+            
+            this.sendEmail(c.getClient().getUsername(), c, "update");
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
 
-    public void create(int code, String description, int software_code, int contract_code, String version, String client_username, String dbServerIp, String appServerIp) {
+    public Configuration create(int code, String description, int software_code, int contract_code, String version, String client_username, String dbServerIp, String appServerIp) {
         try {
             Configuration configuration = em.find(Configuration.class, code);
 
             if (configuration != null) {
-                return;
+                return null;
             }
 
             Software software = em.find(Software.class, software_code);
 
             if (software == null) {
-                return;
+                return null;
             }
 
             Contract contract = em.find(Contract.class, contract_code);
             if (contract == null) {
-                return;
+                return null;
             }
 
             Client client = em.find(Client.class, client_username);
             if (client == null) {
-                return;
+                return null;
             }
 
             configuration = new Configuration(code, description, software, contract, version, client, dbServerIp, appServerIp);
@@ -305,7 +311,9 @@ public class ConfigurationBean {
             client.addConfiguration(configuration);
 
             em.persist(configuration);
-
+         
+            return configuration;
+            
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
@@ -338,6 +346,34 @@ public class ConfigurationBean {
                     c.getApplicationServerIp());
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
+        }
+    }
+    
+    public void sendEmail(String username, Configuration config, String action) throws EntityDoesNotExistsException {
+        try {
+            Client c = em.find(Client.class, username);
+
+            if (c == null) {
+                throw new EntityDoesNotExistsException("ERROR: because doesn't exists any client with the username: " + c.getUsername());
+            }
+            
+            String msg = "";
+            String subject = "";
+            if (action.equalsIgnoreCase("create")) {
+                subject = "New configuration created";
+                msg = "A new configuration with the code: " + config.getCode() + " for the software " + config.getSoftware().getName() + " was add to your list of configurations. \nPlease go to the platform to see more information.";
+            } else if (action.equalsIgnoreCase("update")) {
+                subject = "Configuration Updated";
+                msg = "The configuration with code: " + config.getCode() + " for the software " + config.getSoftware().getName() + " was updated. \nPlease go to the platform to see more information.";
+            }
+            
+            emailBean.send(
+                    c.getEmail(),
+                    subject,
+                    msg);
+            
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 }

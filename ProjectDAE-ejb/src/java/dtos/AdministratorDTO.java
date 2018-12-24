@@ -18,16 +18,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AdministratorDTO extends UserDTO implements Serializable  {
     private String name;
-    private String email;
     private String jobRole;
 
     public AdministratorDTO() {
     }
 
     public AdministratorDTO(String name, String email, String jobRole, String username, String password) {
-        super(username, password);
+        super(username, email, password);
         this.name = name;
-        this.email = email;
         this.jobRole = jobRole;
     }
     
@@ -35,7 +33,6 @@ public class AdministratorDTO extends UserDTO implements Serializable  {
     public void reset() {
         super.reset();
         setName(null);
-        setEmail(null);
         setJobRole(null);
     }
 
@@ -45,14 +42,6 @@ public class AdministratorDTO extends UserDTO implements Serializable  {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getJobRole() {
