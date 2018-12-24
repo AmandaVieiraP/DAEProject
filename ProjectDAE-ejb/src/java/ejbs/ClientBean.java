@@ -77,6 +77,23 @@ public class ClientBean {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    @GET
+    @Path("/{username}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public ClientDTO getClient(@PathParam("username") String username)  {
+        try {
+            Client c = em.find(Client.class, username);
+            if (c == null) {
+                return null;
+            }
+
+            return clientToDTO(c);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
     @GET
     @RolesAllowed({"Administrator"})

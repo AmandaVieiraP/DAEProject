@@ -32,6 +32,7 @@ public class UserManager implements Serializable {
     private static final Logger logger = Logger.getLogger("web.UserManager");
     private String username;
     private String password;
+    private boolean isAdmin = false;
     private boolean loginFlag = true;
     
     public UserManager() {
@@ -79,9 +80,11 @@ public class UserManager implements Serializable {
             return "login_error?faces-redirect=true";
         }
         if(isUserInRole("Administrator")){
+            setIsAdmin(true);
             return "/faces/admin/admin_index?faces-redirect=true";
         }
         if(isUserInRole("Client")){
+            setIsAdmin(false);
             return "/faces/client/client_index?faces-redirect=true";
         }
         
@@ -115,6 +118,16 @@ public class UserManager implements Serializable {
         }
         return "index.xhtml?faces-redirect=true";
     }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+    
+    
     
     
     

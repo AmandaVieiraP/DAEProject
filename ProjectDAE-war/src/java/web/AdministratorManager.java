@@ -97,6 +97,7 @@ public class AdministratorManager implements Serializable {
     private String paramName;
     private String usernameClientSelectedToClone;
     private int codeConfigurationSelectedToClone;
+    private ClientDTO currentClientLogged;
 
 
     private UploadedFile file;
@@ -111,6 +112,7 @@ public class AdministratorManager implements Serializable {
         this.newClientDTO = new ClientDTO();
         this.newTemplateDTO = new TemplateDTO();
         this.currentAdminLogged = new AdministratorDTO();
+        this.currentClientLogged = new ClientDTO();
         this.newConfigurationDTO = new ConfigurationDTO();
         this.newParameterDTO = new ParameterDTO();
         this.newExtensionDTO = new ExtensionDTO();
@@ -125,7 +127,13 @@ public class AdministratorManager implements Serializable {
     public void init() {
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(userManager.getUsername(), userManager.getPassword());
         client.register(feature);
-        this.getAdministratorLogged();
+        
+        if (userManager.isAdmin()) {
+            this.getAdministratorLogged();
+        } else {
+            this.getClientLogged();
+        }
+        
     }
 
     //**** Métodos de Criar ****//
@@ -384,6 +392,24 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_XML)
                     .get(AdministratorDTO.class);
             this.setCurrentAdminLogged(admin);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", logger);
+            FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
+        }
+    }
+    
+    public void getClientLogged() {
+
+        ClientDTO c;
+        try {
+            c = client.target(baseUri)
+                    .path("/clients")
+                    .path(userManager.getUsername())
+                    .request(MediaType.APPLICATION_XML)
+                    .get(ClientDTO.class);
+            this.setCurrentClientLogged(c);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -1024,6 +1050,11 @@ public class AdministratorManager implements Serializable {
         }
 
         return configurationsDTO;
+    }
+    
+    public List<ConfigurationDTO> getCurrentLoggedClientConfigurations() {
+
+        return this.getClientConfigurations(currentClientLogged.getUsername());
     }
 
     public List<ConfigurationDTO> getClientConfigurations(String username) {
@@ -2003,7 +2034,15 @@ public class AdministratorManager implements Serializable {
         this.codeConfigurationSelectedToClone = codeConfigurationSelectedToClone;
     }
 
+    public ClientDTO getCurrentClientLogged() {
+        return currentClientLogged;
+    }
 
+    public void setCurrentClientLogged(ClientDTO currentClientLogged) {
+        this.currentClientLogged = currentClientLogged;
+    }
+
+    
 
 
 
