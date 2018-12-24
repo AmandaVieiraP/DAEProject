@@ -17,6 +17,19 @@
                    list="#{administratorManager.currentLoggedClientConfigurations}" 
                    widgetVar="configurationsTable" >
                 
+                <p:column headerText="Software - Contract" sortBy="#{object.softwareName}" filterBy="#{object.softwareName}" filterMatchMode="contains">
+                    <div align="center"><h:outputText value="#{object.softwareName} and Contract Nr. #{object.contractCode}"/></div>
+                    <div align="center"><h:commandLink value=" View Software and Contract Details" action="configurations_details_software_contract?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
+                        </h:commandLink></div>
+                </p:column>
+                
+                <p:column headerText="Other Configuration Details">
+                    <div align="center"><h:commandLink value="Extensions | Modules | Help Materials | Artefacts | Parameters" 
+                                                       action="configurations_other_details?faces-redirect=true">
+                            <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
+                        </h:commandLink></div>
+                </p:column>
               
             
             </em:dt> 
