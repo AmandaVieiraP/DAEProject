@@ -64,6 +64,15 @@ public class ConfigBean {
     
     @EJB
     private LicenseBean licenseBean;
+    
+    @EJB
+    private QuestionBean questionBean;
+    
+    
+    @EJB
+    private AnswerBean answerBean;
+    
+    
 
     @PostConstruct
     public void populateDB() {
@@ -317,7 +326,19 @@ public class ConfigBean {
             serviceBean.associateServiceToModule(1, 107);
             serviceBean.associateServiceToModule(3, 105);
             serviceBean.associateServiceToModule(4, 105);
-
+            
+            
+            //questions 
+            questionBean.create(1, "client1", "Qual o ip da maquina?", 33);
+            questionBean.create(2, "client1", "Qual o ip do servidor BD?", 33);
+             questionBean.create(3, "admin3", "olá 3mundoasdasd!", 34);
+            
+            //answers
+            answerBean.create(1, "admin", "192.12.12.12", 1);
+            answerBean.create(2, "admin", "172.0.0.1 ", 2);
+            answerBean.create(3, "admin2", "adeus", 2);
+            answerBean.create(4, "admin3", "ola", 3);
+            
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }

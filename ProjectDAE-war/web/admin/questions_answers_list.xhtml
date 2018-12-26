@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
+
+
+    <ui:composition template="./admin_templates/admin_skeleton.xhtml">
+        <ui:define name="title">Client #{administratorManager.currentClient.username} Configurations</ui:define>
+
+        <ui:define name="main">
+            <br/>       
+            <em:dt headers="#{['User', 'question']}" 
+                   props="#{['questionSender', 'question']}" 
+                   list="#{administratorManager.allQuestionsFromConfiguration}" 
+                   widgetVar="clientsTable">
+
+                <p:column headerText="Actions">
+                    <div align="center">             
+                        <h:commandLink value="Answers" action="answers_list?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.currentQuestion}" value="#{object}" />
+                        </h:commandLink>
+                    </div>
+                </p:column>
+                
+            </em:dt> 
+            <h:form>          
+                <div class="form-group">       
+                    <h:outputLabel for="question" value="New question: " />                 
+                    <p:inputTextarea class="form-control" id="question" required="true" requiredMessage="Error: Question cannot be empty"
+                                     rows="3" cols="30" counter="display" maxlength="255" counterTemplate="{0} characters remaining." autoResize="false"
+                                    value="#{administratorManager.newQuestionDTO.question}" />
+                    <br />
+                    <h:outputText id="display" />
+                    <h:message for="question" errorStyle="color:red" />
+                    </div>  
+                    <br></br>
+
+                <h:commandButton class="btn btn-outline-secondary" value="Send" action="#{administratorManager.createNewQuestion()}" /> 
+              
+
+            </h:form> 
+            
+        </ui:define>
+    </ui:composition>  
+
+</html>
+
+

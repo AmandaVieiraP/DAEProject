@@ -7,7 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp">
         
-    <ui:composition template="./client_templates/client_skeleton.xhtml">
+   <ui:composition template="./client_templates/client_skeleton.xhtml">
         <ui:define name="title">Configurations list</ui:define>
         
         <ui:define name="main">
@@ -31,7 +31,13 @@
                         </h:commandLink></div>
                 </p:column>
               
-            
+                <p:column headerText="Actions">
+                    <div align="center">                     
+                        <h:commandLink value="QuestionsAndAnswers" action="questions_answers_list?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
+                        </h:commandLink>
+                    </div>
+                </p:column>
             </em:dt> 
         </ui:define>
         

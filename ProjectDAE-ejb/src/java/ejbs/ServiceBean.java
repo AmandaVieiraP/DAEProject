@@ -176,6 +176,7 @@ public class ServiceBean {
 
     public void associateServiceToModule(int serviceCode, int moduleCode) {
         try {
+            
             Service service = em.find(Service.class, serviceCode);
             Module module = em.find(Module.class, moduleCode);
 

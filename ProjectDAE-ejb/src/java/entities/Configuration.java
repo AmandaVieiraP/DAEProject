@@ -21,6 +21,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -53,10 +54,15 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     @ManyToOne
     @JoinColumn(name = "CLIENT_USERNAME")
     private Client client;
+    
+    @NotNull
+    @OneToMany(mappedBy = "configuration", cascade = CascadeType.REMOVE)
+    private List<Question> questions;
 
     public Configuration() {
         this.modules = new LinkedList<>();
         this.configurationParameters = new LinkedList<>();
+        this.questions = new LinkedList<>();
     }
 
     public Configuration(int code, String description, Software software, Contract contract, String version, Client client, String dbServerIp, String appServerIp) {
@@ -67,7 +73,17 @@ public class Configuration extends ConfigurationSuper implements Serializable {
         this.client = client;
         this.dbServerIp = dbServerIp;
         this.applicationServerIp = appServerIp;
+        this.questions = new LinkedList<>();
     }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+    
 
     public String getDbServerIp() {
         return dbServerIp;
@@ -112,6 +128,18 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     public void addParameters(Parameter parameter) {
         if (parameter != null && !configurationParameters.contains(parameter)) {
             configurationParameters.add(parameter);
+        }
+    }
+    
+    public void addQuestions(Question question) {
+        if (question != null && !questions.contains(question)) {
+            questions.add(question);
+        }
+    }
+    
+    public void removeQuestions(Question question) {
+        if (question != null && questions.contains(question)) {
+            questions.remove(question);
         }
     }
 

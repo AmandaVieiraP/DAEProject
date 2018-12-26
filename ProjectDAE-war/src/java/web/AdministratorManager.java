@@ -6,6 +6,7 @@
 package web;
 
 import dtos.AdministratorDTO;
+import dtos.AnswerDTO;
 import dtos.ArtefactDTO;
 import dtos.ClientDTO;
 import dtos.ConfigurationDTO;
@@ -15,6 +16,7 @@ import dtos.ParameterDTO;
 import dtos.ExtensionDTO;
 import dtos.HelpMaterialDTO;
 import dtos.LicenseDTO;
+import dtos.QuestionDTO;
 import dtos.ServiceDTO;
 import dtos.SoftwareDTO;
 import dtos.SoftwareModuleDTO;
@@ -99,7 +101,14 @@ public class AdministratorManager implements Serializable {
     private int codeConfigurationSelectedToClone;
     private ClientDTO currentClientLogged;
 
-
+    private List<QuestionDTO> currentQuestions;
+    private QuestionDTO currentQuestion;
+    private QuestionDTO newQuestionDTO;
+    
+    private List<AnswerDTO> currentAnswers;
+    private AnswerDTO currentAnswer;
+    private AnswerDTO newAnswerDTO;
+    
     private UploadedFile file;
     private String path;
 
@@ -119,6 +128,10 @@ public class AdministratorManager implements Serializable {
         this.newConfigurationModuleDTO = new ConfigurationModuleDTO();
         this.newLinceseDTO = new LicenseDTO();
         this.newServiceDTO = new ServiceDTO();
+        this.newQuestionDTO = new QuestionDTO();
+        this.currentQuestion = new QuestionDTO();
+        this.currentAnswer = new AnswerDTO();
+        this.newAnswerDTO = new AnswerDTO();
         client = ClientBuilder.newClient();
 
     }
@@ -314,6 +327,48 @@ public class AdministratorManager implements Serializable {
         }
 
         return "configurations_associations?faces-redirect=true";
+    }
+    
+    public String createNewQuestion() {
+        try {
+            this.newQuestionDTO.setQuestionSender(this.userManager.getUsername());
+            this.newQuestionDTO.setConfigurationCode(this.currentConfiguration.getCode());
+            this.newQuestionDTO.setId(0);
+            
+            System.out.println("question: " + this.newQuestionDTO.getQuestion());
+            client.target(baseUri)
+                    .path("/questions/create")
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newQuestionDTO));
+
+            // clearConfigurationDTO();
+            this.currentQuestions.add(newQuestionDTO);
+            clearQuestionDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+
+        return "questions_answers_list?faces-redirect=true";
+    }
+    
+    public String createNewAnswer() {
+        try {
+            this.newAnswerDTO.setAnswerSender(this.userManager.getUsername());
+            this.newAnswerDTO.setQuestionCode(this.currentQuestion.getId());
+         
+            client.target(baseUri)
+                    .path("/answers/create")
+                    .request(MediaType.APPLICATION_XML).post(Entity.xml(newAnswerDTO));
+
+            // clearConfigurationDTO();
+            this.currentAnswers.add(newAnswerDTO);
+            clearAnswerDTO();
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+
+        return "answers_list?faces-redirect=true";
     }
 
     public String createNewConfigurationFromTemplate() {
@@ -1032,6 +1087,44 @@ public class AdministratorManager implements Serializable {
 
         return helpMaterials;
     }
+    
+    
+    public List<QuestionDTO> getAllQuestionsFromConfiguration() {
+
+        List<QuestionDTO> questionDTOs = new LinkedList<>();
+            
+        try {
+
+            questionDTOs = client.target(baseUri).path("/questions/configuration").path(String.valueOf(currentConfiguration.getCode()))
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<QuestionDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+        this.currentQuestions = questionDTOs;
+        return this.currentQuestions;
+    }
+    
+    public List<AnswerDTO> getAllAnswerFromQuestion() {
+
+        List<AnswerDTO> answerDTOs = new LinkedList<>();
+            
+        try {
+
+            answerDTOs = client.target(baseUri).path("/answers/question").path(String.valueOf(currentQuestion.getId()))
+                    .request(MediaType.APPLICATION_XML)
+                    .get(new GenericType<List<AnswerDTO>>() {
+                    });
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+        this.currentAnswers = answerDTOs;
+        return this.currentAnswers;
+    }
+    
 
     public List<ConfigurationDTO> getClientConfigurations() {
 
@@ -1785,6 +1878,14 @@ public class AdministratorManager implements Serializable {
         this.newLinceseDTO.reset();
     }
     
+    public void clearQuestionDTO(){
+        this.newQuestionDTO.reset();
+    }
+    
+    public void clearAnswerDTO(){
+        this.newAnswerDTO.reset();
+    }
+    
     public void clearServiceDTO(){
         this.newServiceDTO.reset();
     }
@@ -2042,6 +2143,55 @@ public class AdministratorManager implements Serializable {
         this.currentClientLogged = currentClientLogged;
     }
 
+    public QuestionDTO getNewQuestionDTO() {
+        return newQuestionDTO;
+    }
+
+    public void setNewQuestionDTO(QuestionDTO newQuestionDTO) {
+        this.newQuestionDTO = newQuestionDTO;
+    }
+
+    public QuestionDTO getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public void setCurrentQuestion(QuestionDTO currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+
+    public AnswerDTO getCurrentAnswer() {
+        return currentAnswer;
+    }
+
+    public void setCurrentAnswer(AnswerDTO currentAnswer) {
+        this.currentAnswer = currentAnswer;
+    }
+
+    public List<AnswerDTO> getCurrentAnswers() {
+        return currentAnswers;
+    }
+
+    public void setCurrentAnswers(List<AnswerDTO> currentAnswers) {
+        this.currentAnswers = currentAnswers;
+    }
+
+    public List<QuestionDTO> getCurrentQuestions() {
+        return currentQuestions;
+    }
+
+    public void setCurrentQuestions(List<QuestionDTO> currentQuestions) {
+        this.currentQuestions = currentQuestions;
+    }
+
+    public AnswerDTO getNewAnswerDTO() {
+        return newAnswerDTO;
+    }
+
+    public void setNewAnswerDTO(AnswerDTO newAnswerDTO) {
+        this.newAnswerDTO = newAnswerDTO;
+    }
+
+    
     
 
 

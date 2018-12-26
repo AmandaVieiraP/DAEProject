@@ -47,6 +47,10 @@
                         <h:commandLink value="Remove" actionListener="#{administratorManager.removeConfiguration}" class="btn btn-outline-danger btn-sm">
                             <f:param name="deleteConfigurationCode" id="deleteConfigurationCode" value="#{object.code}" />    
                         </h:commandLink>
+                        &nbsp;
+                        <h:commandLink value="QuestionsAndAnswers" action="questions_answers_list?faces-redirect=true" class="btn btn-outline-info btn-sm">
+                            <f:setPropertyActionListener target="#{administratorManager.currentConfiguration}" value="#{object}" />
+                        </h:commandLink>
                     </div>
                 </p:column>
             </em:dt> 
