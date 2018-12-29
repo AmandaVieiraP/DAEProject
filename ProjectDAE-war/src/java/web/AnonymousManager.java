@@ -53,7 +53,6 @@ public class AnonymousManager implements Serializable {
     }
 
     public List<TemplateDTO> getAllTemplates() {
-        //logger.log(Level.WARNING, "init REST");
         List<TemplateDTO> returnedTemplates = null;
 
         try {
@@ -63,7 +62,6 @@ public class AnonymousManager implements Serializable {
                     });
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return returnedTemplates;
@@ -81,11 +79,8 @@ public class AnonymousManager implements Serializable {
                     });
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-
         return softwareDTO;
-
     }
 
     public List<ServiceDTO> getModuleServicesDetails() {
@@ -101,7 +96,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return servicesDTO;
@@ -120,7 +114,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return versions;
@@ -139,7 +132,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return extensions;
@@ -158,7 +150,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return extensions;
@@ -177,7 +168,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return softwareModules;
@@ -196,7 +186,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return softwareModules;
@@ -215,7 +204,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return contractParameters;
@@ -235,7 +223,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return artefacts;
@@ -255,7 +242,6 @@ public class AnonymousManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return helpMaterials;
@@ -263,7 +249,7 @@ public class AnonymousManager implements Serializable {
 
     /**
      * Auxiliary Functions
-    *
+     *
      */
     private List<String> computeJsonResponseToStringList(Response serviceResponse) {
         List<String> response = new LinkedList();
@@ -287,7 +273,7 @@ public class AnonymousManager implements Serializable {
 
     /**
      * Getters & Setters
-    *
+     *
      */
     public Client getClient() {
         return client;

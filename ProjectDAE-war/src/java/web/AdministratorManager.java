@@ -157,20 +157,13 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newAdministratorDTO));
 
             clearNewAdministrator();
-        } /*catch (EntityExistsException e) {
-            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
-        } */ catch (Exception e) {
-            System.err.println(e.getMessage());
-            //logger.warning("Unexpected error. Try again latter!");
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", logger);
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
-            // logger.warning("Problem creating student in method creatStudent.");   
-            //return "admin_students_create?faces-redirect=true";
             return null;
         }
-        return "clients_list?faces-redirect=true"; // é redirecionado para está página  
+        return "administrators_list?faces-redirect=true"; // é redirecionado para está página  
     }
 
     public String createNewTemplateSoftware() {
@@ -190,36 +183,12 @@ public class AdministratorManager implements Serializable {
                     .path("/templates/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newTemplateDTO));
 
-            /*if (!selectedSoftwareExtensions.isEmpty()) {
-                for (String extension : selectedSoftwareExtensions) {
-
-                    System.out.println("enviado extensionId: " + extension + " templateId: " + newTemplateDTO.getCode());
-
-                    client.target(baseUri)
-                            .path("/templates").path(String.valueOf(newTemplateDTO.getCode())).path("/extension").path(extension)
-                            .request(MediaType.APPLICATION_XML);
-
-                }
-
-            }
-            if (!selectedSoftwareModules.isEmpty()) {
-                for (String module : selectedSoftwareModules) {
-
-                    System.out.println("enviado moduleId: " + module + " templateId: " + newTemplateDTO.getCode());
-
-                    client.target(baseUri)
-                            .path("/templates/").path(String.valueOf(newTemplateDTO.getCode())).path("/module/").path(module)
-                            .request(MediaType.APPLICATION_XML);
-
-                }
-
-            }*/
             clearNewTemplate();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
         }
-        return "clients_list?faces-redirect=true"; // é redirecionado para esta página  
+        return "templates_list?faces-redirect=true"; // é redirecionado para esta página  
     }
 
     public String createNewClient() {
@@ -230,17 +199,10 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newClientDTO));
 
             clearNewClient();
-        } /*catch (EntityExistsException e) {
-            FacesExceptionHandler.handleException(e, e.getMessage(), component, logger);
+        } catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
-        } */ catch (Exception e) {
-            System.err.println(e.getMessage());
-            //logger.warning("Unexpected error. Try again latter!");
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", logger);
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
-            // logger.warning("Problem creating student in method creatStudent.");   
-            //return "admin_students_create?faces-redirect=true";
             return null;
         }
         return "clients_list?faces-redirect=true"; // é redirecionado para está página  
@@ -317,7 +279,6 @@ public class AdministratorManager implements Serializable {
                     .path("/configurations/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
 
-            // clearConfigurationDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return null;
@@ -337,7 +298,6 @@ public class AdministratorManager implements Serializable {
                     .path("/questions/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newQuestionDTO));
 
-            // clearConfigurationDTO();
             this.currentQuestions.add(newQuestionDTO);
             clearQuestionDTO();
         } catch (Exception e) {
@@ -465,11 +425,8 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            //logger.warning("Unexpected error. Try again latter!");
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", logger);
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
-            // logger.warning("Problem creating student in method creatStudent.");   
-            //return "admin_students_create?faces-redirect=true";
         }
     }
 
@@ -654,8 +611,6 @@ public class AdministratorManager implements Serializable {
         }
 
         this.softwareModules = returnedSoftwareModules;
-        // return returnedSoftwareModules;
-
     }
 
     public void allExtentionsFromASoftware() {
@@ -675,54 +630,18 @@ public class AdministratorManager implements Serializable {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             logger.warning("Problem getting all software extensions with REST");
-            //return null;
         }
 
         this.softwareExtensions = returnedSoftwareExtensions;
-        // return returnedSoftwareModules;
 
     }
 
-    //todo ADICIONARRRRR metod é exatamente igualk ao do anonymousamanger
-    //Juntar com Iolanda
     public List<ParameterDTO> getCurrentContractParameters() {
         return getCurrentContractParametersForAllConfiguration(String.valueOf(currentTemplate.getContractCode()));
-        /*List<ContractParameterDTO> contractParameters = new LinkedList<>();
-
-        try {
-            String code = String.valueOf(currentTemplate.getContractCode());
-
-            contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
-                    .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
-                    });
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-
-        return contractParameters;*/
     }
 
     public List<ParameterDTO> getClientConfigurationsContractParameters() {
         return getCurrentContractParametersForAllConfiguration(String.valueOf(currentConfiguration.getContractCode()));
-        /*List<ContractParameterDTO> contractParameters = new LinkedList<>();
-
-        try {
-            String code = String.valueOf(currentTemplate.getContractCode());
-
-            contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
-                    .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ContractParameterDTO>>() {
-                    });
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-
-        return contractParameters;*/
     }
 
     public List<ParameterDTO> getCurrentContractParametersForAllConfiguration(String code) {
@@ -783,24 +702,8 @@ public class AdministratorManager implements Serializable {
         return contractParameters;
     }
 
-    //Para usar o metodo comum---------------------------------------
     public SoftwareDTO getCurrentSoftware() {
         return getSoftwareDTOByConfigurationCode(String.valueOf(currentTemplate.getSoftwareCode()));
-        /*SoftwareDTO softwareDTO = null;
-
-        try {
-            String code = String.valueOf(currentTemplate.getSoftwareCode());
-
-            softwareDTO = client.target(baseUri).path("/softwares").path(code)
-                    .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<SoftwareDTO>() {
-                    });
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-
-        return softwareDTO;*/
 
     }
 
@@ -818,29 +721,12 @@ public class AdministratorManager implements Serializable {
                     });
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
         return null;
     }
 
     public List<String> getCurrentSoftwareVersions() {
         return getCurrentSoftwareVersionsAllConfigurations(String.valueOf(currentTemplate.getSoftwareCode()));
-        /*List<String> versions = new LinkedList<>();
-
-        try {
-            String code = String.valueOf(currentTemplate.getSoftwareCode());
-
-            Response serviceResponse = client.target(baseUri).path("/softwares/versions").path(code)
-                    .request(MediaType.APPLICATION_JSON).get(Response.class);
-
-            versions = computeJsonResponseToStringList(serviceResponse);
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-
-        return versions;*/
     }
 
     public List<String> getClientConfigurationSoftwareVersions() {
@@ -858,13 +744,11 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return versions;
     }
 
-    //adicionarrrrrrr
     public List<ExtensionDTO> getCurrentSoftwareExtensions() {
         List<ExtensionDTO> extensions = new LinkedList<>();
 
@@ -878,7 +762,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return extensions;
@@ -897,7 +780,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return softwareModules;
@@ -905,22 +787,6 @@ public class AdministratorManager implements Serializable {
 
     public List<ExtensionDTO> getCurrentTemplateExtensions() {
         return getExtensionsDTOByConfigurationCode(String.valueOf(currentTemplate.getCode()));
-        /*List<ExtensionDTO> extensions = new LinkedList<>();
-
-        try {
-            String code = String.valueOf(currentTemplate.getCode());
-
-            extensions = client.target(baseUri).path("/extensions/configurations").path(code)
-                    .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ExtensionDTO>>() {
-                    });
-
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
-        }
-
-        return extensions;*/
     }
 
     public List<ExtensionDTO> getCurrentConfigurationsExtensions() {
@@ -942,7 +808,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return extensions;
@@ -961,7 +826,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return softwareModules;
@@ -1017,7 +881,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return artefacts;
@@ -1037,7 +900,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return artefacts;
@@ -1057,7 +919,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return helpMaterials;
@@ -1077,7 +938,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return helpMaterials;
@@ -1222,7 +1082,6 @@ public class AdministratorManager implements Serializable {
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
-            //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
 
         return servicesDTO;
