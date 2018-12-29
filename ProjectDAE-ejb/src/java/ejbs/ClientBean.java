@@ -124,10 +124,6 @@ public class ClientBean {
                 throw new EntityDoesNotExistsException("ERROR: Can't delete that client because doesn't exists a client with the username: " + username);
             }
             
-            for(Configuration c: client.getConfigurations()){
-                c.getClient().removeConfiguration(c);    
-            }
-            
             em.remove(client);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());

@@ -20,6 +20,7 @@ import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
 import exceptions.EntityDoesNotExistsException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -54,7 +55,7 @@ public class ConfigurationBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @RolesAllowed({"Administrator","Client"})
+    @RolesAllowed({"Administrator", "Client"})
     @Path("{username}")
     public List<ConfigurationDTO> getConfigurationsByClient(@PathParam("username") String username) {
         try {
@@ -196,34 +197,13 @@ public class ConfigurationBean {
             if (configuration == null) {
                 return;
             }
-            
-            /*for(Question q:configuration.getQuestions()){
-               
-                for(Answer a: q.getAnswers()){
-                    q.removeAnswer(a);
-                }
-                
-            */
-            
-            
-            
-            for(Question q:configuration.getQuestions()){
-               
-                q.getConfiguration().removeQuestions(q);
-                
-            }
-            
-            
-            
 
             configuration.getClient().removeConfiguration(configuration);
 
             configuration.getSoftware().removeConfiguration(configuration);
 
             configuration.getContract().removeConfiguration(configuration);
-            
-            
-            
+
             for (Extension e : configuration.getExtensions()) {
                 e.removeConfiguration(configuration);
             }
