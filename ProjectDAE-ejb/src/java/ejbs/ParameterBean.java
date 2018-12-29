@@ -12,6 +12,7 @@ import entities.Contract;
 import entities.Parameter;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -120,7 +121,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/associateConfigurations/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -132,7 +133,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/dissociateConfigurations/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -144,7 +145,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/update/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateModuleParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -172,7 +173,7 @@ public class ParameterBean {
 
     @POST
     @Path("/create/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -202,7 +203,7 @@ public class ParameterBean {
 
     @POST
     @Path("/createForModule/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createForModuleREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -232,7 +233,7 @@ public class ParameterBean {
 
     @DELETE
     @Path("{name}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("name") String name) {
         try {

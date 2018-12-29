@@ -77,6 +77,7 @@ public class ClientBean {
     }
 
     @GET
+    @RolesAllowed({"Administrator","Client"})
     @Path("/{username}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

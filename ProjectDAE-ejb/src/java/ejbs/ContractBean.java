@@ -9,6 +9,7 @@ import dtos.ContractDTO;
 import entities.Contract;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -47,7 +48,6 @@ public class ContractBean {
     }
 
     @GET
-    //@RolesAllowed({"Administrator"})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("all")
     public List<ContractDTO> getAll() {

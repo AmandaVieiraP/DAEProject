@@ -11,6 +11,7 @@ import entities.Question;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -62,6 +63,7 @@ public class AnswerBean {
 
     @POST
     @Path("create")
+    @RolesAllowed({"Administrator","Client"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(AnswerDTO answerDTO) {
         try {
@@ -86,6 +88,7 @@ public class AnswerBean {
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("question/{id}")
+    @RolesAllowed({"Administrator","Client"})
     public List<AnswerDTO> getAllFromOneQuestion(@PathParam("id") int code) {
         try {
             Question q = em.find(Question.class, code);

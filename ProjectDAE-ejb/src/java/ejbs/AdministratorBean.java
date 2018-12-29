@@ -59,7 +59,7 @@ public class AdministratorBean {
 
     @POST
     @Path("/create")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(AdministratorDTO admin) throws EntityExistsException {
         try {
@@ -114,7 +114,7 @@ public class AdministratorBean {
     }
 
     @DELETE
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Path("{username}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("username") String username) {
@@ -147,7 +147,7 @@ public class AdministratorBean {
 
     @PUT
     @Path("/update")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(AdministratorDTO admin) throws EntityDoesNotExistsException {
         try {

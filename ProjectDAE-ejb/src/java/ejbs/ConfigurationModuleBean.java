@@ -11,6 +11,7 @@ import entities.ConfigurationModule;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,6 +39,7 @@ public class ConfigurationModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @RolesAllowed({"Administrator","Client"})
     @Path("all/{id}")
     public List<ConfigurationModuleDTO> getAll(@PathParam("id") int configurationCode) {
         try {
@@ -61,6 +63,7 @@ public class ConfigurationModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @RolesAllowed({"Administrator","Client"})
     @Path("{id}")
     public List<ConfigurationModuleDTO> getConfigurationModuleByConfigurationCode(@PathParam("id") int configurationCode) {
         try {
@@ -79,7 +82,7 @@ public class ConfigurationModuleBean {
 
     @POST
     @Path("/createAndAssociateConfig/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int code, ConfigurationModuleDTO configurationModuleDTO) {
         try {
@@ -109,7 +112,7 @@ public class ConfigurationModuleBean {
 
     @PUT
     @Path("/associateModuleConfigurations/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
         try {
@@ -123,7 +126,7 @@ public class ConfigurationModuleBean {
 
     @PUT
     @Path("/dissociateModuleConfigurations/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateConfigurationModuleRest(@PathParam("id") int code, ConfigurationModuleDTO configurationModule) {
         try {

@@ -38,6 +38,61 @@
             <description/>
             <url-pattern>/webapi/clients/*</url-pattern>
         </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin configurations pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/configurations/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin answers</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/answers/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Configurations Modules</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/configurationModules/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Configurations Super pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/configurationsSuper/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Extensions create</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/extensions/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Licenses create pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/licenses/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin parameters pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/contract_parameters/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin questions pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/questions/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Services pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/services/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin Software modules pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/softwareModules/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin template pages</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/templates/*</url-pattern>
+        </web-resource-collection>
         <auth-constraint>
             <description/>
             <role-name>Administrator</role-name>
@@ -54,6 +109,26 @@
             <web-resource-name>Client webpages</web-resource-name>
             <description/>
             <url-pattern>/webapi/clients/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Client Configurations</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/configurations/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Client Answers</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/answers/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Client Configuration Modules</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/configurationModules/*</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Client questions</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/questions/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

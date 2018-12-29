@@ -16,6 +16,7 @@ import entities.Template;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -60,6 +61,7 @@ public class TemplateBean {
 
     @POST
     @Path("/create")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(TemplateDTO temp) throws EntityExistsException {
         try {
@@ -96,6 +98,7 @@ public class TemplateBean {
 
     @POST
     @Path("/{templateId}/extension/{extensionId}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateExtensionToTemplateRest(@PathParam("extensionId") int extensionCode, @PathParam("templateId") int templateCode) {
         try {
@@ -126,6 +129,7 @@ public class TemplateBean {
 
     @PUT
     @Path("/update")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(TemplateDTO templateDTO) {
         try {
@@ -170,6 +174,7 @@ public class TemplateBean {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {

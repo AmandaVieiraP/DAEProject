@@ -11,6 +11,7 @@ import entities.Module;
 import entities.Service;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -56,7 +57,7 @@ public class ServiceBean {
 
     @POST
     @Path("/create/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createForModuleREST(@PathParam("id") int code, ServiceDTO serviceDTO) {
         try {
@@ -86,7 +87,7 @@ public class ServiceBean {
 
     @PUT
     @Path("/update/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateModuleParameterRest(@PathParam("id") int code, ServiceDTO serviceDTO) {
         try {
@@ -115,7 +116,7 @@ public class ServiceBean {
 
     @DELETE
     @Path("{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {

@@ -52,6 +52,7 @@ public class ConfigurationBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @RolesAllowed({"Administrator","Client"})
     @Path("{username}")
     public List<ConfigurationDTO> getConfigurationsByClient(@PathParam("username") String username) {
         try {
@@ -71,7 +72,7 @@ public class ConfigurationBean {
 
     @POST
     @Path("/create")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(ConfigurationDTO configurationDTO) {
         try {
@@ -87,7 +88,7 @@ public class ConfigurationBean {
 
     @POST
     @Path("/createByTemplate/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createByTemplateREST(@PathParam("id") int code, ConfigurationDTO configurationDTO) {
         try {
@@ -155,7 +156,7 @@ public class ConfigurationBean {
 
     @POST
     @Path("clone/{idConfig}/{idClient}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void cloneConfiguration(@PathParam("idConfig") int code, @PathParam("idClient") String username) {
         try {
@@ -184,7 +185,7 @@ public class ConfigurationBean {
 
     @DELETE
     @Path("{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {

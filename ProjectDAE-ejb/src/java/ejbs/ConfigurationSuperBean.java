@@ -12,6 +12,7 @@ import entities.Artefact;
 import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.HelpMaterial;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,7 +36,7 @@ public class ConfigurationSuperBean {
 
     @PUT
     @Path("/associateExtensions/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateExtensionRest(@PathParam("id") int code, ExtensionDTO extension) {
         try {
@@ -49,7 +50,7 @@ public class ConfigurationSuperBean {
     
     @PUT
     @Path("/dissociateExtensions/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateExtensionRest(@PathParam("id") int code, ExtensionDTO extension) {
         try {
@@ -63,7 +64,7 @@ public class ConfigurationSuperBean {
 
     @PUT
     @Path("/associateArtefacts/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateArtefactRest(@PathParam("id") int code, ArtefactDTO artefactDTO) {
         try {
@@ -87,7 +88,7 @@ public class ConfigurationSuperBean {
     
     @PUT
     @Path("/dissociateArtefacts/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateArtefactRest(@PathParam("id") int code, ArtefactDTO artefactDTO) {
         try {
@@ -119,7 +120,7 @@ public class ConfigurationSuperBean {
     
     @PUT
     @Path("/dissociateHelpMaterial/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateHelpMaterial(@PathParam("id") int code, HelpMaterialDTO helpMaterialDTO){
         try {
@@ -152,7 +153,7 @@ public class ConfigurationSuperBean {
 
     @PUT
     @Path("/associateHelpMaterials/{id}")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateHelpMaterialsRest(@PathParam("id") int code, HelpMaterialDTO helpMaterialDTO) {
         try {
