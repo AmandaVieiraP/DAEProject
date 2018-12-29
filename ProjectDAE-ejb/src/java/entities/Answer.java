@@ -27,22 +27,20 @@ import javax.validation.constraints.NotNull;
 @Table(name = "ANSWERS")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NamedQueries({
-    @NamedQuery(name = "getAllAnswersByQuestion", query = "SELECT a FROM Answer a WHERE a.question.id=?1"),
-})
+    @NamedQuery(name = "getAllAnswersByQuestion", query = "SELECT a FROM Answer a WHERE a.question.id=?1"),})
 public class Answer implements Serializable {
 
     //private static final long serialVersionUID = 1L;
-    
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
     private String answerSender;
-    
+
     @NotNull
     private String answer;
-    
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
@@ -57,14 +55,12 @@ public class Answer implements Serializable {
         this.answer = answer;
         this.question = question;
     }
-    
-    public Answer(String answerSender, String answer, Question question) {    
+
+    public Answer(String answerSender, String answer, Question question) {
         this.answerSender = answerSender;
         this.answer = answer;
         this.question = question;
     }
-
-    
 
     public String getAnswerSender() {
         return answerSender;
@@ -89,10 +85,7 @@ public class Answer implements Serializable {
     public void setQuestion(Question question) {
         this.question = question;
     }
-    
-    
-    
-    
+
     public int getId() {
         return id;
     }
@@ -101,11 +94,9 @@ public class Answer implements Serializable {
         this.id = id;
     }
 
-   
-   
     @Override
     public String toString() {
         return "entities.Answer[ id=" + id + " ]";
     }
-    
+
 }

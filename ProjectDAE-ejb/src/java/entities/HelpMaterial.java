@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("HelpMaterial")
 public class HelpMaterial extends FileSuper implements Serializable {
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "HELPMATERIALS_CONFIGURATIONS", joinColumns = @JoinColumn(name = "HELP_FILENAME", referencedColumnName = "FILENAME"),
@@ -36,14 +36,14 @@ public class HelpMaterial extends FileSuper implements Serializable {
     private List<ConfigurationSuper> configurations;
 
     public HelpMaterial() {
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public HelpMaterial(String filename, String mimetype) {
         super(filename, mimetype);
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
-    
+
     public List<ConfigurationSuper> getConfigurations() {
         return configurations;
     }
@@ -51,7 +51,7 @@ public class HelpMaterial extends FileSuper implements Serializable {
     public void setConfigurations(List<ConfigurationSuper> configurations) {
         this.configurations = configurations;
     }
-    
+
     public void addConfigurations(ConfigurationSuper conf) {
 
         if (conf != null && !configurations.contains(conf)) {
@@ -65,5 +65,5 @@ public class HelpMaterial extends FileSuper implements Serializable {
             configurations.remove(config);
         }
     }
-    
+
 }

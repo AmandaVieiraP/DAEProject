@@ -12,7 +12,6 @@ import entities.Contract;
 import entities.Parameter;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

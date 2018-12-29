@@ -16,18 +16,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Contract")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ContractDTO implements Serializable{
-    
+public class ContractDTO implements Serializable {
+
     private int code;
 
     public ContractDTO() {
     }
 
     public ContractDTO(int code) {
-        this.code = code; 
+        this.code = code;
     }
-    
-    public void reset () {
+
+    public void reset() {
         setCode(0);
     }
 

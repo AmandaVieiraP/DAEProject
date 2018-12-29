@@ -18,7 +18,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement(name = "FileSuper")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(ArtefactDTO.class)
-public class FileSuperDTO implements Serializable{
+public class FileSuperDTO implements Serializable {
+
     private String filename;
     private String mimetype;
 
@@ -29,8 +30,8 @@ public class FileSuperDTO implements Serializable{
         this.filename = filename;
         this.mimetype = mimetype;
     }
-    
-    public void reset(){
+
+    public void reset() {
         setFilename(null);
         setMimetype(null);
     }

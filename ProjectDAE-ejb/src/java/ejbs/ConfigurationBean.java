@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -46,7 +46,7 @@ public class ConfigurationBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @EJB
     EmailBean emailBean;
 
@@ -77,7 +77,7 @@ public class ConfigurationBean {
         try {
             Configuration config = this.create(configurationDTO.getCode(), configurationDTO.getDescription(), configurationDTO.getSoftwareCode(),
                     configurationDTO.getContractCode(), configurationDTO.getVersion(), configurationDTO.getClientUsername(),
-                    configurationDTO.getDbServerIp(),configurationDTO.getApplicationServerIp());
+                    configurationDTO.getDbServerIp(), configurationDTO.getApplicationServerIp());
             this.sendEmail(configurationDTO.getClientUsername(), config, "create");
 
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class ConfigurationBean {
             int lastCode = (Integer) em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
 
             lastCode = lastCode + 1;
-            Configuration configuration = new Configuration(lastCode, t.getDescription(), t.getSoftware(), t.getContract(), t.getVersion(), client,null,null);
+            Configuration configuration = new Configuration(lastCode, t.getDescription(), t.getSoftware(), t.getContract(), t.getVersion(), client, null, null);
 
             t.getSoftware().addConfiguration(configuration);
 
@@ -132,27 +132,27 @@ public class ConfigurationBean {
                 h.addConfigurations(configuration);
             }
             em.persist(configuration);
-            
+
             int modCode = (Integer) em.createNamedQuery("getMaxModulesCode").getSingleResult();
 
-            for(SoftwareModule s: t.getModules()){
+            for (SoftwareModule s : t.getModules()) {
                 modCode = modCode + 1;
-                ConfigurationModule cm= new ConfigurationModule(modCode,s.getDescription(),t.getSoftware(),t.getVersion());
-                
+                ConfigurationModule cm = new ConfigurationModule(modCode, s.getDescription(), t.getSoftware(), t.getVersion());
+
                 em.persist(cm);
-                
+
                 cm.addConfiguration(configuration);
                 configuration.addModule(cm);
 
             }
-            
+
             this.sendEmail(client.getUsername(), configuration, "create");
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @POST
     @Path("clone/{idConfig}/{idClient}")
     //@RolesAllowed({"Administrator"})
@@ -160,22 +160,22 @@ public class ConfigurationBean {
     public void cloneConfiguration(@PathParam("idConfig") int code, @PathParam("idClient") String username) {
         try {
             Configuration conf = em.find(Configuration.class, code);
-            
+
             if (conf == null) {
                 return;
             }
-            
+
             Client client = em.find(Client.class, username);
-            
+
             if (client == null) {
                 return;
             }
-            
+
             int lastCode = (Integer) em.createNamedQuery("getMaxConfigurationsCode").getSingleResult();
             lastCode = lastCode + 1;
-            
-            Configuration newConfig = this.create(lastCode, conf.getDescription(), conf.getSoftware().getCode(), conf.getContract().getCode(), conf.getVersion(), client.getUsername(), null,null); 
-            
+
+            Configuration newConfig = this.create(lastCode, conf.getDescription(), conf.getSoftware().getCode(), conf.getContract().getCode(), conf.getVersion(), client.getUsername(), null, null);
+
             this.sendEmail(client.getUsername(), newConfig, "create");
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -221,7 +221,7 @@ public class ConfigurationBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/update")
     @RolesAllowed({"Administrator"})
@@ -263,20 +263,20 @@ public class ConfigurationBean {
             newContract.addConfiguration(c);
 
             c.setContract(newContract);
-            
-            if(oldSoftware.getCode() != newSoftware.getCode()){
-                for(Extension e:c.getExtensions()){
+
+            if (oldSoftware.getCode() != newSoftware.getCode()) {
+                for (Extension e : c.getExtensions()) {
                     e.removeConfiguration(c);
                 }
-                
-                for(ConfigurationModule m:c.getModules()){
+
+                for (ConfigurationModule m : c.getModules()) {
                     m.removeConfiguration(c);
                 }
-                
+
                 c.setExtensions(new LinkedList<>());
                 c.setModules(new LinkedList<>());
             }
-            
+
             this.sendEmail(c.getClient().getUsername(), c, "update");
 
         } catch (Exception e) {
@@ -317,9 +317,9 @@ public class ConfigurationBean {
             client.addConfiguration(configuration);
 
             em.persist(configuration);
-         
+
             return configuration;
-            
+
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
@@ -354,7 +354,7 @@ public class ConfigurationBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     public void sendEmail(String username, Configuration config, String action) throws EntityDoesNotExistsException {
         try {
             Client c = em.find(Client.class, username);
@@ -362,7 +362,7 @@ public class ConfigurationBean {
             if (c == null) {
                 throw new EntityDoesNotExistsException("ERROR: because doesn't exists any client with the username: " + c.getUsername());
             }
-            
+
             String msg = "";
             String subject = "";
             if (action.equalsIgnoreCase("create")) {
@@ -372,12 +372,12 @@ public class ConfigurationBean {
                 subject = "Configuration Updated";
                 msg = "The configuration with code: " + config.getCode() + " for the software " + config.getSoftware().getName() + " was updated. \nPlease go to the platform to see more information.";
             }
-            
+
             emailBean.send(
                     c.getEmail(),
                     subject,
                     msg);
-            
+
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }

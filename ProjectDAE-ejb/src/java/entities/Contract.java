@@ -27,14 +27,14 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "CONTRACTS")
 @NamedQueries({
-    @NamedQuery(name = "getAllContracts", 
-                query = "SELECT c from Contract c ORDER BY c.code")
+    @NamedQuery(name = "getAllContracts",
+            query = "SELECT c from Contract c ORDER BY c.code")
 })
 public class Contract implements Serializable {
 
     @Id
     private int code;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "CONTRACTS_CONTRACTPARAMETERS", joinColumns = @JoinColumn(name = "CONTRACT_CODE", referencedColumnName = "CODE"),
@@ -93,8 +93,7 @@ public class Contract implements Serializable {
             templates.remove(templateToRemove);
         }
     }
-    
-    
+
     public void addParameter(Parameter contractParameter) {
 
         if (contractParameter != null && !contractParameters.contains(contractParameter)) {
@@ -108,6 +107,5 @@ public class Contract implements Serializable {
             contractParameters.remove(contractParameter);
         }
     }
-    
-    
+
 }

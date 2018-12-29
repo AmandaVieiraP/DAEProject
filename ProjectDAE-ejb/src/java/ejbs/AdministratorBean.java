@@ -144,7 +144,7 @@ public class AdministratorBean {
     public AdministratorDTO administratorToDTO(Administrator admin) {
         return new AdministratorDTO(admin.getName(), admin.getEmail(), admin.getJobRole(), admin.getUsername(), admin.getPassword());
     }
-    
+
     @PUT
     @Path("/update")
     //@RolesAllowed({"Administrator"})

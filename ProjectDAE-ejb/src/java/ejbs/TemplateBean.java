@@ -5,21 +5,17 @@
  */
 package ejbs;
 
-import dtos.ConfigurationDTO;
 import dtos.TemplateDTO;
 import entities.Artefact;
-import entities.Configuration;
 import entities.Contract;
 import entities.Extension;
 import entities.HelpMaterial;
-import entities.Parameter;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -127,7 +123,7 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/update")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -149,29 +145,29 @@ public class TemplateBean {
 
             t.setDescription(templateDTO.getDescription());
             t.setVersion(templateDTO.getVersion());
-            
+
             //Vai buscar software antigo para trocar pelo novo
-            Software oldSoftware=t.getSoftware();
+            Software oldSoftware = t.getSoftware();
             oldSoftware.removeConfiguration(t);
-            
+
             t.setSoftware(newSoftware);
-            
+
             newSoftware.addConfiguration(t);
-            
+
             //Vai buscar o contrato antigo para trocar pelo novo
-            Contract oldContract=t.getContract();
-            
+            Contract oldContract = t.getContract();
+
             oldContract.removeConfiguration(t);
-            
+
             newContract.addConfiguration(t);
-            
+
             t.setContract(newContract);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @DELETE
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -182,7 +178,6 @@ public class TemplateBean {
             if (template == null) {
                 return;
             }
-
 
             template.getSoftware().removeTemplate(template);
 
@@ -206,7 +201,6 @@ public class TemplateBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
 
     //Para usar no config Bean para popular a BD
     public void create(int code, String description, int software_code, int contract_code, String version) {

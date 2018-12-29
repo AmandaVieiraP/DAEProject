@@ -6,22 +6,19 @@
 package dtos;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 @XmlRootElement(name = "Question")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AnswerDTO implements Serializable {
 
- 
     private int id;
     private String answerSender;
     private String answer;
     private int questionCode;
-    
+
     public AnswerDTO() {
     }
 
@@ -31,9 +28,7 @@ public class AnswerDTO implements Serializable {
         this.answer = answer;
         this.questionCode = questionCode;
     }
-   
 
-    
     public int getId() {
         return id;
     }
@@ -66,8 +61,6 @@ public class AnswerDTO implements Serializable {
         this.questionCode = questionCode;
     }
 
-   
-   
     public void reset() {
         setId(0);
         setAnswerSender(null);
@@ -75,5 +68,4 @@ public class AnswerDTO implements Serializable {
         setQuestionCode(0);
     }
 
-   
 }

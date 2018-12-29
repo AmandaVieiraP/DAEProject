@@ -31,8 +31,7 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CONFIG_TYPE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(name = "getMaxConfigurationsCode", query = "SELECT MAX(c.code) FROM ConfigurationSuper c"),
-})
+    @NamedQuery(name = "getMaxConfigurationsCode", query = "SELECT MAX(c.code) FROM ConfigurationSuper c"),})
 public class ConfigurationSuper implements Serializable {
 
     @Id

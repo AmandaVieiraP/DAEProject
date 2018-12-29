@@ -24,38 +24,38 @@ public class Parameter implements Serializable {
 
     @Id
     private String name;
-    
+
     @NotNull
     private String description;
-    
+
     @NotNull
     private String paramValue;
-    
+
     @NotNull
     @ManyToMany(mappedBy = "contractParameters")
     private List<Contract> contracts;
-    
+
     @NotNull
     @ManyToMany(mappedBy = "moduleParameters")
     private List<ConfigurationModule> modules;
-    
+
     @NotNull
     @ManyToMany(mappedBy = "configurationParameters")
     private List<Configuration> configurations;
-    
+
     public Parameter() {
-        this.contracts=new LinkedList<>();
-        this.modules=new LinkedList<>();
-        this.configurations=new LinkedList<>();
+        this.contracts = new LinkedList<>();
+        this.modules = new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public Parameter(String name, String description, String value) {
         this.name = name;
         this.description = description;
         this.paramValue = value;
-        this.contracts=new LinkedList<>();
-        this.modules=new LinkedList<>();
-        this.configurations=new LinkedList<>();
+        this.contracts = new LinkedList<>();
+        this.modules = new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public String getName() {
@@ -105,7 +105,7 @@ public class Parameter implements Serializable {
     public void setConfigurations(List<Configuration> configurations) {
         this.configurations = configurations;
     }
-    
+
     public void addContract(Contract contract) {
 
         if (contract != null && !contracts.contains(contract)) {
@@ -119,7 +119,7 @@ public class Parameter implements Serializable {
             contracts.remove(contract);
         }
     }
-    
+
     public void addModule(ConfigurationModule module) {
 
         if (module != null && !modules.contains(module)) {
@@ -133,7 +133,7 @@ public class Parameter implements Serializable {
             modules.remove(module);
         }
     }
-    
+
     public void addConfigurations(Configuration conf) {
 
         if (conf != null && !configurations.contains(conf)) {
@@ -147,5 +147,5 @@ public class Parameter implements Serializable {
             configurations.remove(config);
         }
     }
-    
+
 }

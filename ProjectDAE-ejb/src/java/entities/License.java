@@ -26,7 +26,7 @@ public class License implements Serializable {
 
     @NotNull
     private String licenceValue;
-    
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "CONFIGURATION_CODE")
@@ -38,7 +38,7 @@ public class License implements Serializable {
     public License(int key, String value, ConfigurationModule config) {
         this.code = key;
         this.licenceValue = value;
-        this.configurationModule=config;
+        this.configurationModule = config;
     }
 
     public int getCode() {

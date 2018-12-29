@@ -163,7 +163,7 @@ public class Software implements Serializable {
             modules.remove(module);
         }
     }
-    
+
     public void removeTemplate(Template template) {
         if (template != null && templates.contains(template)) {
             templates.remove(template);

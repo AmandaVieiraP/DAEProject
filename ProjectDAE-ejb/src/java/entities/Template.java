@@ -28,8 +28,7 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Template")
 @NamedQueries({
-    @NamedQuery(name = "getAllTemplates", query = "SELECT t FROM Template t ORDER BY t.code"),
-})
+    @NamedQuery(name = "getAllTemplates", query = "SELECT t FROM Template t ORDER BY t.code"),})
 public class Template extends ConfigurationSuper implements Serializable {
 
     @NotNull

@@ -36,6 +36,7 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class User implements Serializable {
+
     @Id
     private String username;
     @NotNull
@@ -77,7 +78,7 @@ public abstract class User implements Serializable {
 
     public void setGroup(UserGroup group) {
         this.group = group;
-    } 
+    }
 
     public String getEmail() {
         return email;
@@ -86,8 +87,7 @@ public abstract class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
     private String hashPassword(String password) {
         char[] encoded = null;
         try {
@@ -100,5 +100,5 @@ public abstract class User implements Serializable {
             Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new String(encoded);
-    }    
+    }
 }

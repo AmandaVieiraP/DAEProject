@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Artefact")
 public class Artefact extends FileSuper implements Serializable {
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "ARTEFACTS_CONFIGURATIONS", joinColumns = @JoinColumn(name = "ART_FILENAME", referencedColumnName = "FILENAME"),
@@ -36,14 +36,14 @@ public class Artefact extends FileSuper implements Serializable {
     private List<ConfigurationSuper> configurations;
 
     public Artefact() {
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
 
     public Artefact(String filename, String mimetype) {
         super(filename, mimetype);
-        this.configurations=new LinkedList<>();
+        this.configurations = new LinkedList<>();
     }
-    
+
     public List<ConfigurationSuper> getConfigurations() {
         return configurations;
     }
@@ -51,7 +51,7 @@ public class Artefact extends FileSuper implements Serializable {
     public void setConfigurations(List<ConfigurationSuper> configurations) {
         this.configurations = configurations;
     }
-    
+
     public void addConfigurations(ConfigurationSuper conf) {
 
         if (conf != null && !configurations.contains(conf)) {

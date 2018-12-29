@@ -46,33 +46,30 @@ public class ConfigBean {
 
     @EJB
     private ConfigurationSuperBean configurationSuperBean;
-    
+
     @EJB
     private ConfigurationBean configurationBean;
-    
+
     @EJB
     private ArtefactBean artefactBean;
-    
+
     @EJB
     private HelpMaterialBean helpMaterialBean;
-    
+
     @EJB
     private ServiceBean serviceBean;
-    
+
     @EJB
     private ConfigurationModuleBean configurationModuleBean;
-    
+
     @EJB
     private LicenseBean licenseBean;
-    
+
     @EJB
     private QuestionBean questionBean;
-    
-    
+
     @EJB
     private AnswerBean answerBean;
-    
-    
 
     @PostConstruct
     public void populateDB() {
@@ -94,7 +91,7 @@ public class ConfigBean {
             administratorBean.create("admin12", "123", "Arturo Vidal", "vidal@email.com", "Administrator Of Things");
             administratorBean.create("admin13", "123", "Piqué", "shakira@email.com", "Administrator Of Things");
 
-            clientBean.create("client1", "dae.project.ipl@gmail.com",  "123", "Rua fgfg gdf", "Marvel", "Kara - 1293715");
+            clientBean.create("client1", "dae.project.ipl@gmail.com", "123", "Rua fgfg gdf", "Marvel", "Kara - 1293715");
             clientBean.create("client2", "dae.project.ipl@gmail.com", "123", "Rua qopwk", "Super Girl", "Dean - 758491453");
             clientBean.create("client3", "dae.project.ipl@gmail.com", "123", "Rua wkeios", "MrPiracy", "Lena - 1237892");
             clientBean.create("client4", "dae.project.ipl@gmail.com", "123", "Rua 20weke", "Amazon", "Harry - 8462781992");
@@ -124,28 +121,28 @@ public class ConfigBean {
             softwareBean.addVersionToSoftware(1002, "Version 2.3");
 
             //Criar Extensoes
-            extensionBean.create(12, "Clear Cache", "Clear Chrome Browser Cache", 1000,"Version 1.0");
-            extensionBean.create(13, "Clear Cache", "Clear Chrome Browser Cache", 1001,"Version 3.0");
-            extensionBean.create(14, "Clear Cache", "Clear Chrome Browser Cache", 1002,"Version 2.0");
-            extensionBean.create(15, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1000,"Version 1.0");
-            extensionBean.create(16, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1001,"Version 2.0");
-            extensionBean.create(17, "Last Pass", "Password Manager", 1000,"Version 1.0");
-            extensionBean.create(18, "Last Pass", "Password Manager", 1000,"Version 2.0");
-            extensionBean.create(19, "Last Pass", "Password Manager", 1001,"Version 3.0");
-            extensionBean.create(20, "Last Pass", "Password Manager", 1002,"Version 4.0");
+            extensionBean.create(12, "Clear Cache", "Clear Chrome Browser Cache", 1000, "Version 1.0");
+            extensionBean.create(13, "Clear Cache", "Clear Chrome Browser Cache", 1001, "Version 3.0");
+            extensionBean.create(14, "Clear Cache", "Clear Chrome Browser Cache", 1002, "Version 2.0");
+            extensionBean.create(15, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1000, "Version 1.0");
+            extensionBean.create(16, "Aamazon For Opera", "Deal of the day, Price Comparision, Universal Wish List", 1001, "Version 2.0");
+            extensionBean.create(17, "Last Pass", "Password Manager", 1000, "Version 1.0");
+            extensionBean.create(18, "Last Pass", "Password Manager", 1000, "Version 2.0");
+            extensionBean.create(19, "Last Pass", "Password Manager", 1001, "Version 3.0");
+            extensionBean.create(20, "Last Pass", "Password Manager", 1002, "Version 4.0");
 
             //Criar Software Modules
-            softwareModuleBean.create(100, "FD - Financial Data Managment", 1000,"Version 1.1");
-            softwareModuleBean.create(101, "HR - Human Resources Management", 1000,"Version 1.2");
-            softwareModuleBean.create(102, "FD - Financial Data Managment", 1001,"Version 1.2");
-            softwareModuleBean.create(103, "HR - Human Resources Management", 1002,"Version 1.3");
-            
+            softwareModuleBean.create(100, "FD - Financial Data Managment", 1000, "Version 1.1");
+            softwareModuleBean.create(101, "HR - Human Resources Management", 1000, "Version 1.2");
+            softwareModuleBean.create(102, "FD - Financial Data Managment", 1001, "Version 1.2");
+            softwareModuleBean.create(103, "HR - Human Resources Management", 1002, "Version 1.3");
+
             //Criar Serviços
-            serviceBean.create(1,"Service 1","Description of service 1","Version 1.0");
-            serviceBean.create(2,"Service 2","Description of service 2","Version 1.2");
-            serviceBean.create(3,"Service 3","Description of service 3","Version 1.0");
-            serviceBean.create(4,"Service 4","Description of service 4","Version 1.2");
-            
+            serviceBean.create(1, "Service 1", "Description of service 1", "Version 1.0");
+            serviceBean.create(2, "Service 2", "Description of service 2", "Version 1.2");
+            serviceBean.create(3, "Service 3", "Description of service 3", "Version 1.0");
+            serviceBean.create(4, "Service 4", "Description of service 4", "Version 1.2");
+
             //Associar serviços a modulos
             serviceBean.associateServiceToModule(1, 100);
             serviceBean.associateServiceToModule(2, 100);
@@ -155,7 +152,7 @@ public class ConfigBean {
             serviceBean.associateServiceToModule(1, 102);
             serviceBean.associateServiceToModule(3, 102);
             serviceBean.associateServiceToModule(4, 104);
-            
+
             //Criar Parametros para o contrato
             contractParameterBean.create("Type 1 - Maintenance Hours", "Total Hours of mensal support to any issue related to software fail", "12 hours / month");
             contractParameterBean.create("Type 1 - Contract Price", "Total price of the contract during the according time", "10000 €");
@@ -188,7 +185,7 @@ public class ConfigBean {
             contractParameterBean.associateParameterToAContract(11, "Type 1 - Quality of Service");
             contractParameterBean.associateParameterToAContract(12, "Type 1 - Responsability");
             contractParameterBean.associateParameterToAContract(12, "Type 1 - Avalaibality");
-            
+
             configurationSuperBean.associateExtensionToConfiguration(12, 1);
             configurationSuperBean.associateExtensionToConfiguration(13, 2);
             configurationSuperBean.associateExtensionToConfiguration(14, 3);
@@ -198,7 +195,7 @@ public class ConfigBean {
             configurationSuperBean.associateExtensionToConfiguration(18, 1);
             configurationSuperBean.associateExtensionToConfiguration(19, 2);
             configurationSuperBean.associateExtensionToConfiguration(20, 3);
-           
+
             templateBean.associateModuleToTemplate(100, 1);
             templateBean.associateModuleToTemplate(101, 2);
             templateBean.associateModuleToTemplate(102, 1);
@@ -207,7 +204,7 @@ public class ConfigBean {
             templateBean.associateModuleToTemplate(101, 4);
             templateBean.associateModuleToTemplate(102, 5);
             templateBean.associateModuleToTemplate(103, 6);
-            
+
             helpMaterialBean.create("Error_procedure.txt", "text/plain");
             helpMaterialBean.create("User_Manual.pdf", "application/pdf");
 
@@ -221,7 +218,7 @@ public class ConfigBean {
             configurationSuperBean.addHelpMaterialToConfiguration(5, "User_Manual.pdf");
             configurationSuperBean.addHelpMaterialToConfiguration(6, "Error_procedure.txt");
             configurationSuperBean.addHelpMaterialToConfiguration(6, "User_Manual.pdf");
-            
+
             //Criar os artefactos//String filename, String mimetype
             artefactBean.create("database.sql", "application/sql");
             artefactBean.create("dae_esquema.png", "image/png");
@@ -239,22 +236,21 @@ public class ConfigBean {
             configurationSuperBean.addArtefactsToConfiguration(5, "dae_esquema.png");
             configurationSuperBean.addArtefactsToConfiguration(6, "dae_esquema.png");
 
-            
             configurationModuleBean.create(105, "Module HR", 1000, "Version 1.1");
             configurationModuleBean.create(106, "Module HR", 1002, "Version 1.1");
             configurationModuleBean.create(107, "Module HR", 1001, "Version 1.1");
-            
+
             //Criar configuração para associar a um cliente
             configurationBean.create(30, "Configuration 1", 1000, 10, "Version 1.0", "client1", "164.0.0.1", "189.1.1.3");
-            configurationBean.create(31, "Configuration 2", 1001, 10, "Version 1.0", "client1","164.0.0.1", "189.1.1.3");
-            configurationBean.create(32, "Configuration 3", 1002, 10, "Version 1.0", "client1","164.0.0.1", "189.1.1.3");
-            configurationBean.create(33, "Configuration 1", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
-            configurationBean.create(34, "Configuration 2", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
-            configurationBean.create(35, "Configuration 3", 1001, 10, "Version 1.0", "client4","164.0.0.1", "189.1.1.3");
-            configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
-            configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
-            configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6","164.0.0.1", "189.1.1.3");
-            
+            configurationBean.create(31, "Configuration 2", 1001, 10, "Version 1.0", "client1", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(32, "Configuration 3", 1002, 10, "Version 1.0", "client1", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(33, "Configuration 1", 1001, 10, "Version 1.0", "client4", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(34, "Configuration 2", 1001, 10, "Version 1.0", "client4", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(35, "Configuration 3", 1001, 10, "Version 1.0", "client4", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(36, "Configuration 1", 1000, 10, "Version 1.0", "client6", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(37, "Configuration 2", 1002, 10, "Version 1.0", "client6", "164.0.0.1", "189.1.1.3");
+            configurationBean.create(38, "Configuration 3", 1000, 10, "Version 1.0", "client6", "164.0.0.1", "189.1.1.3");
+
             configurationSuperBean.associateExtensionToConfiguration(12, 30);
             configurationSuperBean.associateExtensionToConfiguration(13, 31);
             configurationSuperBean.associateExtensionToConfiguration(14, 32);
@@ -264,7 +260,7 @@ public class ConfigBean {
             configurationSuperBean.associateExtensionToConfiguration(18, 36);
             configurationSuperBean.associateExtensionToConfiguration(19, 30);
             configurationSuperBean.associateExtensionToConfiguration(20, 33);
-            
+
             configurationModuleBean.associateModuleToConfiguration(105, 30);
             configurationModuleBean.associateModuleToConfiguration(105, 31);
             configurationModuleBean.associateModuleToConfiguration(105, 32);
@@ -275,7 +271,7 @@ public class ConfigBean {
             configurationModuleBean.associateModuleToConfiguration(107, 37);
             configurationModuleBean.associateModuleToConfiguration(107, 38);
             configurationModuleBean.associateModuleToConfiguration(106, 35);
-            
+
             configurationSuperBean.addArtefactsToConfiguration(31, "database.sql");
             configurationSuperBean.addArtefactsToConfiguration(32, "database.sql");
             configurationSuperBean.addArtefactsToConfiguration(33, "database.sql");
@@ -288,7 +284,7 @@ public class ConfigBean {
             configurationSuperBean.addArtefactsToConfiguration(34, "dae_esquema.png");
             configurationSuperBean.addArtefactsToConfiguration(35, "dae_esquema.png");
             configurationSuperBean.addArtefactsToConfiguration(36, "dae_esquema.png");
-            
+
             configurationSuperBean.addHelpMaterialToConfiguration(31, "Error_procedure.txt");
             configurationSuperBean.addHelpMaterialToConfiguration(31, "User_Manual.pdf");
             configurationSuperBean.addHelpMaterialToConfiguration(32, "Error_procedure.txt");
@@ -299,13 +295,13 @@ public class ConfigBean {
             configurationSuperBean.addHelpMaterialToConfiguration(35, "User_Manual.pdf");
             configurationSuperBean.addHelpMaterialToConfiguration(36, "Error_procedure.txt");
             configurationSuperBean.addHelpMaterialToConfiguration(36, "User_Manual.pdf");
-            
+
             contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Maintenance Hours");
             contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Contract Price");
             contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Contract Duration");
             contractParameterBean.associateParameterToAConfiguration(34, "Type 1 - Maintenance Schedule");
             contractParameterBean.associateParameterToAConfiguration(33, "Type 1 - Guarantee of Support");
-            
+
             //Criar licensas
             licenseBean.create(1, "License Nr 1", 105);
             licenseBean.create(2, "License Nr 1", 106);
@@ -313,11 +309,11 @@ public class ConfigBean {
             licenseBean.create(4, "License Nr 2", 105);
             licenseBean.create(5, "License Nr 2", 106);
             licenseBean.create(6, "License Nr 2", 107);
-            
+
             contractParameterBean.associateParameterToAModule(105, "Type 1 - Maintenance Schedule");
             contractParameterBean.associateParameterToAModule(106, "Type 1 - Guarantee of Support");
             contractParameterBean.associateParameterToAModule(107, "Type 1 - Guarantee of Support");
-            
+
             serviceBean.associateServiceToModule(1, 105);
             serviceBean.associateServiceToModule(2, 106);
             serviceBean.associateServiceToModule(3, 107);
@@ -326,19 +322,18 @@ public class ConfigBean {
             serviceBean.associateServiceToModule(1, 107);
             serviceBean.associateServiceToModule(3, 105);
             serviceBean.associateServiceToModule(4, 105);
-            
-            
+
             //questions 
             questionBean.create(1, "client1", "Qual o ip da maquina?", 33);
             questionBean.create(2, "client1", "Qual o ip do servidor BD?", 33);
-             questionBean.create(3, "admin3", "olá 3mundoasdasd!", 34);
-            
+            questionBean.create(3, "admin3", "olá 3mundoasdasd!", 34);
+
             //answers
             answerBean.create(1, "admin", "192.12.12.12", 1);
             answerBean.create(2, "admin", "172.0.0.1 ", 2);
             answerBean.create(3, "admin2", "adeus", 2);
             answerBean.create(4, "admin3", "ola", 3);
-            
+
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
         }

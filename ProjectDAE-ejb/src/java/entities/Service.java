@@ -26,7 +26,7 @@ public class Service implements Serializable {
 
     @Id
     private int code;
-    
+
     @NotNull
     private String name;
 
@@ -35,7 +35,7 @@ public class Service implements Serializable {
 
     @NotNull
     private String version;
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "SERVICES_MODULES", joinColumns = @JoinColumn(name = "SERVICE_CODE", referencedColumnName = "CODE"),
@@ -93,7 +93,7 @@ public class Service implements Serializable {
     public void setModules(List<Module> modules) {
         this.modules = modules;
     }
-    
+
     public void addModule(Module module) {
         if (module != null && !modules.contains(module)) {
             modules.add(module);
@@ -105,7 +105,5 @@ public class Service implements Serializable {
             modules.remove(module);
         }
     }
-    
-    
 
 }

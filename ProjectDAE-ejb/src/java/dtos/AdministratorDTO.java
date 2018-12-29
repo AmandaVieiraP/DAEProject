@@ -16,7 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Administrator")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AdministratorDTO extends UserDTO implements Serializable  {
+public class AdministratorDTO extends UserDTO implements Serializable {
+
     private String name;
     private String jobRole;
 
@@ -28,7 +29,7 @@ public class AdministratorDTO extends UserDTO implements Serializable  {
         this.name = name;
         this.jobRole = jobRole;
     }
-    
+
     @Override
     public void reset() {
         super.reset();
@@ -51,7 +52,5 @@ public class AdministratorDTO extends UserDTO implements Serializable  {
     public void setJobRole(String jobRole) {
         this.jobRole = jobRole;
     }
-    
-     
-    
+
 }

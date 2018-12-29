@@ -22,7 +22,7 @@ public class SoftwareModuleDTO extends ModuleDTO implements Serializable {
     }
 
     public SoftwareModuleDTO(int code, String description, int softwareCode, String softwareName, String version) {
-        super(code, description, softwareCode, softwareName,version);
+        super(code, description, softwareCode, softwareName, version);
     }
 
     @Override

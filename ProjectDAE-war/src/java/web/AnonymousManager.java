@@ -38,7 +38,7 @@ public class AnonymousManager implements Serializable {
     private static final Logger logger = Logger.getLogger("web.AnonymousManager");
 
     private TemplateDTO currentTemplate;
-    
+
     private List<TemplateDTO> filteredTemplates;
 
     private int contractCode;
@@ -68,13 +68,13 @@ public class AnonymousManager implements Serializable {
 
         return returnedTemplates;
     }
-    
-    public SoftwareDTO getCurrentSoftware(){
+
+    public SoftwareDTO getCurrentSoftware() {
         SoftwareDTO softwareDTO = null;
 
         try {
             String code = String.valueOf(currentTemplate.getSoftwareCode());
-            
+
             softwareDTO = client.target(baseUri).path("/softwares").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<SoftwareDTO>() {
@@ -85,218 +85,210 @@ public class AnonymousManager implements Serializable {
         }
 
         return softwareDTO;
-        
+
     }
-    
-    public List<ServiceDTO> getModuleServicesDetails(){
+
+    public List<ServiceDTO> getModuleServicesDetails() {
         List<ServiceDTO> servicesDTO = new LinkedList<>();
-        
+
         try {
             String code = String.valueOf(moduleCode);
-            
+
             servicesDTO = client.target(baseUri).path("/services").path(code)
                     .request(MediaType.APPLICATION_XML)
-                    .get(new GenericType<List<ServiceDTO>>(){
-             });
-            
-            
+                    .get(new GenericType<List<ServiceDTO>>() {
+                    });
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return servicesDTO;
     }
-    
-    public List<String> getCurrentSoftwareVersions(){
-        List<String> versions=new LinkedList<>();
-        
+
+    public List<String> getCurrentSoftwareVersions() {
+        List<String> versions = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getSoftwareCode());
-            
+
             Response serviceResponse = client.target(baseUri).path("/softwares/versions").path(code)
                     .request(MediaType.APPLICATION_JSON).get(Response.class);
-            
-            versions=computeJsonResponseToStringList(serviceResponse);
-            
-            
+
+            versions = computeJsonResponseToStringList(serviceResponse);
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return versions;
     }
-    
-    public List<ExtensionDTO> getCurrentTemplateExtensions(){
-        List<ExtensionDTO> extensions=new LinkedList<>();
-        
+
+    public List<ExtensionDTO> getCurrentTemplateExtensions() {
+        List<ExtensionDTO> extensions = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getCode());
-            
+
             extensions = client.target(baseUri).path("/extensions/configurations").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });
-            
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return extensions;
     }
-    
-    public List<ExtensionDTO> getCurrentSoftwareExtensions(){
-        List<ExtensionDTO> extensions=new LinkedList<>();
-        
+
+    public List<ExtensionDTO> getCurrentSoftwareExtensions() {
+        List<ExtensionDTO> extensions = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getSoftwareCode());
-            
+
             extensions = client.target(baseUri).path("/extensions/softwares").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ExtensionDTO>>() {
                     });
-            
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return extensions;
     }
-    
-    
-    public List<SoftwareModuleDTO> getCurrentSoftwareModule(){
-        List<SoftwareModuleDTO> softwareModules=new LinkedList<>();
-        
+
+    public List<SoftwareModuleDTO> getCurrentSoftwareModule() {
+        List<SoftwareModuleDTO> softwareModules = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getSoftwareCode());
-            
+
             softwareModules = client.target(baseUri).path("/softwareModules/softwares").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<SoftwareModuleDTO>>() {
                     });
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return softwareModules;
     }
-    
-    public List<SoftwareModuleDTO> getCurrentTemplateModule(){
-        List<SoftwareModuleDTO> softwareModules=new LinkedList<>();
-        
+
+    public List<SoftwareModuleDTO> getCurrentTemplateModule() {
+        List<SoftwareModuleDTO> softwareModules = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getCode());
-            
+
             softwareModules = client.target(baseUri).path("/softwareModules/templates").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<SoftwareModuleDTO>>() {
                     });
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return softwareModules;
     }
-    
-    public List<ParameterDTO> getCurrentContractParameters(){
-        List<ParameterDTO> contractParameters=new LinkedList<>();
-        
+
+    public List<ParameterDTO> getCurrentContractParameters() {
+        List<ParameterDTO> contractParameters = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getContractCode());
-            
+
             contractParameters = client.target(baseUri).path("/contract_parameters/contracts").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ParameterDTO>>() {
                     });
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return contractParameters;
     }
-    
-    public List<ArtefactDTO> getCurrentTemplateArtefacts(){
-        List<ArtefactDTO> artefacts=new LinkedList<>();
-        
+
+    public List<ArtefactDTO> getCurrentTemplateArtefacts() {
+        List<ArtefactDTO> artefacts = new LinkedList<>();
+
         try {
-            
+
             String code = String.valueOf(currentTemplate.getCode());
-            
+
             artefacts = client.target(baseUri).path("/artefacts").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ArtefactDTO>>() {
-                    });     
-            
+                    });
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return artefacts;
     }
-    
-    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials(){
 
-        List<HelpMaterialDTO> helpMaterials=new LinkedList<>();
-        
+    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials() {
+
+        List<HelpMaterialDTO> helpMaterials = new LinkedList<>();
+
         try {
             String code = String.valueOf(currentTemplate.getCode());
-            
+
             helpMaterials = client.target(baseUri).path("/helpMaterials").path(code)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<HelpMaterialDTO>>() {
                     });
-            
-            
+
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             //FacesExceptionHandler.handleException(e, "Unexpected error! Try again latter!", component, logger);
         }
-        
+
         return helpMaterials;
     }
-    
+
     /**
-    * Auxiliary Functions
-    **/
+     * Auxiliary Functions
+    *
+     */
     private List<String> computeJsonResponseToStringList(Response serviceResponse) {
         List<String> response = new LinkedList();
-        try{
+        try {
             String list = serviceResponse.readEntity(String.class);
-            
-            list=list.replace("[", "");
-            
-            list=list.replace("]","");
-            
-            String[]servicesList=list.split(",");
-            
+
+            list = list.replace("[", "");
+
+            list = list.replace("]", "");
+
+            String[] servicesList = list.split(",");
+
             response.addAll(Arrays.asList(servicesList));
-            
+
             return response;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             return null;
         }
     }
-    
-    
-    
+
     /**
-    * Getters & Setters
-    **/
-    
+     * Getters & Setters
+    *
+     */
     public Client getClient() {
         return client;
     }
@@ -344,7 +336,5 @@ public class AnonymousManager implements Serializable {
     public void setModuleCode(int moduleCode) {
         this.moduleCode = moduleCode;
     }
-    
-    
-    
+
 }

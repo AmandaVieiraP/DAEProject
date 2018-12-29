@@ -6,7 +6,6 @@
 package dtos;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,12 +14,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Amanda
  */
-
 @XmlRootElement(name = "Client")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ClientDTO extends UserDTO implements Serializable {
+
     private String address;
-    private String companyName; 
+    private String companyName;
     private String contactPerson;
 
     public ClientDTO() {
@@ -34,13 +33,13 @@ public class ClientDTO extends UserDTO implements Serializable {
     }
 
     @Override
-    public void reset () {
+    public void reset() {
         super.reset();
         setAddress(null);
         setCompanyName(null);
         setContactPerson(null);
     }
-    
+
     public String getAddress() {
         return address;
     }
@@ -64,7 +63,5 @@ public class ClientDTO extends UserDTO implements Serializable {
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
     }
-    
-    
-    
+
 }

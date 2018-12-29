@@ -30,11 +30,12 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("SoftwareModule")
 @NamedQueries({
-    @NamedQuery(name = "getAllSoftwareModulesBySoftware", query = "SELECT m FROM SoftwareModule m WHERE m.software.code=?1"),
+    @NamedQuery(name = "getAllSoftwareModulesBySoftware", query = "SELECT m FROM SoftwareModule m WHERE m.software.code=?1")
+    ,
     @NamedQuery(name = "getAllSoftwareModules", query = "SELECT m FROM SoftwareModule m")
 })
 public class SoftwareModule extends Module implements Serializable {
-    
+
     @NotNull
     @ManyToMany
     @JoinTable(name = "TEMPLATES_MODULES", joinColumns = @JoinColumn(name = "MODULE_CODE", referencedColumnName = "CODE"),
@@ -42,12 +43,12 @@ public class SoftwareModule extends Module implements Serializable {
     private List<Template> templates;
 
     public SoftwareModule() {
-        this.templates=new LinkedList<>();
+        this.templates = new LinkedList<>();
     }
 
     public SoftwareModule(int code, String description, Software software, String version) {
-        super(code, description, software,version);
-        this.templates=new LinkedList<>();
+        super(code, description, software, version);
+        this.templates = new LinkedList<>();
     }
 
     public List<Template> getTemplates() {
@@ -57,7 +58,7 @@ public class SoftwareModule extends Module implements Serializable {
     public void setTemplates(List<Template> templates) {
         this.templates = templates;
     }
-    
+
     public void addTemplate(Template template) {
         if (template != null && !templates.contains(template)) {
             templates.add(template);

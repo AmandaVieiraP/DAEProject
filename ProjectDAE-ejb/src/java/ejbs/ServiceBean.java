@@ -11,7 +11,6 @@ import entities.Module;
 import entities.Service;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -180,7 +179,7 @@ public class ServiceBean {
 
     public void associateServiceToModule(int serviceCode, int moduleCode) {
         try {
-            
+
             Service service = em.find(Service.class, serviceCode);
             Module module = em.find(Module.class, moduleCode);
 

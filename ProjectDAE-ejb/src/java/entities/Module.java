@@ -32,11 +32,11 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "MODULE_TYPE", discriminatorType = DiscriminatorType.STRING)
 @NamedQueries({
-    @NamedQuery(name = "getMaxModulesCode", query = "SELECT MAX(c.code) FROM Module c"),
-    @NamedQuery(name = "getAllConfigurationModulesBySoftware", query = "SELECT m FROM ConfigurationModule m WHERE m.software.code=?1"),
-})
+    @NamedQuery(name = "getMaxModulesCode", query = "SELECT MAX(c.code) FROM Module c")
+    ,
+    @NamedQuery(name = "getAllConfigurationModulesBySoftware", query = "SELECT m FROM ConfigurationModule m WHERE m.software.code=?1"),})
 public class Module implements Serializable {
-    
+
     @Id
     private int code;
 

@@ -5,16 +5,12 @@
  */
 package ejbs;
 
-import dtos.ConfigurationModuleDTO;
 import dtos.SoftwareModuleDTO;
-import entities.Configuration;
-import entities.ConfigurationModule;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -45,15 +41,13 @@ public class SoftwareModuleBean {
     public List<SoftwareModuleDTO> getAll() {
         try {
             List<SoftwareModule> softwareModules = em.createNamedQuery("getAllSoftwareModules").getResultList();
-            
+
             return softwareModuleListToSoftwareModuleDTOList(softwareModules);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
-   
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("softwares/{id}")
@@ -89,34 +83,32 @@ public class SoftwareModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/associateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateConfigurationModuleRest(@PathParam("id") int templateCode, SoftwareModuleDTO softwareModule) {
         try {
-            
+
             associateModuleToConfiguration(softwareModule.getCode(), templateCode);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @PUT
     @Path("/dissociateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateConfigurationModuleRest(@PathParam("id") int code, SoftwareModuleDTO softwareModuleDTO) {
         try {
-            
+
             dissociateModuleToTemplateConfiguration(softwareModuleDTO.getCode(), code);
 
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
-  
 
     private List<SoftwareModuleDTO> softwareModuleListToSoftwareModuleDTOList(List<SoftwareModule> softwareModules) {
         try {
@@ -170,13 +162,11 @@ public class SoftwareModuleBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
-    
-    
-     public void dissociateModuleToTemplateConfiguration(int moduleCode, int templateCode) {
+
+    public void dissociateModuleToTemplateConfiguration(int moduleCode, int templateCode) {
         try {
             SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
-            Template template= em.find(Template.class, templateCode);
+            Template template = em.find(Template.class, templateCode);
 
             if (module == null || template == null) {
                 return;
@@ -188,34 +178,29 @@ public class SoftwareModuleBean {
 
             template.removeModule(module);
             module.removeTemplate(template);
-            
+
             em.merge(template);
             em.merge(module);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
-    
-    
-    
+
     public void associateModuleToConfiguration(int moduleCode, int templateCode) {
         try {
-            
-          
-            
+
             SoftwareModule module = em.find(SoftwareModule.class, moduleCode);
-            Template template= em.find(Template.class, templateCode);
+            Template template = em.find(Template.class, templateCode);
             if (module == null || template == null) {
                 return;
             }
-            
+
             Software templateSoftware = template.getSoftware();
             Software moduleSoftware = module.getSoftware();
 
-            if(templateSoftware.getCode() != moduleSoftware.getCode())
-            {
-                 System.out.println("vem aqui");
-                 return;
+            if (templateSoftware.getCode() != moduleSoftware.getCode()) {
+                System.out.println("vem aqui");
+                return;
             }
 
             if (template.getModules().contains(module)) {

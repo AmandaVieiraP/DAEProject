@@ -6,14 +6,11 @@
 package ejbs;
 
 import dtos.ConfigurationModuleDTO;
-import dtos.ExtensionDTO;
 import entities.Configuration;
 import entities.ConfigurationModule;
-import entities.Extension;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -49,11 +46,11 @@ public class ConfigurationModuleBean {
             if (configuration == null) {
                 return null;
             }
-            
+
             Query query = em.createNamedQuery("getAllConfigurationModulesBySoftware");
 
             query.setParameter(1, configuration.getSoftware().getCode());
-            
+
             List<ConfigurationModule> configurationModules = query.getResultList();
 
             return configurationModuleListToConfigurationModuleDTOList(configurationModules);
@@ -79,7 +76,7 @@ public class ConfigurationModuleBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @POST
     @Path("/createAndAssociateConfig/{id}")
     //@RolesAllowed({"Administrator"})
@@ -98,7 +95,7 @@ public class ConfigurationModuleBean {
                 return;
             }
 
-            m = new ConfigurationModule(configurationModuleDTO.getCode(),configurationModuleDTO.getDescription(),c.getSoftware(),configurationModuleDTO.getVersion());
+            m = new ConfigurationModule(configurationModuleDTO.getCode(), configurationModuleDTO.getDescription(), c.getSoftware(), configurationModuleDTO.getVersion());
 
             em.persist(m);
 

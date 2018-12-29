@@ -6,16 +6,13 @@
 package ejbs;
 
 import dtos.AnswerDTO;
-import dtos.QuestionDTO;
 import entities.Answer;
-import entities.Configuration;
 import entities.Question;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -38,12 +35,10 @@ public class AnswerBean {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    
     @PersistenceContext
     EntityManager em;
-    
 
-    public void create(int id, String answerSender, String answerMsg,int questionCode) throws EntityExistsException {
+    public void create(int id, String answerSender, String answerMsg, int questionCode) throws EntityExistsException {
         try {
             Answer a = em.find(Answer.class, id);
 
@@ -51,12 +46,12 @@ public class AnswerBean {
                 throw new EntityExistsException("ERROR: Can't create new Answer because already exists a Answer with the id: " + a);
             }
             Question q = em.find(Question.class, questionCode);
-            if (q  == null) {
+            if (q == null) {
                 return;
                 // throw new EntityDoesNotExistException("The course does not exists");
             }
-            
-            Answer answer = new Answer(id,answerSender,answerMsg,q);
+
+            Answer answer = new Answer(id, answerSender, answerMsg, q);
             em.persist(answer);
         } catch (EntityExistsException e) {
             throw e;
@@ -64,13 +59,13 @@ public class AnswerBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @POST
     @Path("create")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void createREST( AnswerDTO answerDTO) {
+    public void createREST(AnswerDTO answerDTO) {
         try {
-            
+
             Question q = em.find(Question.class, answerDTO.getQuestionCode());
 
             if (q == null) {
@@ -78,7 +73,7 @@ public class AnswerBean {
             }
 
             //int id, String questionSender, String question,Configuration configuration) {
-            Answer answer = new Answer(answerDTO.getAnswerSender(),answerDTO.getAnswer(),q);
+            Answer answer = new Answer(answerDTO.getAnswerSender(), answerDTO.getAnswer(), q);
 
             em.persist(answer);
             q.addAnswer(answer);
@@ -94,16 +89,17 @@ public class AnswerBean {
     public List<AnswerDTO> getAllFromOneQuestion(@PathParam("id") int code) {
         try {
             Question q = em.find(Question.class, code);
-            
-            if(q == null)
+
+            if (q == null) {
                 return null;
-            
+            }
+
             Query query = em.createNamedQuery("getAllAnswersByQuestion");
 
             query.setParameter(1, q.getId());
 
             List<Answer> answers = query.getResultList();
-            
+
             return answersToDTOs(answers);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
@@ -111,7 +107,7 @@ public class AnswerBean {
     }
 
     public AnswerDTO answerToDTO(Answer a) {
-        return new AnswerDTO(a.getId(),a.getAnswerSender(),a.getAnswer(),a.getQuestion().getId());
+        return new AnswerDTO(a.getId(), a.getAnswerSender(), a.getAnswer(), a.getQuestion().getId());
     }
 
     public List<AnswerDTO> answersToDTOs(List<Answer> answers) {

@@ -5,8 +5,6 @@
  */
 package web;
 
-import javax.inject.Named;
-
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +20,7 @@ import javax.servlet.http.HttpSession;
  * @author Amanda
  */
 //@Named(value = "userManager")
-@ManagedBean(name="userManager")
+@ManagedBean(name = "userManager")
 @SessionScoped
 public class UserManager implements Serializable {
 
@@ -34,7 +32,7 @@ public class UserManager implements Serializable {
     private String password;
     private boolean isAdmin = false;
     private boolean loginFlag = true;
-    
+
     public UserManager() {
     }
 
@@ -42,7 +40,6 @@ public class UserManager implements Serializable {
         this.username = username;
         this.password = password;
     }
-       
 
     public String getUsername() {
         return username;
@@ -67,9 +64,7 @@ public class UserManager implements Serializable {
     public void setLoginFlag(boolean loginFlag) {
         this.loginFlag = loginFlag;
     }
-    
-    
-    
+
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -79,26 +74,26 @@ public class UserManager implements Serializable {
             logger.log(Level.WARNING, e.getMessage());
             return "login_error?faces-redirect=true";
         }
-        if(isUserInRole("Administrator")){
+        if (isUserInRole("Administrator")) {
             setIsAdmin(true);
             return "/faces/admin/clients_list?faces-redirect=true";
         }
-        if(isUserInRole("Client")){
+        if (isUserInRole("Client")) {
             setIsAdmin(false);
             return "/faces/client/configurations_list?faces-redirect=true";
         }
-        
+
         return "login_error?faces-redirect=true";
     }
-    
+
     public boolean isUserInRole(String role) {
         return (isSomeUserAuthenticated() && FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role));
     }
-    
+
     public boolean isSomeUserAuthenticated() {
-        return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal()!=null;
+        return FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal() != null;
     }
-    
+
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         // remove data from beans:
@@ -111,9 +106,9 @@ public class UserManager implements Serializable {
         // using faces-redirect to initiate a new request:
         return "/index.xhtml?faces-redirect=true";
     }
-    
-    public String clearLogin(){
-        if(isSomeUserAuthenticated()){
+
+    public String clearLogin() {
+        if (isSomeUserAuthenticated()) {
             logout();
         }
         return "index.xhtml?faces-redirect=true";
@@ -126,9 +121,5 @@ public class UserManager implements Serializable {
     public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-    
-    
-    
-    
-    
+
 }

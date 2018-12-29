@@ -41,7 +41,7 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     private String applicationServerIp;
 
     @NotNull
-    @ManyToMany(mappedBy = "configurations",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "configurations", cascade = CascadeType.ALL)
     private List<ConfigurationModule> modules;
 
     @NotNull
@@ -54,7 +54,7 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     @ManyToOne
     @JoinColumn(name = "CLIENT_USERNAME")
     private Client client;
-    
+
     @NotNull
     @OneToMany(mappedBy = "configuration", cascade = CascadeType.REMOVE)
     private List<Question> questions;
@@ -83,7 +83,6 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
-    
 
     public String getDbServerIp() {
         return dbServerIp;
@@ -130,13 +129,13 @@ public class Configuration extends ConfigurationSuper implements Serializable {
             configurationParameters.add(parameter);
         }
     }
-    
+
     public void addQuestions(Question question) {
         if (question != null && !questions.contains(question)) {
             questions.add(question);
         }
     }
-    
+
     public void removeQuestions(Question question) {
         if (question != null && questions.contains(question)) {
             questions.remove(question);

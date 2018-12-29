@@ -39,7 +39,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.mail.MessagingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -104,11 +103,11 @@ public class AdministratorManager implements Serializable {
     private List<QuestionDTO> currentQuestions;
     private QuestionDTO currentQuestion;
     private QuestionDTO newQuestionDTO;
-    
+
     private List<AnswerDTO> currentAnswers;
     private AnswerDTO currentAnswer;
     private AnswerDTO newAnswerDTO;
-    
+
     private UploadedFile file;
     private String path;
 
@@ -140,13 +139,13 @@ public class AdministratorManager implements Serializable {
     public void init() {
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(userManager.getUsername(), userManager.getPassword());
         client.register(feature);
-        
+
         if (userManager.isAdmin()) {
             this.getAdministratorLogged();
         } else {
             this.getClientLogged();
         }
-        
+
     }
 
     //**** Métodos de Criar ****//
@@ -171,12 +170,11 @@ public class AdministratorManager implements Serializable {
             //return "admin_students_create?faces-redirect=true";
             return null;
         }
-        return "admin_index?faces-redirect=true"; // é redirecionado para está página  
+        return "clients_list?faces-redirect=true"; // é redirecionado para está página  
     }
 
     public String createNewTemplateSoftware() {
         try {
-
 
             SoftwareDTO soft = new SoftwareDTO();
             String code = String.valueOf(newTemplateDTO.getSoftwareCode());
@@ -216,13 +214,12 @@ public class AdministratorManager implements Serializable {
                 }
 
             }*/
-
             clearNewTemplate();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
         }
-        return "admin_index?faces-redirect=true"; // é redirecionado para esta página  
+        return "clients_list?faces-redirect=true"; // é redirecionado para esta página  
     }
 
     public String createNewClient() {
@@ -246,66 +243,66 @@ public class AdministratorManager implements Serializable {
             //return "admin_students_create?faces-redirect=true";
             return null;
         }
-        return "admin_index?faces-redirect=true"; // é redirecionado para está página  
+        return "clients_list?faces-redirect=true"; // é redirecionado para está página  
     }
-    
-    public void createNewParameterAndAssociateToConfig(){
+
+    public void createNewParameterAndAssociateToConfig() {
         createNewParameterAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public void createNewParameterAndAssociateToConfigOnCreate(){
+
+    public void createNewParameterAndAssociateToConfigOnCreate() {
         createNewParameterAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
-    public void createNewParameterAndAssociateToConfigGeral(String code){
+
+    public void createNewParameterAndAssociateToConfigGeral(String code) {
         try {
             client.target(baseUri)
                     .path("/contract_parameters/create")
                     .path(code)
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newParameterDTO));
-            
+
             clearNewParameterDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
     }
 
-    public void createNewExtensionAndAssociateToConfig(){
+    public void createNewExtensionAndAssociateToConfig() {
         createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public void createNewExtensionAndAssociateToConfigOnCreate(){
+
+    public void createNewExtensionAndAssociateToConfigOnCreate() {
         createNewExtensionAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
-    public void createNewExtensionAndAssociateToConfigGeral(String code){
+
+    public void createNewExtensionAndAssociateToConfigGeral(String code) {
         try {
             client.target(baseUri)
                     .path("/extensions/createAndAssociateConfig")
                     .path(code)
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newExtensionDTO));
-            
+
             clearNewExtensionDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
     }
-    
-    public void createNewConfigurationModuleAndAssociateToConfig(){
+
+    public void createNewConfigurationModuleAndAssociateToConfig() {
         createNewConfigurationModuleAndAssociateToConfigGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public void createNewConfigurationModuleAndAssociateToConfigOnCreate(){
+
+    public void createNewConfigurationModuleAndAssociateToConfigOnCreate() {
         createNewConfigurationModuleAndAssociateToConfigGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
-    public void createNewConfigurationModuleAndAssociateToConfigGeral(String code){
+
+    public void createNewConfigurationModuleAndAssociateToConfigGeral(String code) {
         try {
             client.target(baseUri)
                     .path("/configurationModules/createAndAssociateConfig")
                     .path(code)
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newConfigurationModuleDTO));
-            
+
             clearNewExtensionDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -328,13 +325,13 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_associations?faces-redirect=true";
     }
-    
+
     public String createNewQuestion() {
         try {
             this.newQuestionDTO.setQuestionSender(this.userManager.getUsername());
             this.newQuestionDTO.setConfigurationCode(this.currentConfiguration.getCode());
             this.newQuestionDTO.setId(0);
-            
+
             System.out.println("question: " + this.newQuestionDTO.getQuestion());
             client.target(baseUri)
                     .path("/questions/create")
@@ -350,12 +347,12 @@ public class AdministratorManager implements Serializable {
 
         return "questions_answers_list?faces-redirect=true";
     }
-    
+
     public String createNewAnswer() {
         try {
             this.newAnswerDTO.setAnswerSender(this.userManager.getUsername());
             this.newAnswerDTO.setQuestionCode(this.currentQuestion.getId());
-         
+
             client.target(baseUri)
                     .path("/answers/create")
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newAnswerDTO));
@@ -373,13 +370,13 @@ public class AdministratorManager implements Serializable {
 
     public String createNewConfigurationFromTemplate() {
         try {
-            this.newConfigurationDTO = new ConfigurationDTO(0, null, 0, null, 0, null, this.currentClient.getUsername(),null,null);
+            this.newConfigurationDTO = new ConfigurationDTO(0, null, 0, null, 0, null, this.currentClient.getUsername(), null, null);
 
             client.target(baseUri)
                     .path("/configurations/createByTemplate")
                     .path(String.valueOf(this.code))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(newConfigurationDTO));
-           
+
         } catch (Exception e) {
             logger.warning(e.getMessage());
             return null;
@@ -387,14 +384,14 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_list?faces-redirect=true";
     }
-    
-    public String createNewLicenseForModule(){
+
+    public String createNewLicenseForModule() {
         try {
             client.target(baseUri)
                     .path("/licenses/create")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newLinceseDTO));
-            
+
             clearLicenseDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -403,14 +400,14 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_modules_details?faces-redirect=true";
     }
-    
-    public String createNewParameterForModule(){
+
+    public String createNewParameterForModule() {
         try {
             client.target(baseUri)
                     .path("/contract_parameters/createForModule")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newParameterDTO));
-            
+
             clearNewParameterDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -419,14 +416,14 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_modules_details?faces-redirect=true";
     }
-    
-    public String createNewServiceForModule(){
+
+    public String createNewServiceForModule() {
         try {
             client.target(baseUri)
                     .path("/services/create")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).post(Entity.xml(this.newServiceDTO));
-            
+
             this.clearServiceDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -454,7 +451,7 @@ public class AdministratorManager implements Serializable {
             FacesExceptionHandler.handleException(e, "Unexpected error. Try again latter!", component, logger);
         }
     }
-    
+
     public void getClientLogged() {
 
         ClientDTO c;
@@ -561,15 +558,15 @@ public class AdministratorManager implements Serializable {
         return returnedContracts;
     }
 
-    public List<ExtensionDTO> getAllExtensions() { 
-        return getAllExtensionsGeral(String.valueOf(this.newConfigurationDTO.getCode()));  
+    public List<ExtensionDTO> getAllExtensions() {
+        return getAllExtensionsGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
-    public List<ExtensionDTO> getAllExtensionsOnUpdate(){
+
+    public List<ExtensionDTO> getAllExtensionsOnUpdate() {
         return getAllExtensionsGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
-    public List<ExtensionDTO> getAllExtensionsGeral(String code){
+
+    public List<ExtensionDTO> getAllExtensionsGeral(String code) {
         List<ExtensionDTO> extensionsDTO = new LinkedList<>();
 
         try {
@@ -587,11 +584,11 @@ public class AdministratorManager implements Serializable {
     public List<ConfigurationModuleDTO> getAllModulesFromConfiguration() {
         return getAllModulesFromConfigurationGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
-    
+
     public List<ConfigurationModuleDTO> getAllModulesFromConfigurationOnUpdate() {
         return getAllModulesFromConfigurationGeral(String.valueOf(this.currentConfiguration.getCode()));
     }
-    
+
     public List<ConfigurationModuleDTO> getAllModulesFromConfigurationGeral(String code) {
         List<ConfigurationModuleDTO> modulesDTO = new LinkedList<>();
 
@@ -951,7 +948,6 @@ public class AdministratorManager implements Serializable {
         return extensions;
     }
 
-
     public List<SoftwareModuleDTO> getCurrentTemplateModule() {
         List<SoftwareModuleDTO> softwareModules = new LinkedList<>();
 
@@ -1007,8 +1003,8 @@ public class AdministratorManager implements Serializable {
         return configurationModulesDTO;
     }
 
-    public List<ArtefactDTO> getCurrentTemplateArtefacts(){
-        List<ArtefactDTO> artefacts=new LinkedList<>();
+    public List<ArtefactDTO> getCurrentTemplateArtefacts() {
+        List<ArtefactDTO> artefacts = new LinkedList<>();
 
         try {
 
@@ -1047,9 +1043,9 @@ public class AdministratorManager implements Serializable {
         return artefacts;
     }
 
-    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials(){
+    public List<HelpMaterialDTO> getCurrentTemplateHelpMaterials() {
 
-        List<HelpMaterialDTO> helpMaterials=new LinkedList<>();
+        List<HelpMaterialDTO> helpMaterials = new LinkedList<>();
 
         try {
             String code = String.valueOf(currentTemplate.getCode());
@@ -1058,7 +1054,6 @@ public class AdministratorManager implements Serializable {
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<HelpMaterialDTO>>() {
                     });
-
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -1087,12 +1082,11 @@ public class AdministratorManager implements Serializable {
 
         return helpMaterials;
     }
-    
-    
+
     public List<QuestionDTO> getAllQuestionsFromConfiguration() {
 
         List<QuestionDTO> questionDTOs = new LinkedList<>();
-            
+
         try {
 
             questionDTOs = client.target(baseUri).path("/questions/configuration").path(String.valueOf(currentConfiguration.getCode()))
@@ -1106,11 +1100,11 @@ public class AdministratorManager implements Serializable {
         this.currentQuestions = questionDTOs;
         return this.currentQuestions;
     }
-    
+
     public List<AnswerDTO> getAllAnswerFromQuestion() {
 
         List<AnswerDTO> answerDTOs = new LinkedList<>();
-            
+
         try {
 
             answerDTOs = client.target(baseUri).path("/answers/question").path(String.valueOf(currentQuestion.getId()))
@@ -1124,7 +1118,6 @@ public class AdministratorManager implements Serializable {
         this.currentAnswers = answerDTOs;
         return this.currentAnswers;
     }
-    
 
     public List<ConfigurationDTO> getClientConfigurations() {
 
@@ -1144,7 +1137,7 @@ public class AdministratorManager implements Serializable {
 
         return configurationsDTO;
     }
-    
+
     public List<ConfigurationDTO> getCurrentLoggedClientConfigurations() {
 
         return this.getClientConfigurations(currentClientLogged.getUsername());
@@ -1167,7 +1160,6 @@ public class AdministratorManager implements Serializable {
         return configurationsDTO;
     }
 
-
     public List<ClientDTO> getClientsToCloneConfiguration() {
         List<ClientDTO> clients = new LinkedList();
         for (ClientDTO c : this.getAllClients()) {
@@ -1187,12 +1179,10 @@ public class AdministratorManager implements Serializable {
         try {
             String username = this.usernameClientSelectedToClone;
 
-
             configurationsDTO = client.target(baseUri).path("/configurations").path(username)
                     .request(MediaType.APPLICATION_XML)
                     .get(new GenericType<List<ConfigurationDTO>>() {
                     });
-
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -1273,7 +1263,7 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem removing the client");
             return null;
         }
-        return "admin_index?faces-redirect=true";
+        return "clients_list?faces-redirect=true";
     }
 
     public String removeAdministrator(ActionEvent event) {
@@ -1290,7 +1280,7 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem removing the administrator");
             return null;
         }
-        return "admin_index?faces-redirect=true";
+        return "clients_list?faces-redirect=true";
     }
 
     public String removeConfiguration(ActionEvent event) {
@@ -1309,9 +1299,9 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_list?faces-redirect=true";
     }
-    
-    public String removeLicense(ActionEvent event){
-       try {
+
+    public String removeLicense(ActionEvent event) {
+        try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteLicenseCode");
             String code = param.getValue().toString();
 
@@ -1326,9 +1316,9 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_modules_details?faces-redirect=true";
     }
-    
-    public String removeParameter(ActionEvent event){
-       try {
+
+    public String removeParameter(ActionEvent event) {
+        try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteParameterCode");
             String name = param.getValue().toString();
 
@@ -1343,9 +1333,9 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_modules_details?faces-redirect=true";
     }
-    
-    public String removeService(ActionEvent event){
-       try {
+
+    public String removeService(ActionEvent event) {
+        try {
             UIParameter param = (UIParameter) event.getComponent().findComponent("deleteServiceCode");
             String code = param.getValue().toString();
 
@@ -1440,7 +1430,7 @@ public class AdministratorManager implements Serializable {
 
     public void associateTemplateConfigurationModule(String tempCode) {
         try {
-            selectedTemplateConfigurationModule = new SoftwareModuleDTO(this.moduleCode,null,0,null,null);
+            selectedTemplateConfigurationModule = new SoftwareModuleDTO(this.moduleCode, null, 0, null, null);
 
             client.target(baseUri)
                     .path("/softwareModules/associateModuleConfigurations").path(tempCode)
@@ -1526,7 +1516,7 @@ public class AdministratorManager implements Serializable {
             UIParameter param = (UIParameter) event.getComponent().findComponent("moduleCode");
             int moduleCode = Integer.parseInt(param.getValue().toString());
 
-            selectedTemplateConfigurationModule = new SoftwareModuleDTO(moduleCode,null,0,null,null);
+            selectedTemplateConfigurationModule = new SoftwareModuleDTO(moduleCode, null, 0, null, null);
 
             client.target(baseUri)
                     .path("/softwareModules/dissociateModuleConfigurations").path(templateCode)
@@ -1631,7 +1621,6 @@ public class AdministratorManager implements Serializable {
         }
     }
 
-
     //******************* Clone configuration
     public String cloneClientConfiguration() {
         try {
@@ -1676,7 +1665,7 @@ public class AdministratorManager implements Serializable {
         return "clients_list?faces-redirect=true";
     }
 
-    public String updateConfiguration() { 
+    public String updateConfiguration() {
         try {
             client.target(baseUri)
                     .path("/configurations/update")
@@ -1688,14 +1677,14 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_list?faces-redirect=true";
     }
-    
-    public String updateLicenseForModule(){
+
+    public String updateLicenseForModule() {
         try {
             client.target(baseUri)
                     .path("/licenses/update")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newLinceseDTO));
-            
+
             clearLicenseDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -1704,14 +1693,14 @@ public class AdministratorManager implements Serializable {
 
         return "configurations_modules_details?faces-redirect=true";
     }
-    
-    public String updateParameterForModule(){
+
+    public String updateParameterForModule() {
         try {
             client.target(baseUri)
                     .path("/contract_parameters/update")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newParameterDTO));
-            
+
             this.clearNewParameterDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -1721,13 +1710,13 @@ public class AdministratorManager implements Serializable {
         return "configurations_modules_details?faces-redirect=true";
     }
 
-    public String updateServiceForModule(){
+    public String updateServiceForModule() {
         try {
             client.target(baseUri)
                     .path("/services/update")
                     .path(String.valueOf(this.moduleCode))
                     .request(MediaType.APPLICATION_XML).put(Entity.xml(this.newServiceDTO));
-            
+
             this.clearServiceDTO();
         } catch (Exception e) {
             logger.warning(e.getMessage());
@@ -1749,8 +1738,6 @@ public class AdministratorManager implements Serializable {
         }
         return "configurations_list?faces-redirect=true";
     }
-
-
 
     public void upload(boolean isArtefact, boolean isTemplate) {
         if (file != null) {
@@ -1777,9 +1764,9 @@ public class AdministratorManager implements Serializable {
                 out.close();
 
                 if (isArtefact) {
-                    addArtefactToConfiguration(filename, mimetype,isTemplate);
+                    addArtefactToConfiguration(filename, mimetype, isTemplate);
                 } else {
-                    addHelpMaterialToConfiguration(filename, mimetype,isTemplate);
+                    addHelpMaterialToConfiguration(filename, mimetype, isTemplate);
                 }
 
             } catch (IOException e) {
@@ -1788,22 +1775,18 @@ public class AdministratorManager implements Serializable {
         }
     }
 
-
-
-    public void addArtefactToConfiguration(String filename, String mimetype,boolean isTemplate) {
+    public void addArtefactToConfiguration(String filename, String mimetype, boolean isTemplate) {
         try {
 
             String codeC = null;
-            if(isTemplate)
-            {
+            if (isTemplate) {
                 if (this.currentTemplate != null) {
                     codeC = String.valueOf(this.currentTemplate.getCode());
                 } else {
                     codeC = String.valueOf(this.newTemplateDTO.getCode());
                 }
 
-            }else
-            {
+            } else {
                 if (this.currentConfiguration != null) {
                     codeC = String.valueOf(this.currentConfiguration.getCode());
                 } else {
@@ -1822,19 +1805,17 @@ public class AdministratorManager implements Serializable {
         }
     }
 
-    public void addHelpMaterialToConfiguration(String filename, String mimetype,boolean isTemplate) {
+    public void addHelpMaterialToConfiguration(String filename, String mimetype, boolean isTemplate) {
         try {
 
             String codeC = null;
-            if(isTemplate)
-            {
+            if (isTemplate) {
                 if (this.currentTemplate != null) {
                     codeC = String.valueOf(this.currentTemplate.getCode());
                 } else {
                     codeC = String.valueOf(this.newTemplateDTO.getCode());
                 }
-            }else
-            {
+            } else {
                 if (this.currentConfiguration != null) {
                     codeC = String.valueOf(this.currentConfiguration.getCode());
                 } else {
@@ -1861,35 +1842,35 @@ public class AdministratorManager implements Serializable {
     public void setFile(UploadedFile file) {
         this.file = file;
     }
-    
-    public void clearNewParameterDTO(){
+
+    public void clearNewParameterDTO() {
         this.newParameterDTO.reset();
     }
-    
-    public void clearNewExtensionDTO(){
+
+    public void clearNewExtensionDTO() {
         this.newExtensionDTO.reset();
     }
-    
-    public void clearNewConfigurationModuleDTO(){
+
+    public void clearNewConfigurationModuleDTO() {
         this.newConfigurationModuleDTO.reset();
     }
-    
-    public void clearLicenseDTO(){
+
+    public void clearLicenseDTO() {
         this.newLinceseDTO.reset();
     }
-    
-    public void clearQuestionDTO(){
+
+    public void clearQuestionDTO() {
         this.newQuestionDTO.reset();
     }
-    
-    public void clearAnswerDTO(){
+
+    public void clearAnswerDTO() {
         this.newAnswerDTO.reset();
     }
-    
-    public void clearServiceDTO(){
+
+    public void clearServiceDTO() {
         this.newServiceDTO.reset();
     }
-    
+
     public void clearNewTemplate() {
         //todo limnpar melhor
         this.selectedSoftwareExtensions = null;
@@ -2191,11 +2172,4 @@ public class AdministratorManager implements Serializable {
         this.newAnswerDTO = newAnswerDTO;
     }
 
-    
-    
-
-
-
-    
-    
 }

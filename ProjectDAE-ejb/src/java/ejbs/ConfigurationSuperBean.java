@@ -12,7 +12,6 @@ import entities.Artefact;
 import entities.ConfigurationSuper;
 import entities.Extension;
 import entities.HelpMaterial;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

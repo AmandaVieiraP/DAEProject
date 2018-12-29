@@ -32,7 +32,7 @@ public class FileSuper implements Serializable {
     private String mimetype;
 
     public FileSuper() {
-        
+
     }
 
     public FileSuper(String filename, String mimetype) {

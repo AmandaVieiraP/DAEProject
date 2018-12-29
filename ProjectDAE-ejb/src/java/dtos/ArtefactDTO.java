@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "Artefact")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ArtefactDTO extends FileSuperDTO implements Serializable{
+public class ArtefactDTO extends FileSuperDTO implements Serializable {
 
     public ArtefactDTO() {
     }

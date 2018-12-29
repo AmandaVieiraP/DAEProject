@@ -30,7 +30,7 @@ public class HelpMaterialBean {
 
     @PersistenceContext
     EntityManager em;
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("{id}")
@@ -47,7 +47,7 @@ public class HelpMaterialBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     private List<HelpMaterialDTO> helpMaterialListToHelpMaterialDTOList(List<HelpMaterial> helpMaterials) {
         try {
             List<HelpMaterialDTO> helpMaterialsDTO = new LinkedList<>();
@@ -64,12 +64,11 @@ public class HelpMaterialBean {
 
     private HelpMaterialDTO helpMaterialToHelpMaterialDTO(HelpMaterial h) {
         try {
-            return new HelpMaterialDTO(h.getFilename(),h.getMimetype());
+            return new HelpMaterialDTO(h.getFilename(), h.getMimetype());
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-
 
     public void create(String filename, String mimetype) {
         try {
@@ -79,7 +78,7 @@ public class HelpMaterialBean {
                 return;
             }
 
-            helpMaterial = new HelpMaterial(filename,mimetype);
+            helpMaterial = new HelpMaterial(filename, mimetype);
 
             em.persist(helpMaterial);
 

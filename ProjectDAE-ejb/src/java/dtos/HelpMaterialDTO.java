@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "HelpMaterial")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class HelpMaterialDTO extends FileSuperDTO implements Serializable{
+public class HelpMaterialDTO extends FileSuperDTO implements Serializable {
 
     public HelpMaterialDTO() {
     }
@@ -24,5 +24,5 @@ public class HelpMaterialDTO extends FileSuperDTO implements Serializable{
     public HelpMaterialDTO(String filename, String mimetype) {
         super(filename, mimetype);
     }
-    
+
 }

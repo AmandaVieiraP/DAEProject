@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-
 
 /**
  *
@@ -19,7 +17,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement(name = "ConfigurationSuper")
 @XmlAccessorType(XmlAccessType.FIELD)
 //@XmlSeeAlso(SoftwareModuleDTO.class)
-public class ConfigurationSuperDTO implements Serializable{
+public class ConfigurationSuperDTO implements Serializable {
+
     private int code;
     private String description;
     private int softwareCode;
@@ -38,7 +37,7 @@ public class ConfigurationSuperDTO implements Serializable{
         this.contractCode = contractCode;
         this.version = version;
     }
-    
+
     public void reset() {
         setCode(0);
         setDescription(null);
@@ -46,7 +45,7 @@ public class ConfigurationSuperDTO implements Serializable{
         setSoftwareName(null);
         setContractCode(0);
         setVersion(null);
-    }  
+    }
 
     public int getCode() {
         return code;
@@ -95,7 +94,5 @@ public class ConfigurationSuperDTO implements Serializable{
     public void setVersion(String version) {
         this.version = version;
     }
-    
-    
-    
+
 }

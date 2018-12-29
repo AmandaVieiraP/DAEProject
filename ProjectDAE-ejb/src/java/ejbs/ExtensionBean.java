@@ -6,15 +6,12 @@
 package ejbs;
 
 import dtos.ExtensionDTO;
-import dtos.ParameterDTO;
 import entities.Configuration;
 import entities.ConfigurationSuper;
 import entities.Extension;
-import entities.Parameter;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -45,22 +42,23 @@ public class ExtensionBean {
     public List<ExtensionDTO> getAll(@PathParam("id") int code) {
         try {
             Configuration c = em.find(Configuration.class, code);
-            
-            if(c == null)
+
+            if (c == null) {
                 return null;
-            
+            }
+
             Query query = em.createNamedQuery("getAllExtensionsBySoftware");
 
             query.setParameter(1, c.getSoftware().getCode());
 
             List<Extension> extensions = query.getResultList();
-            
+
             return extensionListToExtensionDTOList(extensions);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("softwares/{id}")
@@ -96,7 +94,7 @@ public class ExtensionBean {
             throw new EJBException(ex.getMessage());
         }
     }
-    
+
     @POST
     @Path("/createAndAssociateConfig/{id}")
     //@RolesAllowed({"Administrator"})
@@ -115,7 +113,7 @@ public class ExtensionBean {
                 return;
             }
 
-            e = new Extension(extensionDTO.getCode(),extensionDTO.getName(),extensionDTO.getDescription(),c.getSoftware(),extensionDTO.getVersion());
+            e = new Extension(extensionDTO.getCode(), extensionDTO.getName(), extensionDTO.getDescription(), c.getSoftware(), extensionDTO.getVersion());
 
             em.persist(e);
 
@@ -126,7 +124,6 @@ public class ExtensionBean {
             throw new EJBException(e.getMessage());
         }
     }
-    
 
     private List<ExtensionDTO> extensionListToExtensionDTOList(List<Extension> extensions) {
         try {
