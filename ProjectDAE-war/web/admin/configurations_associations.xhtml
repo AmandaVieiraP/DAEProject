@@ -106,7 +106,7 @@
             <h:form enctype="multipart/form-data">
                 <div align="center">
                     <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
-                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(true)}"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(true,false)}"/>
                 </div>
             </h:form>
         </p:dialog> 
@@ -116,7 +116,7 @@
             <h:form enctype="multipart/form-data">
                 <div align="center">
                     <p:fileUpload value="#{administratorManager.file}" mode="simple" skinSimple="true"/>
-                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(false)}"/>
+                    <p:commandButton value="Submit" ajax="false" actionListener="#{administratorManager.upload(false,false)}"/>
                 </div>
             </h:form>
         </p:dialog>  

@@ -224,7 +224,7 @@ public class ConfigurationBean {
     
     @PUT
     @Path("/update")
-    //@RolesAllowed({"Administrator"})
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(ConfigurationDTO configurationDTO) {
         try {
