@@ -38,7 +38,6 @@ public class QuestionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @RolesAllowed({"Administrator","Client"})
     @Path("all")
     public List<QuestionDTO> getAll() {
         try {
@@ -55,7 +54,6 @@ public class QuestionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @RolesAllowed({"Administrator","Client"})
     @Path("configuration/{id}")
     public List<QuestionDTO> getAllFromOneConfiguration(@PathParam("id") int code) {
         try {
@@ -79,7 +77,6 @@ public class QuestionBean {
 
     @POST
     @Path("create")
-    @RolesAllowed({"Administrator","Client"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(QuestionDTO questionDTO) {
         try {

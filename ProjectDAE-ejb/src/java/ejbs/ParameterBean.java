@@ -121,7 +121,6 @@ public class ParameterBean {
 
     @PUT
     @Path("/associateConfigurations/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -133,7 +132,6 @@ public class ParameterBean {
 
     @PUT
     @Path("/dissociateConfigurations/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -145,7 +143,6 @@ public class ParameterBean {
 
     @PUT
     @Path("/update/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateModuleParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -173,7 +170,6 @@ public class ParameterBean {
 
     @POST
     @Path("/create/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -203,7 +199,6 @@ public class ParameterBean {
 
     @POST
     @Path("/createForModule/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createForModuleREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -233,7 +228,6 @@ public class ParameterBean {
 
     @DELETE
     @Path("{name}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("name") String name) {
         try {

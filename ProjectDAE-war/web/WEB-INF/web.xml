@@ -59,39 +59,14 @@
             <url-pattern>/webapi/configurationsSuper/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
-            <web-resource-name>Admin Extensions create</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/extensions/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Admin Licenses create pages</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/licenses/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Admin parameters pages</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/contract_parameters/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
             <web-resource-name>Admin questions pages</web-resource-name>
             <description/>
             <url-pattern>/webapi/questions/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
-            <web-resource-name>Admin Services pages</web-resource-name>
+            <web-resource-name>Admin extensions</web-resource-name>
             <description/>
-            <url-pattern>/webapi/services/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Admin Software modules pages</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/softwareModules/*</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Admin template pages</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/templates/*</url-pattern>
+            <url-pattern>/webapi/extensions/createAndAssociateConfig/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

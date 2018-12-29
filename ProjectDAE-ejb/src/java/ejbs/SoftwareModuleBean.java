@@ -87,7 +87,6 @@ public class SoftwareModuleBean {
 
     @PUT
     @Path("/associateModuleConfigurations/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateConfigurationModuleRest(@PathParam("id") int templateCode, SoftwareModuleDTO softwareModule) {
         try {
@@ -101,7 +100,6 @@ public class SoftwareModuleBean {
 
     @PUT
     @Path("/dissociateModuleConfigurations/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateConfigurationModuleRest(@PathParam("id") int code, SoftwareModuleDTO softwareModuleDTO) {
         try {

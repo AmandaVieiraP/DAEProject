@@ -10,6 +10,7 @@ import entities.ConfigurationModule;
 import entities.License;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -38,6 +39,7 @@ public class LicenseBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("{id}")
     public List<LicenseDTO> getConfigurationModuleLicense(@PathParam("id") int moduleCode) {
         try {
@@ -55,7 +57,6 @@ public class LicenseBean {
 
     @POST
     @Path("/create/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -83,7 +84,6 @@ public class LicenseBean {
 
     @PUT
     @Path("/update/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -109,7 +109,6 @@ public class LicenseBean {
 
     @DELETE
     @Path("{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {

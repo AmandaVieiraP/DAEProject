@@ -1224,7 +1224,7 @@ public class AdministratorManager implements Serializable {
             logger.warning(e.getMessage());
             return null;
         }
-        return "configurations_list?faces-redirect=true";
+        return "templates_list?faces-redirect=true";
     }
 
     //******************* Associate Methods

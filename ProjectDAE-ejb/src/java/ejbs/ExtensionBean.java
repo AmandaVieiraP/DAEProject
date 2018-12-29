@@ -12,6 +12,7 @@ import entities.Extension;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -39,6 +40,7 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("all/{id}")
     public List<ExtensionDTO> getAll(@PathParam("id") int code) {
         try {
@@ -62,6 +64,7 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("softwares/{id}")
     public List<ExtensionDTO> getExtensionBySoftwareCode(@PathParam("id") int software_code) {
         try {
@@ -80,6 +83,7 @@ public class ExtensionBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("configurations/{id}")
     public List<ExtensionDTO> getExtensionByTemplateCode(@PathParam("id") int code) {
         try {

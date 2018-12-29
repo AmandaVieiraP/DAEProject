@@ -57,7 +57,6 @@ public class ServiceBean {
 
     @POST
     @Path("/create/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createForModuleREST(@PathParam("id") int code, ServiceDTO serviceDTO) {
         try {
@@ -87,7 +86,6 @@ public class ServiceBean {
 
     @PUT
     @Path("/update/{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateModuleParameterRest(@PathParam("id") int code, ServiceDTO serviceDTO) {
         try {
@@ -116,7 +114,6 @@ public class ServiceBean {
 
     @DELETE
     @Path("{id}")
-    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {
