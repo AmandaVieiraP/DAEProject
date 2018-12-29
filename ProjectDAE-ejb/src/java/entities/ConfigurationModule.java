@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 public class ConfigurationModule extends Module implements Serializable {
 
     @NotNull
-    @OneToMany(mappedBy = "configurationModule", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "configurationModule", cascade = CascadeType.ALL)
     private List<License> licenses;
 
     @NotNull

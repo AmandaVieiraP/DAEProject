@@ -53,6 +53,7 @@ public class AnswerBean {
             }
 
             Answer answer = new Answer(id, answerSender, answerMsg, q);
+            q.addAnswer(answer);
             em.persist(answer);
         } catch (EntityExistsException e) {
             throw e;

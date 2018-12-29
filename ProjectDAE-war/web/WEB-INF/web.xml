@@ -71,72 +71,70 @@
         <web-resource-collection>
             <web-resource-name>Admin licenses create</web-resource-name>
             <description/>
-            <url-pattern>/webapi/licenses/create/{id}</url-pattern>
+            <url-pattern>/webapi/licenses/create/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin licenses update</web-resource-name>
             <description/>
-            <url-pattern>/webapi/licenses/update/{id}</url-pattern>
+            <url-pattern>/webapi/licenses/update/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin licenses delete</web-resource-name>
             <description/>
-            <url-pattern>/webapi/licenses/{id}</url-pattern>
+            <url-pattern>/webapi/licenses/*</url-pattern>
+            <http-method>DELETE</http-method>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param associate conf</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/associateConfigurations/{id}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/associateConfigurations/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param dissociate conf</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/dissociateConfigurations/{id}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/dissociateConfigurations/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param update</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/update/{id}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/update/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param create</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/create/{id}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/create/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param create for module</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/createForModule/{id}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/createForModule/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin param delete</web-resource-name>
             <description/>
-            <url-pattern>/webapi/contract_parameters/{name}</url-pattern>
+            <url-pattern>/webapi/contract_parameters/*</url-pattern>
+            <http-method>DELETE</http-method>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin service create</web-resource-name>
             <description/>
-            <url-pattern>/webapi/services/create/{id}</url-pattern>
+            <url-pattern>/webapi/services/create/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin service update</web-resource-name>
             <description/>
-            <url-pattern>/webapi/services/update/{id}</url-pattern>
+            <url-pattern>/webapi/services/update/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin service delete</web-resource-name>
             <description/>
-            <url-pattern>/webapi/services/{id}</url-pattern>
-        </web-resource-collection>
-        <web-resource-collection>
-            <web-resource-name>Admin sofModules associate</web-resource-name>
-            <description/>
-            <url-pattern>/webapi/softwareModules/associateModuleConfigurations/{id}</url-pattern>
+            <url-pattern>/webapi/services/*</url-pattern>
+            <http-method>DELETE</http-method>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin sofModules dissociate</web-resource-name>
             <description/>
-            <url-pattern>/webapi/softwareModules/dissociateModuleConfigurations/{id}</url-pattern>
+            <url-pattern>/webapi/softwareModules/dissociateModuleConfigurations/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin temp create</web-resource-name>
@@ -146,7 +144,7 @@
         <web-resource-collection>
             <web-resource-name>Admin temp ext</web-resource-name>
             <description/>
-            <url-pattern>/webapi/templates/{templateId}/extension/{extensionId}</url-pattern>
+            <url-pattern>/webapi/templates/*/extension/*</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Admin temp update</web-resource-name>
@@ -156,7 +154,13 @@
         <web-resource-collection>
             <web-resource-name>Admin temp delete</web-resource-name>
             <description/>
-            <url-pattern>/webapi/templates/{id}</url-pattern>
+            <url-pattern>/webapi/templates/*</url-pattern>
+            <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Admin sofModules Associate</web-resource-name>
+            <description/>
+            <url-pattern>/webapi/softwareModules/associateModuleConfigurations/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

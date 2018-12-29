@@ -42,15 +42,15 @@ public class Software implements Serializable {
     private List<String> versions;
 
     @NotNull
-    @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "software", cascade = CascadeType.ALL)
     private List<ConfigurationSuper> templates;
 
     @NotNull
-    @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "software", cascade = CascadeType.ALL)
     private List<Extension> extensions;
 
     @NotNull
-    @OneToMany(mappedBy = "software", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "software", cascade = CascadeType.ALL)
     private List<Module> modules;
 
     public Software() {

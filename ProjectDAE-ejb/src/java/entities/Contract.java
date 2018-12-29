@@ -42,7 +42,7 @@ public class Contract implements Serializable {
     private List<Parameter> contractParameters;
 
     @NotNull
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private List<ConfigurationSuper> templates;
 
     public Contract() {

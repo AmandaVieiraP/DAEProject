@@ -251,7 +251,7 @@ public class AnonymousManager implements Serializable {
      * Auxiliary Functions
      *
      */
-    private List<String> computeJsonResponseToStringList(Response serviceResponse) {
+    public List<String> computeJsonResponseToStringList(Response serviceResponse) {
         List<String> response = new LinkedList();
         try {
             String list = serviceResponse.readEntity(String.class);

@@ -49,7 +49,7 @@ public class Question implements Serializable {
     @NotNull
     private String question;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
     @NotNull

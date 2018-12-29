@@ -55,8 +55,8 @@ public class Configuration extends ConfigurationSuper implements Serializable {
     @JoinColumn(name = "CLIENT_USERNAME")
     private Client client;
 
-    @NotNull
-    @OneToMany(mappedBy = "configuration", cascade = CascadeType.REMOVE)
+    
+    @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL)
     private List<Question> questions;
 
     public Configuration() {

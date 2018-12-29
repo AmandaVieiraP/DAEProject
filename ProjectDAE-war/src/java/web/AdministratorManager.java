@@ -713,7 +713,7 @@ public class AdministratorManager implements Serializable {
 
     }
 
-    private SoftwareDTO getSoftwareDTOByConfigurationCode(String code) {
+    public SoftwareDTO getSoftwareDTOByConfigurationCode(String code) {
         try {
             return client.target(baseUri).path("/softwares").path(code)
                     .request(MediaType.APPLICATION_XML)
@@ -733,7 +733,7 @@ public class AdministratorManager implements Serializable {
         return getCurrentSoftwareVersionsAllConfigurations(String.valueOf(currentConfiguration.getSoftwareCode()));
     }
 
-    private List<String> getCurrentSoftwareVersionsAllConfigurations(String code) {
+    public List<String> getCurrentSoftwareVersionsAllConfigurations(String code) {
         List<String> versions = new LinkedList<>();
 
         try {
@@ -797,7 +797,7 @@ public class AdministratorManager implements Serializable {
         return getExtensionsDTOByConfigurationCode(String.valueOf(currentTemplate.getCode()));
     }
 
-    private List<ExtensionDTO> getExtensionsDTOByConfigurationCode(String code) {
+    public List<ExtensionDTO> getExtensionsDTOByConfigurationCode(String code) {
         List<ExtensionDTO> extensions = new LinkedList<>();
 
         try {
@@ -1087,7 +1087,7 @@ public class AdministratorManager implements Serializable {
         return servicesDTO;
     }
 
-    private List<String> computeJsonResponseToStringList(Response serviceResponse) {
+    public List<String> computeJsonResponseToStringList(Response serviceResponse) {
         List<String> response = new LinkedList();
         try {
             String list = serviceResponse.readEntity(String.class);

@@ -41,7 +41,7 @@ public class Client extends User implements Serializable {
     private String contactPerson;
 
     @NotNull
-    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Configuration> configurations;
 
     public Client() {

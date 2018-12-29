@@ -6,6 +6,7 @@
 package ejbs;
 
 import dtos.ConfigurationDTO;
+import entities.Answer;
 import entities.Artefact;
 import entities.Client;
 import entities.Configuration;
@@ -195,12 +196,33 @@ public class ConfigurationBean {
             if (configuration == null) {
                 return;
             }
+            
+            /*for(Question q:configuration.getQuestions()){
+               
+                for(Answer a: q.getAnswers()){
+                    q.removeAnswer(a);
+                }
+                
+            */
+            
+            
+            
+            for(Question q:configuration.getQuestions()){
+               
+                q.getConfiguration().removeQuestions(q);
+                
+            }
+            
+            
+            
 
             configuration.getClient().removeConfiguration(configuration);
 
             configuration.getSoftware().removeConfiguration(configuration);
 
             configuration.getContract().removeConfiguration(configuration);
+            
+            
             
             for (Extension e : configuration.getExtensions()) {
                 e.removeConfiguration(configuration);

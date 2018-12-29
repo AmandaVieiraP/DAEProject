@@ -7,6 +7,7 @@ package ejbs;
 
 import dtos.QuestionDTO;
 import entities.Configuration;
+import entities.ConfigurationSuper;
 import entities.Question;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
@@ -112,8 +113,10 @@ public class QuestionBean {
             if (c == null) {
                 return;
             }
-
+            
             Question question = new Question(id, questionSender, questionMsg, c);
+            
+            c.addQuestions(question);
 
             em.persist(question);
         } catch (EntityExistsException e) {
