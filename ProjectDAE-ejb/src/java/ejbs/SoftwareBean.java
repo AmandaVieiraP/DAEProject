@@ -9,6 +9,7 @@ import dtos.SoftwareDTO;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,6 +33,7 @@ public class SoftwareBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("/{id}")
     public SoftwareDTO getSoftwareByCode(@PathParam("id") int software_code) {
         try {
@@ -49,6 +51,7 @@ public class SoftwareBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("all")
     public List<SoftwareDTO> getAll() {
         try {
@@ -61,6 +64,7 @@ public class SoftwareBean {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("versions/{id}")
     public String getSoftwareVersions(@PathParam("id") int software_code) {
         try {

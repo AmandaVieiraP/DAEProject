@@ -11,6 +11,7 @@ import entities.SoftwareModule;
 import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -38,6 +39,7 @@ public class SoftwareModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("all")
     public List<SoftwareModuleDTO> getAll() {
         try {
@@ -51,6 +53,7 @@ public class SoftwareModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("softwares/{id}")
     public List<SoftwareModuleDTO> getSoftwareModuleBySoftwareCode(@PathParam("id") int software_code) {
         try {
@@ -69,6 +72,7 @@ public class SoftwareModuleBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("templates/{id}")
     public List<SoftwareModuleDTO> getSoftwareModuleByTemplateCode(@PathParam("id") int template_code) {
         try {
@@ -86,6 +90,7 @@ public class SoftwareModuleBean {
     }
 
     @PUT
+    @RolesAllowed({"Administrator"})
     @Path("/associateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateConfigurationModuleRest(@PathParam("id") int templateCode, SoftwareModuleDTO softwareModule) {
@@ -99,6 +104,7 @@ public class SoftwareModuleBean {
     }
 
     @PUT
+    @RolesAllowed({"Administrator"})
     @Path("/dissociateModuleConfigurations/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateConfigurationModuleRest(@PathParam("id") int code, SoftwareModuleDTO softwareModuleDTO) {

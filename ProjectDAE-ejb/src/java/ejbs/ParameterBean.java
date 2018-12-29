@@ -12,6 +12,7 @@ import entities.Contract;
 import entities.Parameter;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -40,6 +41,7 @@ public class ParameterBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("all/configurations")
     public List<ParameterDTO> getAllParametersFromConfigurations() {
         try {
@@ -67,6 +69,7 @@ public class ParameterBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("contracts/{id}")
     public List<ParameterDTO> getContractParameterByContractCode(@PathParam("id") int contract_code) {
         try {
@@ -85,6 +88,7 @@ public class ParameterBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("configurations/{id}")
     public List<ParameterDTO> getParameterByConfigurationCode(@PathParam("id") int configurationCode) {
         try {
@@ -103,6 +107,7 @@ public class ParameterBean {
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("modules/{id}")
     public List<ParameterDTO> getParameterByModuleCode(@PathParam("id") int moduleCode) {
         try {
@@ -121,6 +126,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/associateConfigurations/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void associateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -132,6 +138,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/dissociateConfigurations/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void dissociateParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -143,6 +150,7 @@ public class ParameterBean {
 
     @PUT
     @Path("/update/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateModuleParameterRest(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -170,6 +178,7 @@ public class ParameterBean {
 
     @POST
     @Path("/create/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -199,6 +208,7 @@ public class ParameterBean {
 
     @POST
     @Path("/createForModule/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createForModuleREST(@PathParam("id") int code, ParameterDTO parameterDTO) {
         try {
@@ -228,6 +238,7 @@ public class ParameterBean {
 
     @DELETE
     @Path("{name}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("name") String name) {
         try {

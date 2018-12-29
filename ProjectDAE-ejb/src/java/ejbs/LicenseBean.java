@@ -57,6 +57,7 @@ public class LicenseBean {
 
     @POST
     @Path("/create/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -84,6 +85,7 @@ public class LicenseBean {
 
     @PUT
     @Path("/update/{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -109,6 +111,7 @@ public class LicenseBean {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {
