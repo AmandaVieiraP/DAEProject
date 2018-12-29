@@ -76,31 +76,5 @@ public class ContractBean {
     public ContractDTO contractToDTO(Contract contract) {
         return new ContractDTO(contract.getCode());
     }
-    /*public void associateParameterToContract(int contractCode, String parameterName) {
-         try {
-            Contract contract = em.find(Contract.class, contractCode);
-            ContractParameter contractParameter = em.find(ContractParameter.class, parameterName);
-
-            if (contract == null || contractParameter == null) {
-                return;
-            }
-            
-            if (contractParameter.getContracts().contains(contract)) {
-                return;
-            }
-           
-
-            //Adiciona disciplina ao estudante
-            contractParameter.addContract(contract);
-
-            //Adiciona estudante à disciplina
-            contract.addParameter(contractParameter);
-
-            em.merge(contractParameter);
-            em.merge(contract);
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }*/
 
 }

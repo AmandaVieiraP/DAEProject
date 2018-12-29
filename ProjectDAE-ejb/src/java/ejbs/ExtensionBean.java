@@ -14,6 +14,7 @@ import entities.Parameter;
 import entities.Software;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -98,6 +99,7 @@ public class ExtensionBean {
     
     @POST
     @Path("/createAndAssociateConfig/{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int code, ExtensionDTO extensionDTO) {
         try {

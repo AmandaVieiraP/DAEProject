@@ -5,25 +5,14 @@
  */
 package ejbs;
 
-import dtos.ConfigurationDTO;
-import dtos.HelpMaterialDTO;
 import dtos.LicenseDTO;
-import entities.Artefact;
-import entities.Configuration;
 import entities.ConfigurationModule;
-import entities.ConfigurationSuper;
-import entities.Contract;
-import entities.Extension;
-import entities.HelpMaterial;
 import entities.License;
-import entities.Parameter;
-import entities.Software;
-import entities.Template;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -66,6 +55,7 @@ public class LicenseBean {
     
     @POST
     @Path("/create/{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -92,6 +82,7 @@ public class LicenseBean {
     
     @PUT
     @Path("/update/{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(@PathParam("id") int moduleCode, LicenseDTO licenseDTO) {
         try {
@@ -116,6 +107,7 @@ public class LicenseBean {
     
     @DELETE
     @Path("{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {

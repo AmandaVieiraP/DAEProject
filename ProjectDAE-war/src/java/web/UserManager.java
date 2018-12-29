@@ -81,11 +81,11 @@ public class UserManager implements Serializable {
         }
         if(isUserInRole("Administrator")){
             setIsAdmin(true);
-            return "/faces/admin/admin_index?faces-redirect=true";
+            return "/faces/admin/clients_list?faces-redirect=true";
         }
         if(isUserInRole("Client")){
             setIsAdmin(false);
-            return "/faces/client/client_index?faces-redirect=true";
+            return "/faces/client/configurations_list?faces-redirect=true";
         }
         
         return "login_error?faces-redirect=true";

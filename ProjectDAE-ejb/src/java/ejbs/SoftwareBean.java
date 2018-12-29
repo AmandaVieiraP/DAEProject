@@ -48,7 +48,6 @@ public class SoftwareBean {
     }
 
     @GET
-    //@RolesAllowed({"Administrator"})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Path("all")
     public List<SoftwareDTO> getAll() {

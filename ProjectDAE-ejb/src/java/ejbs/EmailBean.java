@@ -8,7 +8,6 @@ package ejbs;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;

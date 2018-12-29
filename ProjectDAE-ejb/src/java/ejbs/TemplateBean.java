@@ -19,6 +19,7 @@ import entities.Template;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -239,29 +240,6 @@ public class TemplateBean {
             throw new EJBException(e.getMessage());
         }
     }
-
-    /*public void associateExtensionToTemplate(int extensionCode, int templateCode) {
-        try {
-            Extension extension = em.find(Extension.class, extensionCode);
-            Template template = em.find(Template.class, templateCode);
-
-            if (extension == null || template == null) {
-                return;
-            }
-
-            if (template.getExtensions().contains(extension)) {
-                return;
-            }
-
-            template.addExtension(extension);
-            extension.addConfiguration(template);
-
-            em.merge(template);
-            em.merge(extension);
-        } catch (Exception ex) {
-            throw new EJBException(ex.getMessage());
-        }
-    }*/
 
     public void associateModuleToTemplate(int moduleCode, int templateCode) {
         try {

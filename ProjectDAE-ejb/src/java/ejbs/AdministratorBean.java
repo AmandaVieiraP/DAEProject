@@ -59,6 +59,7 @@ public class AdministratorBean {
 
     @POST
     @Path("/create")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void create(AdministratorDTO admin) throws EntityExistsException {
         try {
@@ -78,6 +79,7 @@ public class AdministratorBean {
 
     @GET
     @Path("/{username}")
+    @RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public AdministratorDTO getAdministrator(@PathParam("username") String username) throws EntityExistsException {
@@ -112,7 +114,7 @@ public class AdministratorBean {
     }
 
     @DELETE
-    @RolesAllowed({"Administrator"})
+    //@RolesAllowed({"Administrator"})
     @Path("{username}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("username") String username) {
@@ -142,19 +144,10 @@ public class AdministratorBean {
     public AdministratorDTO administratorToDTO(Administrator admin) {
         return new AdministratorDTO(admin.getName(), admin.getEmail(), admin.getJobRole(), admin.getUsername(), admin.getPassword());
     }
-
-    /*
-    public void create (String username, String password, String name, String email) {
-        try {
-            Administrator admin = new Administrator(username, password, name, email);
-            em.persist(admin);             
-        } catch (Exception e) {
-            throw new EJBException(e.getMessage());
-        }
-    }
-     */
+    
     @PUT
     @Path("/update")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(AdministratorDTO admin) throws EntityDoesNotExistsException {
         try {

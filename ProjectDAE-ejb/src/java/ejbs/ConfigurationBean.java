@@ -20,6 +20,7 @@ import entities.Template;
 import exceptions.EntityDoesNotExistsException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -70,6 +71,7 @@ public class ConfigurationBean {
 
     @POST
     @Path("/create")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createREST(ConfigurationDTO configurationDTO) {
         try {
@@ -85,6 +87,7 @@ public class ConfigurationBean {
 
     @POST
     @Path("/createByTemplate/{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void createByTemplateREST(@PathParam("id") int code, ConfigurationDTO configurationDTO) {
         try {
@@ -152,6 +155,7 @@ public class ConfigurationBean {
     
     @POST
     @Path("clone/{idConfig}/{idClient}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void cloneConfiguration(@PathParam("idConfig") int code, @PathParam("idClient") String username) {
         try {
@@ -180,6 +184,7 @@ public class ConfigurationBean {
 
     @DELETE
     @Path("{id}")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void remove(@PathParam("id") int code) {
         try {
@@ -219,6 +224,7 @@ public class ConfigurationBean {
     
     @PUT
     @Path("/update")
+    //@RolesAllowed({"Administrator"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void updateRest(ConfigurationDTO configurationDTO) {
         try {
