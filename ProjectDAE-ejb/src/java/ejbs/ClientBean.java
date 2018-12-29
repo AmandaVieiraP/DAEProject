@@ -7,6 +7,7 @@ package ejbs;
 
 import dtos.ClientDTO;
 import entities.Client;
+import entities.Configuration;
 import exceptions.EntityDoesNotExistsException;
 import exceptions.EntityExistsException;
 import java.util.LinkedList;
@@ -122,7 +123,7 @@ public class ClientBean {
             if (client == null) {
                 throw new EntityDoesNotExistsException("ERROR: Can't delete that client because doesn't exists a client with the username: " + username);
             }
-
+            
             em.remove(client);
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());

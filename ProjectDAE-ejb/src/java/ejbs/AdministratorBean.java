@@ -86,9 +86,8 @@ public class AdministratorBean {
         try {
             Administrator a = em.find(Administrator.class, username);
             if (a == null) {
-                // throw entitydoesnotexists
-                //   throw new EntityExistsException("ERROR: Can't create new administrator because already exists a administrator with the username: " + admin.getUsername());
-            }
+                return null;
+               }
 
             return administratorToDTO(a);
         } catch (Exception e) {

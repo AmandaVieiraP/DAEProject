@@ -1595,7 +1595,7 @@ public class AdministratorManager implements Serializable {
             logger.warning("Problem updating the template configuration");
             return "templates_list";
         }
-        return "configurations_list?faces-redirect=true";
+        return "templates_list?faces-redirect=true";
     }
 
     public void upload(boolean isArtefact, boolean isTemplate) {

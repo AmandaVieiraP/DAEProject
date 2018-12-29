@@ -14,6 +14,7 @@ import entities.Contract;
 import entities.Extension;
 import entities.HelpMaterial;
 import entities.Parameter;
+import entities.Question;
 import entities.Software;
 import entities.SoftwareModule;
 import entities.Template;
@@ -200,7 +201,7 @@ public class ConfigurationBean {
             configuration.getSoftware().removeConfiguration(configuration);
 
             configuration.getContract().removeConfiguration(configuration);
-
+            
             for (Extension e : configuration.getExtensions()) {
                 e.removeConfiguration(configuration);
             }
