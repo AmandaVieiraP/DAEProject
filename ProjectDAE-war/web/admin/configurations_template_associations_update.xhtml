@@ -111,7 +111,7 @@
                     <p:dataTable
                         var="repo"
                         summary="Template Artefacts Repository"
-                        value="#{administratorManager.currentTemplateConfigurationArtefacts}"
+                        value="#{administratorManager.currentTemplateArtefacts}"
                         emptyMessage="No template artefacts found for the given criteria">
                         <p:column headerText="Files Content">
                             <div align="center">
@@ -137,7 +137,7 @@
                     <p:dataTable
                         var="help"
                         summary="Help Materials Repository"
-                        value="#{administratorManager.currentTemplateConfigurationHelpMaterials}"
+                        value="#{administratorManager.currentTemplateHelpMaterials}"
                         emptyMessage="No help material found for the given criteria">
                         <p:column headerText="Help Materials">
                             <div align="center">
@@ -167,7 +167,7 @@
             <h:form>
                 <div align="center">
                     <h:selectOneMenu value="#{administratorManager.code}">
-                        <f:selectItems value="#{administratorManager.allExtensions}" var="c" itemValue="#{c.code}" itemLabel="#{c.name}-#{c.version}" />
+                        <f:selectItems value="#{administratorManager.allExtensionsFromTemplate}" var="c" itemValue="#{c.code}" itemLabel="#{c.name}-#{c.version}" />
                     </h:selectOneMenu>
                     <br/><br/><br/>
 

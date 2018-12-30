@@ -518,6 +518,10 @@ public class AdministratorManager implements Serializable {
     public List<ExtensionDTO> getAllExtensions() {
         return getAllExtensionsGeral(String.valueOf(this.newConfigurationDTO.getCode()));
     }
+    
+    public List<ExtensionDTO> getAllExtensionsFromTemplate() {
+        return getAllExtensionsGeral(String.valueOf(this.newTemplateDTO.getCode()));
+    }
 
     public List<ExtensionDTO> getAllExtensionsOnUpdate() {
         return getAllExtensionsGeral(String.valueOf(this.currentConfiguration.getCode()));
