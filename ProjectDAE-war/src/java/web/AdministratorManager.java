@@ -520,7 +520,7 @@ public class AdministratorManager implements Serializable {
     }
     
     public List<ExtensionDTO> getAllExtensionsFromTemplate() {
-        return getAllExtensionsGeral(String.valueOf(this.newTemplateDTO.getCode()));
+        return getAllExtensionsGeral(String.valueOf(this.currentTemplate.getCode()));
     }
 
     public List<ExtensionDTO> getAllExtensionsOnUpdate() {

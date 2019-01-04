@@ -44,7 +44,7 @@ public class ExtensionBean {
     @Path("all/{id}")
     public List<ExtensionDTO> getAll(@PathParam("id") int code) {
         try {
-            Configuration c = em.find(Configuration.class, code);
+            ConfigurationSuper c = em.find(ConfigurationSuper.class, code);
 
             if (c == null) {
                 return null;
